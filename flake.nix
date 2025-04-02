@@ -20,7 +20,7 @@
         pkgs.alejandra
     );
     nixosModules = rec {
-      declarative-jellyfin = import ./module.nix;
+      declarative-jellyfin = import ./modules;
       default = declarative-jellyfin;
     };
     nixosModule = self.nixosModules.default; # compatiblilty
