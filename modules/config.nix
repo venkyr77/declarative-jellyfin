@@ -1,10 +1,12 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 with lib; let
   cfg = config.services.declarative-jellyfin;
+  toXml' = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
   isStrList = x: builtins.all (x: builtins.isString x) x;
   prepass = x:
     if (builtins.isAttrs x)
@@ -45,6 +47,9 @@ with lib; let
     content = prepass x;
   });
 in {
+  imports = [
+    ./options
+  ];
   config =
     mkIf cfg.enable
     {
@@ -63,11 +68,11 @@ in {
                       file = "network.xml";
                       content = cfg.network;
                     }
-                    {
-                      name = "EncodingOptions";
-                      file = "encoding.xml";
-                      content = cfg.encoding;
-                    }
+                    # {
+                    #   name = "EncodingOptions";
+                    #   file = "encoding.xml";
+                    #   content = cfg.encoding;
+                    # }
                     {
                       name = "ServerConfiguration";
                       file = "system.xml";

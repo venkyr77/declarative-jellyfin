@@ -4,7 +4,7 @@
   ...
 }:
 with lib; let
-  mkStrOption = default: description: {
+  mkStrOption = default: description: mkOption {
     type = types.str;
     inherit default description;
   };
@@ -335,20 +335,20 @@ in {
       default = true;
     };
 
-    SlowResponseThresholdMs = {
+    SlowResponseThresholdMs = mkOption {
       type = types.int;
       default = 500;
       description = "How slow (in ms) would a response have to be before a warning is shown";
     };
 
-    CorsHosts = {
+    CorsHosts = mkOption {
       type = with types; listOf str;
       default = [
         "*"
       ];
     };
 
-    ActivityLogRetentionDays = {
+    ActivityLogRetentionDays = mkOption {
       type = types.int;
       default = 30;
     };
@@ -410,7 +410,7 @@ in {
     ParallelImageEncodingLimit = mkOption {
       type = types.int;
       default = 0;
-      descriptio = ''
+      description = ''
         Maximum number of image encodings that are allowed to run in parallel.
         Setting this to 0 will choose a limit based on your systems core count.
       '';

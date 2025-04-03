@@ -14,26 +14,23 @@ in {
           ../modules/default.nix
         ];
 
-        # assertions = let
-        #   toXml = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
-        # in [
-        #   {
-        #     assertion =
-        #       toXml {tag = "test";}
-        #       == ''
-        #         <?xml version='1.0' encoding='utf-8'?>
-        #         <test />
-        #
-        #       '';
-        #     message = "Generated XML is incorrect!";
-        #   }
-        #   {
-        #     assertion = false;
-        #     message = "lmao";
-        #   }
-        # ];
-
-        ass = false;
+        assertions = let
+          toXml = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
+        in [
+          (
+            let
+              xml =
+                toXml {tag = "test";};
+              expected = ''
+                <?xml version='1.0' encoding='utf-8'?>
+                <test />
+              '';
+            in {
+              assertion = xml == expected;
+              message = "Generated XML is incorrect!\nExpected \n\n${expected}\n\n but got \n\n${xml}\n";
+            }
+          )
+        ];
 
         virtualisation.memorySize = 1024 * 2;
 
