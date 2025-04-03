@@ -3,32 +3,40 @@ with lib; {
   options.services.declarative-jellyfin.network = {
     BaseUrl = mkOption {
       type = types.str;
+      default = "";
+      description = "Add a custom subdirectory to the server URL. For example: http://example.com/<baseurl>";
     };
     EnableHttps = mkEnableOption "Enable HTTPS";
     RequireHttps = mkEnableOption "Require HTTPS";
     CertificatePath = mkOption {
       type = with types; either str path;
-      description = "Path to the certificate file";
+      default = "";
+      description = "Path to a PKCS #12 file containing a certificate and private key to enable TLS support on a custom domain.";
     };
     CertificatePassword = mkOption {
       type = types.str;
-      description = "Password for the certificate";
+      default = "";
+      description = "If your certificate requires a password, please enter it here.";
     };
     InternalHttpPort = mkOption {
       type = types.port;
-      description = "The internal HTTP port jellyfin is run at";
+      default = 8096;
+      description = "The TCP port number for the HTTP server.";
     };
     InternalHttpsPort = mkOption {
       type = types.port;
-      description = "The internal HTTPS port jellyfin is run at";
+      default = 8920;
+      description = "The TCP port number for the HTTPS server.";
     };
     PublicHttpPort = mkOption {
       type = types.port;
-      description = "The public HTTP port jellyfin is run at";
+      default = 8096;
+      description = "The public port number that should be mapped to the local HTTP port.";
     };
     PublicHttpsPort = mkOption {
       type = types.port;
-      description = "The public HTTPS port jellyfin is run at";
+      default = 8920;
+      description = "The public port number that should be mapped to the local HTTPS port.";
     };
     AutoDiscovery = mkOption {
       type = types.bool;
@@ -51,7 +59,15 @@ with lib; {
       default = true;
       description = "Enable remote access";
     };
-    LocalNetworkSubnets = mkEnableOption "UNIMPLEMENTED";
+    LocalNetworkSubnets = mkOption {
+      type = with types; listOf str;
+      default = [];
+      description = ''
+        List of IP addresses or IP/netmask entries for networks that will be considered on local network when enforcing bandwidth restrictions.
+        If set, all other IP addresses will be considered to be on the external network and will be subject to the external bandwidth restrictions.
+        If left empty, only the server's subnet is considered to be on the local network.
+      '';
+    };
     LocalNetworkAddresses = mkEnableOption "UNIMPLEMENTED";
     KnownProxies = mkOption {
       type = with types; listOf str;
@@ -79,8 +95,12 @@ with lib; {
       default = [];
     };
     RemoteIpFilter = mkOption {
-      type = types.str;
-      description = "Remote ip filter";
+      type = with types; listOf str;
+      default = [];
+      description = ''
+        List of IP addresses or IP/netmask entries for networks that will be allowed to connect remotely.
+        If left empty, all remote addresses will be allowed.
+      '';
     };
     IsRemoteIPFilterBlacklist = mkEnableOption "Is the remote ip filter list a blacklist or a whitelist";
   };

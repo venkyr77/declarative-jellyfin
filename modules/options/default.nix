@@ -1,12 +1,11 @@
 {
   config,
-  nixpkgs,
   pkgs,
   lib,
   ...
 }: let
   cfg = config.services.declarative-jellyfin;
-  toXml = (import ../../lib {inherit nixpkgs;}).toXMLGeneric;
+  toXml' = (import ../../lib {nixpkgs = pkgs;}).toXMLGeneric;
 in
   with lib; {
     imports = [
@@ -23,24 +22,29 @@ in
       mkIf cfg.enable
       (
         let
-          listOfStrPrepass = xml: (builtins.mapAttrs (name: value:
-            (
-              if ((name == "content") && (builtins.isList value))
+          prepass = x:
+            if (builtins.isAttrs x)
+            then
+              if !(builtins.hasAttr "tag" x)
               then
-                if (builtins.all builtins.isString value)
-                then # listOf str
-                  (builtins.map (content: {
-                    name = "string";
-                    inherit content;
-                  }))
-                else # Lis of something else
-                  warnIf (!(builtins.all builtins.isAttrs value)) "Recieved list of mixed values. This will most likely not evaluate correctly" (listOfStrPrepass value)
-              else (listOfStrPrepass value)
-            )
-            xml));
-          toXml = name: x: (toXml {
-            inherit name;
-            properties = {
+                attrsets.mapAttrsToList (tag: value: {
+                  inherit tag;
+                  content = value;
+                })
+                x
+              else if (builtins.hasAttr "content" x)
+              then {
+                tag = x.tag;
+                content = prepass x.content;
+              }
+              else x
+            else if (builtins.isList x)
+            then builtins.map prepass x
+            else throw "wtf";
+
+          toXml = tag: x: (toXml' {
+            inherit tag;
+            attrib = {
               "xmlns:xsi" = "http://www.w3.org/2001/XMLSchema-instance";
               "xmlns:xsd" = "http://www.w3.org/2001/XMLSchema";
             };
@@ -49,9 +53,12 @@ in
         in {
           system.activationScripts."link-network-xml" = lib.stringAfter ["var"] (
             let
-              content = toXml "NetworkConfiguration" (listOfStrPrepass cfg.network);
+              content = toXml "NetworkConfiguration" (prepass cfg.network);
             in ''
-              ${pkgs.writeTextFile}/bin/writeTextFile /var/lib/jellyfin/config/network.xml '${strings.escape ["'"] content}'
+              mkdir -p /var/lib/jellyfin/config
+              if [ ! -f "/var/lib/jellyfin/config/network.xml" ]; then
+                echo '${strings.escape ["'"] content}' > /var/lib/jellyfin/config/network.xml
+              fi
             ''
           );
         }
