@@ -5,10 +5,28 @@ Users, Libraries, Plugins, Settings, etc.
 
 # Progress
 
+- [x] Creating .xml files
+- [ ] Modifying databate
+- [ ] Test cases
+    - [ ] Networking
+    - [ ] Encoding
+    - [ ] System
+    - [ ] Users
+    - [ ] Libraries
+    - [ ] Connecting
+    - [ ] Fetching files
+
 - [ ] Users
-    - [ ] Create users
     - [ ] Hashed passwords
 - [ ] Libraries
 - [ ] Plugins
 - [ ] Settings
     - [ ] Scheduled jobs
+    - [ ] Networking
+        - [x] Nix options
+    - [ ] Encoding
+        - [x] Nix options
+    - [ ] System settings
+        - [ ] Nix options
+    - [ ] Branding
+        - [ ] Nix options
