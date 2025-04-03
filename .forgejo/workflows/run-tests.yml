@@ -10,6 +10,7 @@ jobs:
     runs-on: native
 
     steps:
-      - uses: actions/checkout@v3
-      - runs: |
+      - name: Run nix flake check
+        uses: actions/checkout@v3
+        runs: |
           nix flake check --show-trace
