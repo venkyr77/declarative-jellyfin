@@ -27,6 +27,6 @@ Users, Libraries, Plugins, Settings, etc.
     - [ ] Encoding
         - [x] Nix options
     - [ ] System settings
-        - [ ] Nix options
+        - [x] Nix options
     - [ ] Branding
         - [ ] Nix options
