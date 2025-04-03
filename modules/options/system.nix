@@ -1,9 +1,14 @@
-{ lib, config, ... }:
-with lib;
-let
-  mkStrOption = default: description: { type = types.str; inherit default description; };
-in
 {
+  lib,
+  config,
+  ...
+}:
+with lib; let
+  mkStrOption = default: description: {
+    type = types.str;
+    inherit default description;
+  };
+in {
   options.services.declarative-jellyfin.system = {
     ServerName = mkStrOption config.networking.hostName ''
       This name will be used to identify the server and will default to the server's hostname.
@@ -152,7 +157,7 @@ in
     };
 
     ImageSavingConvention = mkOption {
-      type = types.enum [ "Legacy" ];
+      type = types.enum ["Legacy"];
       default = "Legacy";
       description = "i got no idea what this is";
     };
@@ -164,96 +169,96 @@ in
           tag = "MetadataOptions";
           content = {
             ItemType = "Movie";
-            DisabledMetadataSavers = [ ];
-            DisabledMetadataFetchers = [ ];
-            LocalMetadataReaderOrder = [ ];
-            MetadataFetcherOrder = [ ];
-            DisabledImageFetchers = [ ];
-            ImageFetcherOrder = [ ];
+            DisabledMetadataSavers = [];
+            DisabledMetadataFetchers = [];
+            LocalMetadataReaderOrder = [];
+            MetadataFetcherOrder = [];
+            DisabledImageFetchers = [];
+            ImageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
             ItemType = "MusicVideo";
-            DisabledMetadataSavers = [ ];
-            DisabledMetadataFetchers = [ "The Open Movie Database" ];
-            LocalMetadataReaderOrder = [ ];
-            MetadataFetcherOrder = [ ];
-            DisabledImageFetchers = [ "The Open Movie Database" ];
-            ImageFetcherOrder = [ ];
+            DisabledMetadataSavers = [];
+            DisabledMetadataFetchers = ["The Open Movie Database"];
+            LocalMetadataReaderOrder = [];
+            MetadataFetcherOrder = [];
+            DisabledImageFetchers = ["The Open Movie Database"];
+            ImageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
             ItemType = "Series";
-            DisabledMetadataSavers = [ ];
-            DisabledMetadataFetchers = [ ];
-            LocalMetadataReaderOrder = [ ];
-            MetadataFetcherOrder = [ ];
-            DisabledImageFetchers = [ ];
-            ImageFetcherOrder = [ ];
+            DisabledMetadataSavers = [];
+            DisabledMetadataFetchers = [];
+            LocalMetadataReaderOrder = [];
+            MetadataFetcherOrder = [];
+            DisabledImageFetchers = [];
+            ImageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
             ItemType = "MusicAlbum";
-            DisabledMetadataSavers = [ ];
-            DisabledMetadataFetchers = [ "TheAudioDB" ];
-            LocalMetadataReaderOrder = [ ];
-            MetadataFetcherOrder = [ ];
-            DisabledImageFetchers = [ ];
-            ImageFetcherOrder = [ ];
+            DisabledMetadataSavers = [];
+            DisabledMetadataFetchers = ["TheAudioDB"];
+            LocalMetadataReaderOrder = [];
+            MetadataFetcherOrder = [];
+            DisabledImageFetchers = [];
+            ImageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
             ItemType = "MusicArtist";
-            DisabledMetadataSavers = [ ];
-            DisabledMetadataFetchers = [ "TheAudioDB" ];
-            LocalMetadataReaderOrder = [ ];
-            MetadataFetcherOrder = [ ];
-            DisabledImageFetchers = [ ];
-            ImageFetcherOrder = [ ];
+            DisabledMetadataSavers = [];
+            DisabledMetadataFetchers = ["TheAudioDB"];
+            LocalMetadataReaderOrder = [];
+            MetadataFetcherOrder = [];
+            DisabledImageFetchers = [];
+            ImageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
             ItemType = "BoxSet";
-            DisabledMetadataSavers = [ ];
-            DisabledMetadataFetchers = [ ];
-            LocalMetadataReaderOrder = [ ];
-            MetadataFetcherOrder = [ ];
-            DisabledImageFetchers = [ ];
-            ImageFetcherOrder = [ ];
+            DisabledMetadataSavers = [];
+            DisabledMetadataFetchers = [];
+            LocalMetadataReaderOrder = [];
+            MetadataFetcherOrder = [];
+            DisabledImageFetchers = [];
+            ImageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
             ItemType = "Season";
-            DisabledMetadataSavers = [ ];
-            DisabledMetadataFetchers = [ ];
-            LocalMetadataReaderOrder = [ ];
-            MetadataFetcherOrder = [ ];
-            DisabledImageFetchers = [ ];
-            ImageFetcherOrder = [ ];
+            DisabledMetadataSavers = [];
+            DisabledMetadataFetchers = [];
+            LocalMetadataReaderOrder = [];
+            MetadataFetcherOrder = [];
+            DisabledImageFetchers = [];
+            ImageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
             ItemType = "Episode";
-            DisabledMetadataSavers = [ ];
-            DisabledMetadataFetchers = [ ];
-            LocalMetadataReaderOrder = [ ];
-            MetadataFetcherOrder = [ ];
-            DisabledImageFetchers = [ ];
-            ImageFetcherOrder = [ ];
+            DisabledMetadataSavers = [];
+            DisabledMetadataFetchers = [];
+            LocalMetadataReaderOrder = [];
+            MetadataFetcherOrder = [];
+            DisabledImageFetchers = [];
+            ImageFetcherOrder = [];
           };
         }
       ];
@@ -273,7 +278,7 @@ in
 
     ContentTypes = mkOption {
       type = with types; listOf str;
-      default = [ ];
+      default = [];
     };
 
     RemoteClientBitrateLimit = mkOption {
@@ -292,7 +297,7 @@ in
 
     CodecsUsed = mkOption {
       type = with types; listOf str;
-      default = [ ];
+      default = [];
     };
 
     PluginRepositories = mkOption {
@@ -322,7 +327,7 @@ in
 
     PathSubstitutions = mkOption {
       type = with types; listOf str;
-      default = [ ];
+      default = [];
     };
 
     EnableSlowResponseWarning = mkOption {
@@ -368,9 +373,15 @@ in
       '';
     };
 
-    RemoveOldPlugins = mkOption { type = types.bool; default = true; };
+    RemoveOldPlugins = mkOption {
+      type = types.bool;
+      default = true;
+    };
 
-    AllowClientLogUpload = mkOption { type = types.bool; default = true; };
+    AllowClientLogUpload = mkOption {
+      type = types.bool;
+      default = true;
+    };
 
     DummyChapterDuration = mkOption {
       type = types.int;
@@ -436,7 +447,7 @@ in
       '';
 
       ScanBehavior = mkOption {
-        type = types.enum [ "NonBlocking" "Blocking" ];
+        type = types.enum ["NonBlocking" "Blocking"];
         default = "NonBlocking";
         description = ''
           The default behavior is non blocking, which will add media to the library before trickplay generation is done. Blocking will ensure trickplay files are generated before media is added to the library, but will make scans significantly longer.
