@@ -14,7 +14,7 @@ in {
           ../modules/default.nix
         ];
 
-        virtualisation.memorySize = 1024;
+        virtualisation.memorySize = 1024 * 2;
 
         services.declarative-jellyfin = {
           enable = true;
@@ -28,24 +28,31 @@ in {
     };
 
     # stfu i dont care about python linting
-    skipLint = true;
+    # skipLint = true;
 
     testScript = ''
       import xml.etree.ElementTree as ET
 
-      machine.start()
       machine.wait_for_unit("multi-user.target");
 
       with subtest("Jellyfin URI"):
-        machine.succeed("ls /var/lib/jellyfin")
-        tree = ET.parse("/var/lib/jellyfin/config/network.xml")
+        # stupid fucking hack because you cant open files in python for some reason
+        xml = machine.succeed("cat /var/lib/jellyfin/config/network.xml")
+        tree = ET.ElementTree(ET.fromstring(xml))
         root = tree.getroot()
-        found = False
         for child in root:
           if child.tag == "PublishedServerUriBySubnet":
-            found = True
-            print(child)
-            assert False
+            try:
+              if child[0].text == "all=https://test.test.test":
+                break
+            except:
+              print("An error occured when trying to parse xml")
+              print(xml)
+              assert False, "Exception occured, check output above"
+        else:
+          assert False, "The shit was not found"
+
+      machine.shutdown()
     '';
   };
 }

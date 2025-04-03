@@ -15,4 +15,4 @@ jobs:
       
       - name: nix flake check
         run: |
-          nix flake check --show-trace
+          nix flake check --show-trace --print-build-logs
