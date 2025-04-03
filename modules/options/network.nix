@@ -69,7 +69,15 @@ with lib; {
       default = ["veth"];
     };
     EnablePublishedServerUriByRequest = mkEnableOption "Enable published server uri by request";
-    PublishedServerUriBySubnet = mkEnableOption "UNIMPLEMENTED";
+    PublishedServerUriBySubnet = mkOption {
+      type = with types; listOf str;
+      description = ''
+        Override the URI used by Jellyfin, based on the interface, or client IP address.
+
+        For example: `["internal=http://jellyfin.example.com" "external=https://jellyfin.example.com"]` or `["all=https://jellyfin.example.com"]`
+      '';
+      default = [];
+    };
     RemoteIpFilter = mkOption {
       type = types.str;
       description = "Remote ip filter";
