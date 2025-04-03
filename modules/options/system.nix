@@ -4,10 +4,11 @@
   ...
 }:
 with lib; let
-  mkStrOption = default: description: mkOption {
-    type = types.str;
-    inherit default description;
-  };
+  mkStrOption = default: description:
+    mkOption {
+      type = types.str;
+      inherit default description;
+    };
 in {
   options.services.declarative-jellyfin.system = {
     ServerName = mkStrOption config.networking.hostName ''
