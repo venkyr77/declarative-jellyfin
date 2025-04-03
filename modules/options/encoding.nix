@@ -72,7 +72,7 @@ with lib; {
         If you misconfigure this your streams **will not work**!.
         More info: https://jellyfin.org/docs/general/administration/hardware-acceleration/
       '';
-      default = "None";
+      default = "none";
     };
     EncoderAppPathDisplay = mkOption {
       type = types.str;
