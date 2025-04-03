@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '.forgejo/workflows/**/*'
+      - 'flake.nix'
+      - 'flake.lock'
+      - 'options/**/*'
+      - 'lib/**/*'
+      - 'tests/**/*'
 
 jobs:
   run_tests:
