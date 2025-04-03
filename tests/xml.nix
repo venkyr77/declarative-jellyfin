@@ -14,6 +14,27 @@ in {
           ../modules/default.nix
         ];
 
+        # assertions = let
+        #   toXml = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
+        # in [
+        #   {
+        #     assertion =
+        #       toXml {tag = "test";}
+        #       == ''
+        #         <?xml version='1.0' encoding='utf-8'?>
+        #         <test />
+        #
+        #       '';
+        #     message = "Generated XML is incorrect!";
+        #   }
+        #   {
+        #     assertion = false;
+        #     message = "lmao";
+        #   }
+        # ];
+
+        ass = false;
+
         virtualisation.memorySize = 1024 * 2;
 
         services.declarative-jellyfin = {
@@ -27,15 +48,12 @@ in {
       };
     };
 
-    # stfu i dont care about python linting
-    # skipLint = true;
-
     testScript = ''
       import xml.etree.ElementTree as ET
 
       machine.wait_for_unit("multi-user.target");
 
-      with subtest("Jellyfin URI"):
+      with subtest("Networking"):
         # stupid fucking hack because you cant open files in python for some reason
         xml = machine.succeed("cat /var/lib/jellyfin/config/network.xml")
         tree = ET.ElementTree(ET.fromstring(xml))
