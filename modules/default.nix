@@ -1,3 +1,6 @@
 {...}: {
-  imports = [./.];
+  imports = [
+    ./config.nix
+    ./options
+  ];
 }

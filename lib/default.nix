@@ -1,11 +1,11 @@
-{nixpkgs, ...}:
-nixpkgs.lib.extend (
-  final: prev: {
-    toXMLGeneric = let
+{ nixpkgs, ... }:
+{
+  toXMLGeneric =
+    let
       toXMLRecursive =
         toXmlRecursive'
-        "<?xml version='1.0' encoding='utf-8'?>\n"
-        0;
+          "<?xml version='1.0' encoding='utf-8'?>\n"
+          0;
 
       indent = depth: (
         if (depth <= 0)
@@ -13,33 +13,33 @@ nixpkgs.lib.extend (
         else ("  " + (indent (depth - 1)))
       );
 
-      toXmlRecursive' = str: depth: xml: let
-        # depth = if (builtins.isInt depth) then depth else (throw "DEPTH ISNT AN INT??? WTFFF");
-        parseTag = str: depth: xml: (builtins.concatStringsSep "" [
-          str
-          "${indent depth}<${xml.name}${
+      toXmlRecursive' = str: depth: xml:
+        let
+          parseTag = str: depth: xml: (builtins.concatStringsSep "" [
+            str
+            "${indent depth}<${xml.name}${
             if (builtins.hasAttr "content" xml)
             then ">"
             else " "
           }"
 
-          (
-            if (builtins.hasAttr "properties" xml)
-            then
-              (" "
-                + builtins.concatStringsSep " " (nixpkgs.lib.attrsets.mapAttrsToList
+            (
+              if (builtins.hasAttr "properties" xml)
+              then
+                (" "
+                  + builtins.concatStringsSep " " (nixpkgs.lib.attrsets.mapAttrsToList
                   (name: value: "${name}=\"${nixpkgs.lib.strings.escapeXML value}\"")
                   xml.properties))
-            else ""
-          )
+              else ""
+            )
 
-          (
-            if builtins.hasAttr "content" xml
-            then ((toXmlRecursive' "\n" (depth + 1) xml.content) + "</${xml.name}>")
-            else "/>"
-          )
-        ]);
-      in
+            (
+              if builtins.hasAttr "content" xml
+              then ((toXmlRecursive' "\n" (depth + 1) xml.content) + "</${xml.name}>")
+              else "/>"
+            )
+          ]);
+        in
         if (builtins.isAttrs xml)
         then "${parseTag str depth xml}\n${indent (depth - 1)}"
         else if (builtins.isList xml)
@@ -50,6 +50,6 @@ nixpkgs.lib.extend (
         then xml
         else throw "Cannot convert a ${builtins.typeOf xml} to XML";
     in
-      toXMLRecursive;
-  }
-)
+    toXMLRecursive;
+}
+

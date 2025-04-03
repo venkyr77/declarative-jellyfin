@@ -1,10 +1,12 @@
 {
   config,
-  lib,
+  nixpkgs,
   pkgs,
+  lib,
   ...
 }: let
   cfg = config.services.declarative-jellyfin;
+  toXml = (import ../../lib {inherit nixpkgs;}).toXMLGeneric;
 in
   with lib; {
     imports = [
@@ -36,7 +38,7 @@ in
               else (listOfStrPrepass value)
             )
             xml));
-          toXml = name: x: (toXMLGeneric {
+          toXml = name: x: (toXml {
             inherit name;
             properties = {
               "xmlns:xsi" = "http://www.w3.org/2001/XMLSchema-instance";
