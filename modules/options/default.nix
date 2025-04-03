@@ -1,25 +1,25 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: let
+{ config
+, pkgs
+, lib
+, ...
+}:
+let
   cfg = config.services.declarative-jellyfin;
-  toXml' = (import ../../lib {nixpkgs = pkgs;}).toXMLGeneric;
+  toXml' = (import ../../lib { nixpkgs = pkgs; }).toXMLGeneric;
 in
-  with lib; {
-    imports = [
-      ./system.nix
-      ./encoding.nix
-      ./network.nix
-      ./branding.nix
-    ];
-    options.services.declarative-jellyfin = {
-      enable = mkEnableOption "Jellyfin Service";
-    };
+with lib; {
+  imports = [
+    ./system.nix
+    ./encoding.nix
+    ./network.nix
+    ./branding.nix
+  ];
+  options.services.declarative-jellyfin = {
+    enable = mkEnableOption "Jellyfin Service";
+  };
 
-    config =
-      mkIf cfg.enable
+  config =
+    mkIf cfg.enable
       (
         let
           isStrList = x: builtins.all (x: builtins.isString x) x;
@@ -29,11 +29,11 @@ in
               if !(builtins.hasAttr "tag" x)
               then
                 attrsets.mapAttrsToList
-                (tag: value: {
-                  inherit tag;
-                  content = prepass value;
-                })
-                x
+                  (tag: value: {
+                    inherit tag;
+                    content = prepass value;
+                  })
+                  x
               else if (builtins.hasAttr "content" x)
               then {
                 tag = x.tag;
@@ -44,11 +44,12 @@ in
             then
               if (isStrList x)
               then
-                (builtins.map (content: {
-                  tag = "string";
-                  inherit content;
-                })
-                x)
+                (builtins.map
+                  (content: {
+                    tag = "string";
+                    inherit content;
+                  })
+                  x)
               else builtins.map prepass x
             else x;
 
@@ -60,19 +61,43 @@ in
             };
             content = prepass x;
           });
-        in {
-          system.activationScripts."link-network-xml" =
-            lib.stringAfter ["var"]
-            (
-              let
-                storeFile = pkgs.writeText "network.xml" (toXml "NetworkConfiguration" cfg.network);
-              in ''
-                echo "[Declarative Jellyfin] Creating /var/lib/jellyfin/config"
-                mkdir -p "/var/lib/jellyfin/config"
-                echo "[Declarative Jellyfin] Linking ${storeFile} to /var/lib/jellyfin/config/network.xml"
-                cp -s "${storeFile}" "/var/lib/jellyfin/config/network.xml"
-              ''
-            );
+        in
+        {
+          system.activationScripts = {
+            link-network-xml =
+              lib.stringAfter [ "var" ]
+                (
+                  let
+                    storeFile = pkgs.writeText "network.xml" (toXml "NetworkConfiguration" cfg.network);
+                  in
+                  ''
+                    mkdir -p "/var/lib/jellyfin/config"
+                    cp -s "${storeFile}" "/var/lib/jellyfin/config/network.xml"
+                  ''
+                );
+            link-encoding-xml =
+              lib.stringAfter [ "var" ]
+                (
+                  let
+                    storeFile = pkgs.writeText "encoding.xml" (toXml "EncodingOptions" cfg.network);
+                  in
+                  ''
+                    mkdir -p "/var/lib/jellyfin/config"
+                    cp -s "${storeFile}" "/var/lib/jellyfin/config/encoding.xml"
+                  ''
+                );
+            link-system-xml =
+              lib.stringAfter [ "var" ]
+                (
+                  let
+                    storeFile = pkgs.writeText "system.xml" (toXml "ServerConfiguration" cfg.network);
+                  in
+                  ''
+                    mkdir -p "/var/lib/jellyfin/config"
+                    cp -s "${storeFile}" "/var/lib/jellyfin/config/system.xml"
+                  ''
+                );
+          };
         }
       );
-  }
+}
