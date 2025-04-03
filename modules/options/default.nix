@@ -31,7 +31,9 @@ in
           });
         in {
           system.activationScripts."link-network-xml" =
-            lib.stringAfter ["var"] (toXml "NetworkConfiguration" cfg.network);
+            lib.stringAfter ["var"] (let content = toXml "NetworkConfiguration" cfg.network; in ''
+              ${pkgs.writeTextFile}/bin/writeTextFile /var/lib/jellyfin/config/network.xml '${strings.escape ["'"] content}'
+            '');
         }
       );
   }
