@@ -4,13 +4,24 @@ nixpkgs.lib.extend (
     toXMLGeneric = let
       toXMLRecursive =
         toXmlRecursive'
-        "<?xml version='1.0' encoding='utf-8'?>";
+        "<?xml version='1.0' encoding='utf-8'?>\n"
+        0;
 
-      toXmlRecursive' = str: xml: let
-        parseTag = str: xml: (builtins.concatStringsSep "" [
+      indent = depth: (
+        if (depth <= 0)
+        then ""
+        else ("  " + (indent (depth - 1)))
+      );
+
+      toXmlRecursive' = str: depth: xml: let
+        # depth = if (builtins.isInt depth) then depth else (throw "DEPTH ISNT AN INT??? WTFFF");
+        parseTag = str: depth: xml: (builtins.concatStringsSep "" [
           str
-          "\n"
-          "<${xml.name}"
+          "${indent depth}<${xml.name}${
+            if (builtins.hasAttr "content" xml)
+            then ">"
+            else " "
+          }"
 
           (
             if (builtins.hasAttr "properties" xml)
@@ -24,20 +35,20 @@ nixpkgs.lib.extend (
 
           (
             if builtins.hasAttr "content" xml
-            then ((toXmlRecursive' "" xml.content) + "\n</${xml.name}>")
+            then ((toXmlRecursive' "\n" (depth + 1) xml.content) + "</${xml.name}>")
             else "/>"
           )
         ]);
-        output =
-          if (builtins.isAttrs xml)
-          then (parseTag str xml)
-          else if (builtins.isList xml)
-          then (builtins.concatStringsSep "\n" (builtins.map (x: (toXmlRecursive' "" x)) xml))
-          else if ((builtins.isBool xml) || (builtins.isInt xml) || (builtins.isNull xml) || (builtins.isFloat xml))
-          then (builtins.toString xml)
-          else nixpkgs.lib.abort "Cannot convert a ${builtins.typeOf xml} to XML";
       in
-        output;
+        if (builtins.isAttrs xml)
+        then "${parseTag str depth xml}\n${indent (depth - 1)}"
+        else if (builtins.isList xml)
+        then "\n${(builtins.concatStringsSep "" (builtins.map (x: (toXmlRecursive' "" depth x)) xml))}${indent (depth - 1)}"
+        else if ((builtins.isBool xml) || (builtins.isInt xml) || (builtins.isNull xml) || (builtins.isFloat xml))
+        then (builtins.toString xml)
+        else if (builtins.isString xml)
+        then xml
+        else throw "Cannot convert a ${builtins.typeOf xml} to XML";
     in
       toXMLRecursive;
   }
