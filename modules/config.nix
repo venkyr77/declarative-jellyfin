@@ -7,11 +7,11 @@
 with lib; let
   cfg = config.services.declarative-jellyfin;
   toXml' = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
-  isStrList = x: builtins.all (x: builtins.isString x) x;
+  isStrList = x: all (x: isString x) x;
   prepass = x:
-    if (builtins.isAttrs x)
+    if (isAttrs x)
     then
-      if !(builtins.hasAttr "tag" x)
+      if !(hasAttr "tag" x)
       then
         attrsets.mapAttrsToList
         (tag: value: {
@@ -19,23 +19,23 @@ with lib; let
           content = prepass value;
         })
         x
-      else if (builtins.hasAttr "content" x)
+      else if (hasAttr "content" x)
       then {
         tag = x.tag;
         content = prepass x.content;
       }
       else x
-    else if (builtins.isList x)
+    else if (isList x)
     then
       if (isStrList x)
       then
-        (builtins.map
+        (map
           (content: {
             tag = "string";
             inherit content;
           })
           x)
-      else builtins.map prepass x
+      else map prepass x
     else x;
 
   toXml = tag: x: (toXml' {
@@ -59,8 +59,8 @@ in {
           (
             let
               commands =
-                builtins.concatStringsSep "\n"
-                (builtins.map
+                concatStringsSep "\n"
+                (map
                   (x: "cp -s \"${pkgs.writeText x.file (toXml x.name x.content)}\" \"/var/lib/jellyfin/config/${x.file}\"")
                   [
                     {

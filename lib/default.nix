@@ -15,9 +15,9 @@
       parseTag = str: depth: xml: (builtins.concatStringsSep "" [
         str
         "${indent depth}<${xml.tag}${
-          if (builtins.hasAttr "content" xml) && ((builtins.isString xml.content) || (builtins.isList xml.content) && ((builtins.length xml.content) > 0))
-          then ">"
-          else " "
+          if !(builtins.hasAttr "content" xml) || (((builtins.isString xml.content) && xml.content == "") || ((builtins.isList xml.content) && ((builtins.length xml.content) == 0)))
+          then ""
+          else ">"
         }"
 
         (
@@ -31,9 +31,9 @@
         )
 
         (
-          if (builtins.hasAttr "content" xml) && ((builtins.isString xml.content) || (builtins.isList xml.content) && ((builtins.length xml.content) > 0))
-          then ((toXmlRecursive' "\n" (depth + 1) xml.content) + "</${xml.tag}>")
-          else "/>"
+          if !(builtins.hasAttr "content" xml) || (((builtins.isString xml.content) && xml.content == "") || ((builtins.isList xml.content) && ((builtins.length xml.content) == 0)))
+          then " />"
+          else ((toXmlRecursive' "\n" (depth + 1) xml.content) + "</${xml.tag}>")
         )
       ]);
     in
@@ -41,10 +41,12 @@
       then "${parseTag str depth xml}\n${indent (depth - 1)}"
       else if (builtins.isList xml)
       then "\n${(builtins.concatStringsSep "" (builtins.map (x: (toXmlRecursive' "" depth x)) xml))}${indent (depth - 1)}"
-      else if ((builtins.isBool xml) || (builtins.isInt xml) || (builtins.isNull xml) || (builtins.isFloat xml))
+      else if ((builtins.isInt xml) || (builtins.isNull xml) || (builtins.isFloat xml))
       then (builtins.toString xml)
       else if (builtins.isString xml)
       then xml
+      else if (builtins.isBool xml)then
+      if xml then "true" else "false"
       else throw "Cannot convert a ${builtins.typeOf xml} to XML. ${toString (builtins.trace xml xml)}";
   in
     toXMLRecursive;
