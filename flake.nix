@@ -43,6 +43,10 @@
       default = declarative-jellyfin;
     };
 
+    packages = forAllSystems (system: let
+      pkgs = import nixpkgs {inherit system;};
+    in {genhash = import ./modules/pbkdf2-sha512.nix {inherit pkgs;};});
+
     # Run all tests for all systems
     hydraJobs = forAllSystems tests;
     checks = forAllSystems tests;

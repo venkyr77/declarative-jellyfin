@@ -11,8 +11,8 @@ pkgs.stdenv.mkDerivation rec {
   phases = ["buildPhase"];
 
   buildPhase = ''
-    mkdir -p $out
-    gcc $src -o $out/${name} -lnettle
+    mkdir -p $out/bin
+    gcc $src -o $out/bin/${name} -lnettle
     echo $out
   '';
 
