@@ -8,7 +8,8 @@ Users, Libraries, Plugins, Settings, etc.
 - [x] Creating .xml files
 - [ ] Modifying databate
 - [ ] Test cases
-    - [ ] Networking
+    - [x] XML Generation
+    - [x] Networking
     - [ ] Encoding
     - [ ] System
     - [ ] Users
@@ -22,11 +23,11 @@ Users, Libraries, Plugins, Settings, etc.
 - [ ] Plugins
 - [ ] Settings
     - [ ] Scheduled jobs
-    - [ ] Networking
+    - [x] Networking
         - [x] Nix options
-    - [ ] Encoding
+    - [x] Encoding
         - [x] Nix options
-    - [ ] System settings
+    - [x] System settings
         - [x] Nix options
-    - [ ] Branding
+    - [x] Branding
         - [ ] Nix options
