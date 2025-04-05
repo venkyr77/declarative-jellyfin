@@ -46,5 +46,12 @@
     # Run all tests for all systems
     hydraJobs = forAllSystems tests;
     checks = forAllSystems tests;
+    devShell.x86_64-linux = let
+      pkgs = import nixpkgs {system = "x86_64-linux";};
+    in
+      pkgs.mkShell {
+        buildInputs = with pkgs; [bear gcc nettle];
+        nativeBuildInputs = [pkgs.nettle];
+      };
   };
 }
