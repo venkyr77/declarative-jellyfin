@@ -29,5 +29,5 @@ Users, Libraries, Plugins, Settings, etc.
         - [x] Nix options
     - [x] System settings
         - [x] Nix options
-    - [x] Branding
+    - [ ] Branding
         - [ ] Nix options
