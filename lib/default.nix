@@ -45,8 +45,11 @@
       then (builtins.toString xml)
       else if (builtins.isString xml)
       then xml
-      else if (builtins.isBool xml)then
-      if xml then "true" else "false"
+      else if (builtins.isBool xml)
+      then
+        if xml
+        then "true"
+        else "false"
       else throw "Cannot convert a ${builtins.typeOf xml} to XML. ${toString (builtins.trace xml xml)}";
   in
     toXMLRecursive;
