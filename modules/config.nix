@@ -84,6 +84,69 @@ in {
               ${commands}
             ''
           );
+
+        create-db = lib.stringAfter ["var"] (
+          let
+            dbname = "jellyfin.db";
+            defaultDB = ./default.db;
+            sq = "${pkgs.sqlite}/bin/sqlite3 \"${path}/${dbname}\" --";
+            path = "/var/lib/jellyfin/data";
+
+            # ${sq} "INSERT INTO Users (Id, AudioLanguagePreference, AuthenticationProviderId, DisplayCollectionsView, DisplayMissingEpisodes, EnableAutoLogin, EnableLocalPassword, EnableNextEpisodeAutoPlay, EnableUserPreferenceAccess, HidePlayedInLatest, InternalId, LoginAttemptsBeforeLockout, MaxActiveSessions, MaxParentalAgeRating, Password, HashedPasswordFile, PasswordResetProviderId, PlayDefaultAudioTrack, RememberAudioSelections, RememberSubtitleSelections, RemoteClientBitrateLimit, SubtitleLanguagePreference, SubtitleMode, SyncPlayAccess, Username, CastReceiverId) \
+            # VALUES(${user.})"
+            genUser = index: user: let
+              values =
+                builtins.mapAttrs (name: value:
+                  if (isBool value)
+                  then
+                    if value
+                    then "1"
+                    else "0"
+                  else value)
+                (cfg.Users
+                  // {
+                    Id =
+                      if (builtins.hasAttr "Id" cfg.Users)
+                      then cfg.Users.Id
+                      else "$(${pkgs.libuuid}/bin/uuidgen | ${pkgs.coreutils}/bin/tr '[:lower:]' '[:upper:]')";
+                    InternalId =
+                      if (builtins.hasAttr "InternalId" cfg.Users)
+                      then cfg.Users.InternalId
+                      else "$(($maxIndex+${index + 1}))";
+                    Password =
+                      if (hasAttr "HashedPasswordFile" cfg.Users)
+                      then "$(${pkgs.coreutils}/bin/cat \"${cfg.Users.HashedPasswordFile}\")"
+                      else "$(${self.packages.${pkgs.system}.genhash}/bin/genhash -k \"${cfg.Users.Password}\" -i 210000 -l 128 -u)";
+                  });
+            in
+              /*
+              bash
+              */
+              ''
+                if [ -n $(${sq} "SELECT 1 FROM Users WHERE Username = '${user.Username}'") ]; then
+                  # Create user
+                    ${sq} "INSERT INTO Users (${concatStringsSep ","
+                  (builtins.filter (x: x != "HashedPasswordFile")
+                    (lib.attrsets.mapAttrsToList (name: value: "${name}")
+                      options.services.declarative-jellyfin.Users.options))}) \\
+                    VALUES(${builtins.attrValues values})"
+                fi
+              '';
+          in
+            /*
+            bash
+            */
+            ''
+              mkdir -p ${path}
+              # Make sure there is a database
+              if [ -z "${path}/${dbname}" ] && cp ${defaultDB} "${path}/${dbname}"
+
+              maxIndex=$(${sq} 'SELECT InternalId FROM Users ORDER BY InternalId DESC LIMIT 1')
+              if [ -n "$maxIndex" ] && maxIndex="1"
+
+
+            ''
+        );
       };
     };
 }

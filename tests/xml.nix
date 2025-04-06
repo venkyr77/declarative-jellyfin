@@ -154,47 +154,51 @@ in {
       };
     };
 
-    testScript = ''
-      import xml.etree.ElementTree as ET
+    testScript =
+      /*
+      py
+      */
+      ''
+        import xml.etree.ElementTree as ET
 
-      machine.wait_for_unit("multi-user.target");
+        machine.wait_for_unit("multi-user.target");
 
-      with subtest("network.xml"):
-        # stupid fucking hack because you cant open files in python for some reason
-        xml = machine.succeed("cat /var/lib/jellyfin/config/network.xml")
-        tree = ET.ElementTree(ET.fromstring(xml))
-        root = tree.getroot()
+        with subtest("network.xml"):
+          # stupid fucking hack because you cant open files in python for some reason
+          xml = machine.succeed("cat /var/lib/jellyfin/config/network.xml")
+          tree = ET.ElementTree(ET.fromstring(xml))
+          root = tree.getroot()
 
-        with subtest("PublishedServerUriBySubnet"):
-          for child in root:
-            if child.tag == "PublishedServerUriBySubnet":
-              try:
-                if child[0].text == "all=https://test.test.test":
+          with subtest("PublishedServerUriBySubnet"):
+            for child in root:
+              if child.tag == "PublishedServerUriBySubnet":
+                try:
+                  if child[0].text == "all=https://test.test.test":
+                    break
+                except:
+                  print("An error occured when trying to parse xml")
+                  print(xml)
+                  assert False, "Exception occured, check output above"
+            else:
+              assert False, "The shit was not found. Full XML: " + xml
+
+          with subtest("EnableHttps"):
+            for child in root:
+              if child.tag == "EnableHttps":
+                if child.text == "true":
                   break
-              except:
-                print("An error occured when trying to parse xml")
-                print(xml)
-                assert False, "Exception occured, check output above"
-          else:
-            assert False, "The shit was not found. Full XML: " + xml
+            else:
+              assert False, "The shit was not found. Full XML: " + xml
 
-        with subtest("EnableHttps"):
-          for child in root:
-            if child.tag == "EnableHttps":
-              if child.text == "true":
-                break
-          else:
-            assert False, "The shit was not found. Full XML: " + xml
+          with subtest("RequireHttps"):
+            for child in root:
+              if child.tag == "RequireHttps":
+                if child.text == "true":
+                  break
+            else:
+              assert False, "The shit was not found. Full XML: " + xml
 
-        with subtest("RequireHttps"):
-          for child in root:
-            if child.tag == "RequireHttps":
-              if child.text == "true":
-                break
-          else:
-            assert False, "The shit was not found. Full XML: " + xml
-
-      machine.shutdown()
-    '';
+        machine.shutdown()
+      '';
   };
 }

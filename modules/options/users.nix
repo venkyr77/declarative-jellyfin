@@ -9,7 +9,6 @@ with lib; {
         Id = mkOption {
           type = types.str; # TODO: Limit the id to the pattern: "18B51E25-33FD-46B6-BBF8-DB4DD77D0679"
           description = "The ID of the user";
-          default = "autogenerate";
           example = "18B51E25-33FD-46B6-BBF8-DB4DD77D0679";
         };
         AudioLanguagePreference = mkOption {
@@ -64,10 +63,9 @@ with lib; {
           example = false;
         };
         InternalId = mkOption {
-          type = with types; either int str; # TODO: Limit string to "autogenerate"
+          type = types.int;
           # NOTE: index is 1-indexed! NOT 0-indexed.
           description = "The index of the user in the database. Be careful setting this option. 1 indexed.";
-          default = "autogenerate";
           example = 69;
         };
         LoginAttemptsBeforeLockout = mkOption {
