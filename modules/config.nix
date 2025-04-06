@@ -142,12 +142,12 @@ in {
             ''
               mkdir -p ${path}
               # Make sure there is a database
-              if [ -z "${path}/${dbname}" ]; then
+              if [ ! -e "${path}/${dbname}" ]; then
                 cp ${defaultDB} "${path}/${dbname}"
               fi
 
               maxIndex=$(${sq} 'SELECT InternalId FROM Users ORDER BY InternalId DESC LIMIT 1')
-              if [ -n "$maxIndex" ]; then
+              if [ -z "$maxIndex" ]; then
                 maxIndex="1"
               fi
 
