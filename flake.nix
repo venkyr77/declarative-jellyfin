@@ -19,7 +19,9 @@
     tests = system:
       builtins.listToAttrs (builtins.map
         (x: let
-          test = import (./tests + "/${x}") {pkgs = import nixpkgs {inherit system;};};
+          test = import (./tests + "/${x}") {
+            pkgs = import nixpkgs {inherit system;};
+          };
         in {
           name = test.name;
           value = test.test;
@@ -38,24 +40,30 @@
       in
         pkgs.alejandra
     );
+
     nixosModules = rec {
       declarative-jellyfin = import ./modules;
       default = declarative-jellyfin;
     };
 
-    packages = forAllSystems (system: let
-      pkgs = import nixpkgs {inherit system;};
-    in {genhash = import ./modules/pbkdf2-sha512.nix {inherit pkgs;};});
-
     # Run all tests for all systems
     hydraJobs = forAllSystems tests;
     checks = forAllSystems tests;
-    devShell.x86_64-linux = let
-      pkgs = import nixpkgs {system = "x86_64-linux";};
-    in
-      pkgs.mkShell {
-        buildInputs = with pkgs; [bear gcc nettle];
-        nativeBuildInputs = [pkgs.nettle];
-      };
+
+    packages = forAllSystems (
+      system: let
+        pkgs = import nixpkgs {inherit system;};
+      in {genhash = import ./modules/pbkdf2-sha512.nix {inherit pkgs;};}
+    );
+
+    devShell = forAllSystems (
+      system: let
+        pkgs = import nixpkgs {inherit system;};
+      in
+        pkgs.mkShell {
+          buildInputs = with pkgs; [bear gcc nettle];
+          nativeBuildInputs = [pkgs.nettle];
+        }
+    );
   };
 }

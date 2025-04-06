@@ -33,7 +33,6 @@ in {
         machine.systemctl("stop jellyfin.service")
         machine.wait_until_fails("pgrep jellyfin")
         machine.copy_from_vm("/var/lib/jellyfin/data/jellyfin.db", "jellyfin.db")
-        assert False
       '';
   };
 }

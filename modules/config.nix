@@ -2,10 +2,12 @@
   config,
   lib,
   pkgs,
+  self,
   ...
 }:
 with lib; let
   cfg = config.services.declarative-jellyfin;
+  genhash = import ./pbkdf2-sha512.nix {inherit pkgs;};
   toXml' = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
   isStrList = x: all (x: isString x) x;
   prepass = x:
@@ -91,20 +93,40 @@ in {
             defaultDB = ./default.db;
             sq = "${pkgs.sqlite}/bin/sqlite3 \"${path}/${dbname}\" --";
             path = "/var/lib/jellyfin/data";
+            options = lib.attrsets.mapAttrsToList (key: value: "${key}") (
+              builtins.removeAttrs (
+                (import ./options/users.nix {inherit lib;}).options.services.declarative-jellyfin.Users.type.getSubOptions []
+              )
+              ["HashedPasswordFile" "_module"]
+            );
+
+            subtitleModes = {
+              Default = 0;
+              Always = 1;
+              OnlyForce = 2;
+              None = 3;
+              Smart = 4;
+            };
 
             genUser = index: user: let
-              values =
+              values = builtins.removeAttrs (
                 builtins.mapAttrs
-                (name: value:
-                  if (isBool value)
-                  then
-                    if value
-                    then "1"
-                    else "0"
-                  else if (isNull value)
-                  then "NULL"
-                  else value)
-                (user
+                (
+                  name: value:
+                    if (isBool value) # bool -> 1 or 0
+                    then
+                      if value
+                      then "1"
+                      else "0"
+                    else if (isNull value) # null -> NULL
+                    then "NULL"
+                    else if (name == "SubtitleMode") # SubtitleMode -> 0 | 1 | 2 | 3 | 4
+                    then subtitleModes.${value}
+                    else if (isString value)
+                    then "'${value}'"
+                    else value
+                ) (
+                  user
                   // {
                     Id =
                       if !(isNull user.Id)
@@ -117,22 +139,24 @@ in {
                     Password =
                       if !(isNull user.HashedPasswordFile)
                       then "$(${pkgs.coreutils}/bin/cat \"${user.HashedPasswordFile}\")"
-                      else "$(${self.packages.${pkgs.system}.genhash}/bin/genhash -k \"${user.Password}\" -i 210000 -l 128 -u)";
-                  });
+                      else "$(${genhash}/bin/genhash -k \"${user.Password}\" -i 210000 -l 128 -u)";
+                  }
+                )
+              ) ["HashedPasswordFile"];
             in
               /*
               bash
               */
               ''
                 if [ -n $(${sq} "SELECT 1 FROM Users WHERE Username = '${user.Username}'") ]; then
+                  echo "User doesn't exist. creaing new: ${user.Username}" >> /var/log/log.txt
                   # Create user
-                    ${sq} "INSERT INTO Users (${concatStringsSep ","
-                  (
-                    builtins.filter (x: x != "HashedPasswordFile")
-                    (lib.attrsets.mapAttrsToList (name: value: "${name}")
-                      ((import ./options/users.nix {inherit lib;}).options.services.declarative-jellyfin.Users.type.getSubOptions []))
-                  )}) \\
-                    VALUES(${concatStringsSep "," (map toString (builtins.attrValues values))})"
+                  sql="
+                    INSERT INTO Users (${concatStringsSep "," options}) VALUES(${concatStringsSep "," (map toString (builtins.attrValues values))})"
+
+                  echo "SQL COMMAND: $sql" >> /var/log/log.txt
+                  res=$(${sq} "$sql")
+                  echo "OUT: $res" >> /var/log/log.txt
                 fi
               '';
           in
@@ -140,9 +164,13 @@ in {
             bash
             */
             ''
+              mkdir -p /var/log
+              file /var/log/log.txt
+
               mkdir -p ${path}
               # Make sure there is a database
               if [ ! -e "${path}/${dbname}" ]; then
+                echo "No DB found. Copying default..." >> /var/log/log.txt
                 cp ${defaultDB} "${path}/${dbname}"
                 chmod 770 "${path}/${dbname}"
               fi
@@ -151,6 +179,7 @@ in {
               if [ -z "$maxIndex" ]; then
                 maxIndex="1"
               fi
+              echo "Max index: $maxIndex" >> /var/log/log.txt
 
               ${
                 concatStringsSep "\n"

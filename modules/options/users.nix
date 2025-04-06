@@ -93,7 +93,7 @@ with lib; {
           default = "";
         };
         HashedPasswordFile = mkOption {
-          type = with types; either path str;
+          type = types.nullOr types.path;
           description = ''
             A path to a pbkdf2-sha512 hash
             in this format [PHC string](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md).
@@ -110,7 +110,7 @@ with lib; {
 
             ```
           '';
-          default = "";
+          default = null;
           example = ''
             # the format is: $<id>[$<param>=<value>(,<param>=<value>)*][$<salt>[$<hash>]]
             $PBKDF2-SHA512$iterations=210000$D12C02D1DD15949D867BCA9971BE9987$67E75CDCD14E7F6FDDF96BAACBE9E84E5197FB9FE454FB039F5CD773D7DF558B57DC81DB42B6F7CF0E6B8207A771E5C0EE0DBFD91CE5BAF804FE53F70E61CD2E
@@ -172,14 +172,28 @@ with lib; {
           type = types.str;
           default = "F007D354";
         };
-      };
+        InvalidLoginAttemptCount = mkOption {
+          type = types.int;
+          default = 0;
+        };
+        MustUpdatePassword = mkOption {
+          type = types.int;
+          default = 0;
+        };
+        RowVersion = mkOption {
+          type = types.int;
+          default = 0;
+        };
 
-      # Omitted database columns:
-      # InvalidLoginAttemptCount
-      # LastActivityDate
-      # LastLoginDate
-      # MustUpdatePassword
-      # RowVersion
+        LastActivityDate = mkOption {
+          type = with types; nullOr str;
+          default = null;
+        };
+        LastLoginDate = mkOption {
+          type = with types; nullOr str;
+          default = null;
+        };
+      };
     }));
   };
 }
