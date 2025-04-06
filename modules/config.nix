@@ -96,7 +96,8 @@ in {
             # VALUES(${user.})"
             genUser = index: user: let
               values =
-                builtins.mapAttrs (name: value:
+                builtins.mapAttrs
+                (name: value:
                   if (isBool value)
                   then
                     if value
@@ -126,9 +127,11 @@ in {
                 if [ -n $(${sq} "SELECT 1 FROM Users WHERE Username = '${user.Username}'") ]; then
                   # Create user
                     ${sq} "INSERT INTO Users (${concatStringsSep ","
-                  (builtins.filter (x: x != "HashedPasswordFile")
+                  (
+                    builtins.filter (x: x != "HashedPasswordFile")
                     (lib.attrsets.mapAttrsToList (name: value: "${name}")
-                      options.services.declarative-jellyfin.Users.options))}) \\
+                      options.services.declarative-jellyfin.Users.options)
+                  )}) \\
                     VALUES(${builtins.attrValues values})"
                 fi
               '';
@@ -139,11 +142,14 @@ in {
             ''
               mkdir -p ${path}
               # Make sure there is a database
-              if [ -z "${path}/${dbname}" ] && cp ${defaultDB} "${path}/${dbname}"
+              if [ -z "${path}/${dbname}" ]; then
+                cp ${defaultDB} "${path}/${dbname}"
+              fi
 
               maxIndex=$(${sq} 'SELECT InternalId FROM Users ORDER BY InternalId DESC LIMIT 1')
-              if [ -n "$maxIndex" ] && maxIndex="1"
-
+              if [ -n "$maxIndex" ]; then
+                maxIndex="1"
+              fi
 
             ''
         );
