@@ -61,7 +61,7 @@ in {
               commands =
                 concatStringsSep "\n"
                 (map
-                  (x: "cp -s \"${pkgs.writeText x.file (toXml x.name x.content)}\" \"/var/lib/jellyfin/config/${x.file}\"")
+                  (x: "test ! -e \"/var/lib/jellyfin/config/${x.file}\" && cp -s \"${pkgs.writeText x.file (toXml x.name x.content)}\" \"/var/lib/jellyfin/config/${x.file}\"")
                   [
                     {
                       name = "NetworkConfiguration";
@@ -92,8 +92,6 @@ in {
             sq = "${pkgs.sqlite}/bin/sqlite3 \"${path}/${dbname}\" --";
             path = "/var/lib/jellyfin/data";
 
-            # ${sq} "INSERT INTO Users (Id, AudioLanguagePreference, AuthenticationProviderId, DisplayCollectionsView, DisplayMissingEpisodes, EnableAutoLogin, EnableLocalPassword, EnableNextEpisodeAutoPlay, EnableUserPreferenceAccess, HidePlayedInLatest, InternalId, LoginAttemptsBeforeLockout, MaxActiveSessions, MaxParentalAgeRating, Password, HashedPasswordFile, PasswordResetProviderId, PlayDefaultAudioTrack, RememberAudioSelections, RememberSubtitleSelections, RemoteClientBitrateLimit, SubtitleLanguagePreference, SubtitleMode, SyncPlayAccess, Username, CastReceiverId) \
-            # VALUES(${user.})"
             genUser = index: user: let
               values =
                 builtins.mapAttrs
@@ -103,21 +101,23 @@ in {
                     if value
                     then "1"
                     else "0"
+                  else if (isNull value)
+                  then "NULL"
                   else value)
-                (cfg.Users
+                (user
                   // {
                     Id =
-                      if (builtins.hasAttr "Id" cfg.Users)
-                      then cfg.Users.Id
+                      if !(isNull user.Id)
+                      then user.Id
                       else "$(${pkgs.libuuid}/bin/uuidgen | ${pkgs.coreutils}/bin/tr '[:lower:]' '[:upper:]')";
                     InternalId =
-                      if (builtins.hasAttr "InternalId" cfg.Users)
-                      then cfg.Users.InternalId
-                      else "$(($maxIndex+${index + 1}))";
+                      if !(isNull user.InternalId)
+                      then user.InternalId
+                      else "$(($maxIndex+${toString (index + 1)}))";
                     Password =
-                      if (hasAttr "HashedPasswordFile" cfg.Users)
-                      then "$(${pkgs.coreutils}/bin/cat \"${cfg.Users.HashedPasswordFile}\")"
-                      else "$(${self.packages.${pkgs.system}.genhash}/bin/genhash -k \"${cfg.Users.Password}\" -i 210000 -l 128 -u)";
+                      if !(isNull user.HashedPasswordFile)
+                      then "$(${pkgs.coreutils}/bin/cat \"${user.HashedPasswordFile}\")"
+                      else "$(${self.packages.${pkgs.system}.genhash}/bin/genhash -k \"${user.Password}\" -i 210000 -l 128 -u)";
                   });
             in
               /*
@@ -130,9 +130,9 @@ in {
                   (
                     builtins.filter (x: x != "HashedPasswordFile")
                     (lib.attrsets.mapAttrsToList (name: value: "${name}")
-                      options.services.declarative-jellyfin.Users.options)
+                      ((import ./options/users.nix {inherit lib;}).options.services.declarative-jellyfin.Users.type.getSubOptions []))
                   )}) \\
-                    VALUES(${builtins.attrValues values})"
+                    VALUES(${concatStringsSep "," (map toString (builtins.attrValues values))})"
                 fi
               '';
           in
@@ -144,6 +144,7 @@ in {
               # Make sure there is a database
               if [ ! -e "${path}/${dbname}" ]; then
                 cp ${defaultDB} "${path}/${dbname}"
+                chmod 770 "${path}/${dbname}"
               fi
 
               maxIndex=$(${sq} 'SELECT InternalId FROM Users ORDER BY InternalId DESC LIMIT 1')
@@ -151,6 +152,23 @@ in {
                 maxIndex="1"
               fi
 
+              ${
+                concatStringsSep "\n"
+                (
+                  map ({
+                    fst,
+                    snd,
+                  }:
+                    genUser snd fst)
+                  (
+                    lib.lists.zipLists cfg.Users
+                    (
+                      builtins.genList (x: x)
+                      (builtins.length cfg.Users)
+                    )
+                  )
+                )
+              }
             ''
         );
       };

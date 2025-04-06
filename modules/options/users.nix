@@ -4,15 +4,17 @@ with lib; {
   # Based on: https://github.com/jellyfin/jellyfin/blob/master/MediaBrowser.Model/Configuration/UserConfiguration.cs
   Users = mkOption {
     description = "User configuration";
+    default = [];
     type = lib.types.listOf (lib.types.submodule ({config, ...}: {
       options = {
         Id = mkOption {
-          type = types.str; # TODO: Limit the id to the pattern: "18B51E25-33FD-46B6-BBF8-DB4DD77D0679"
+          type = types.nullOr types.str; # TODO: Limit the id to the pattern: "18B51E25-33FD-46B6-BBF8-DB4DD77D0679"
           description = "The ID of the user";
           example = "18B51E25-33FD-46B6-BBF8-DB4DD77D0679";
+          default = null;
         };
         AudioLanguagePreference = mkOption {
-          type = with types; either null str;
+          type = with types; nullOr str;
           description = "The audio language preference. Defaults to 'Any Language'";
           default = null;
           example = "eng";
@@ -63,10 +65,11 @@ with lib; {
           example = false;
         };
         InternalId = mkOption {
-          type = types.int;
+          type = with types; nullOr int;
           # NOTE: index is 1-indexed! NOT 0-indexed.
           description = "The index of the user in the database. Be careful setting this option. 1 indexed.";
           example = 69;
+          default = null;
         };
         LoginAttemptsBeforeLockout = mkOption {
           type = types.int;
@@ -81,15 +84,16 @@ with lib; {
           example = 5;
         };
         MaxParentalAgeRating = mkOption {
-          type = with types; either null int;
+          type = with types; nullOr int;
           # idk no docs man
           default = null;
         };
         Password = mkOption {
           type = types.str;
+          default = "";
         };
         HashedPasswordFile = mkOption {
-          type = types.path;
+          type = with types; either path str;
           description = ''
             A path to a pbkdf2-sha512 hash
             in this format [PHC string](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md).
@@ -106,6 +110,7 @@ with lib; {
 
             ```
           '';
+          default = "";
           example = ''
             # the format is: $<id>[$<param>=<value>(,<param>=<value>)*][$<salt>[$<hash>]]
             $PBKDF2-SHA512$iterations=210000$D12C02D1DD15949D867BCA9971BE9987$67E75CDCD14E7F6FDDF96BAACBE9E84E5197FB9FE454FB039F5CD773D7DF558B57DC81DB42B6F7CF0E6B8207A771E5C0EE0DBFD91CE5BAF804FE53F70E61CD2E
@@ -135,7 +140,7 @@ with lib; {
           default = 0;
         };
         SubtitleLanguagePreference = mkOption {
-          type = with types; either null str;
+          type = with types; nullOr str;
           description = "The subtitle language preference. Defaults to 'Any Language'";
           default = null;
           example = "eng";
