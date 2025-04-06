@@ -1,6 +1,10 @@
-{lib, ...}:
+{
+  pkgs,
+  lib,
+  ...
+}:
 with lib; {
-  options.service.declarative-jellyfin.encoding = {
+  options.services.declarative-jellyfin.encoding = {
     EncodingThreadCount = mkOption {
       type = types.int;
       default = -1;
@@ -18,7 +22,7 @@ with lib; {
     EnableFallbackFont = mkEnableOption "Enable fallback font";
     EnableAudioVbr = mkEnableOption "Enable VBR Audio";
     DownMixAudioBoost = mkOption {
-      type = types.float;
+      type = types.number;
       default = 2;
       description = "Boost audio when downmixing. A value of one will preserve the original volume.";
     };
@@ -126,7 +130,7 @@ with lib; {
       default = "auto";
     };
     TonemappingDesat = mkOption {
-      type = types.float;
+      type = types.number;
       description = ''
         Apply desaturation for highlights that exceed this level of brightness.
         The higher the parameter, the more color information will be preserved.
@@ -138,7 +142,7 @@ with lib; {
       default = 0;
     };
     TonemappingPeak = mkOption {
-      type = types.float;
+      type = types.number;
       description = ''
         Override signal/nominal/reference peak with this value.
         Useful when the embedded peak information in display metadata is not reliable or when tone mapping from a lower range to a higher range.
@@ -148,7 +152,7 @@ with lib; {
       default = 100;
     };
     TonemapingParam = mkOption {
-      type = types.float;
+      type = types.number;
       description = ''
         Tune the tone mapping algorithm.
         The recommended and default values are 0.
@@ -158,7 +162,7 @@ with lib; {
       default = 0;
     };
     VppTonemappingBrightness = mkOption {
-      type = types.float;
+      type = types.number;
       description = ''
         Apply brightness gain in VPP tone mapping.
 
@@ -167,7 +171,7 @@ with lib; {
       default = 16;
     };
     VppTonemappingContrast = mkOption {
-      type = types.float;
+      type = types.number;
       description = ''
         Apply contrast gain in VPP tone mapping.
 
@@ -278,7 +282,7 @@ with lib; {
       '';
     };
     AllowOnDemandMetadataBasedKeyframeExtractionForExtensions = mkOption {
-      type = types.listOf str;
+      type = with types; listOf str;
       description = "imma be real i have no idea what this option is. Just leave it as the default";
       default = ["mkv"];
     };

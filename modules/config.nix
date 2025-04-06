@@ -68,11 +68,11 @@ in {
                       file = "network.xml";
                       content = cfg.network;
                     }
-                    # {
-                    #   name = "EncodingOptions";
-                    #   file = "encoding.xml";
-                    #   content = cfg.encoding;
-                    # }
+                    {
+                      name = "EncodingOptions";
+                      file = "encoding.xml";
+                      content = cfg.encoding;
+                    }
                     {
                       name = "ServerConfiguration";
                       file = "system.xml";
