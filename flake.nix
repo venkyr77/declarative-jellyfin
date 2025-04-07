@@ -19,7 +19,7 @@
     tests = system:
       builtins.listToAttrs (builtins.map
         (x: let
-          test = import (./tests + "/${x}") {
+          test = import (./tests/autorun + "/${x}") {
             pkgs = import nixpkgs {inherit system;};
           };
         in {
@@ -31,7 +31,7 @@
             if value == "regular"
             then name
             else null))
-          (builtins.readDir ./tests))
+          (builtins.readDir ./tests/autorun))
         ));
   in {
     formatter = forAllSystems (

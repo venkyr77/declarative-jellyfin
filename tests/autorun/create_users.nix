@@ -11,7 +11,7 @@ in {
         ...
       }: {
         imports = [
-          ../modules/default.nix
+          ../../modules/default.nix
         ];
 
         virtualisation.memorySize = 1024;
@@ -27,6 +27,10 @@ in {
             {
               Username = "admin";
               Password = "123";
+            }
+            {
+              Username = "other wierd user";
+              HashedPasswordFile = ../example_hash.txt;
             }
           ];
         };

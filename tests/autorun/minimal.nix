@@ -11,7 +11,7 @@ in {
         ...
       }: {
         imports = [
-          ../modules/default.nix
+          ../../modules/default.nix
         ];
 
         virtualisation.memorySize = 1024;

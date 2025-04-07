@@ -89,8 +89,8 @@ with lib; {
           default = null;
         };
         Password = mkOption {
-          type = types.str;
-          default = "";
+          type = with types; nullOr str;
+          default = null;
         };
         HashedPasswordFile = mkOption {
           type = types.nullOr types.path;

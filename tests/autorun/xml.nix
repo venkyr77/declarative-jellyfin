@@ -11,7 +11,7 @@ in {
         ...
       }: {
         imports = [
-          ../modules/default.nix
+          ../../modules/default.nix
         ];
 
         # assertions = let
@@ -37,7 +37,7 @@ in {
             assertion = expected == got;
             message = "[Test: ${name}] Generated XML is incorrect!\nExpected \n\n${expected}\n but got \n\n${got}";
           };
-          toXml = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
+          toXml = (import ../../lib {nixpkgs = pkgs;}).toXMLGeneric;
         in [
           (
             genTest "Single tag"
