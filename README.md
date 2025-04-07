@@ -36,3 +36,34 @@ Users, Libraries, Plugins, Settings, etc.
         - [x] Nix options
     - [ ] Branding
         - [ ] Nix options
+
+# Usage
+## Setup
+Add the flake to your `inputs` and import the `nixosModule` in your configuration.
+
+Example minimal flake.nix:
+```nix
+{
+  description = "An example using declarative-jellyfin flake";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    declarative-jellyfin.url = "gitlab:SpoodyTheOne/declarative-jellyfin";
+    # optional follow:
+    declarative-jellyfin.inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  outputs = {
+    nixpkgs,
+    declarative-jellyfin,
+    ...
+  }: {
+    nixosConfigurations."your-hostname" = nixpkgs.lib.nixosSystem {
+      modules = [
+        declarative-jellyfin.nixosModules.default # <- this imports the NixOS module that provides the options
+        ./configuration.nix # <- your host entrypoint
+      ];
+    };
+  };
+}
+```
