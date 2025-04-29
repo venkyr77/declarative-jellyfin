@@ -206,24 +206,24 @@ in {
         {
           assertion =
             lib.lists.all
-              (user: user.HashedPasswordFile != null || user.Password != null)
-              cfg.Users;
+            (user: user.HashedPasswordFile != null || user.Password != null)
+            cfg.Users;
           message = "Must Provide either Password or HashedPasswordFile";
         }
         # Make sure not both Password and HashPasswordFile is set
         {
           assertion =
             lib.lists.all
-              (user: !(user.HashedPasswordFile != null && user.Password != null))
-              cfg.Users;
+            (user: !(user.HashedPasswordFile != null && user.Password != null))
+            cfg.Users;
           message = "Can not set both Password and HashedPasswordFile";
         }
         # Check if username provided
         {
           assertion =
             lib.lists.all
-              (user: !(isNull user.Username))
-              cfg.Users;
+            (user: !(isNull user.Username))
+            cfg.Users;
           message = "Must set a username for user";
         }
       ];
