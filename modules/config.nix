@@ -202,46 +202,28 @@ in {
         );
       };
       assertions = [
-        # NOTE: probably a retarded way of looping over users
-        # im not a functional mf
-
         # Make sure that either Password or HashPasswordFile is provided
         {
           assertion =
-            lib.lists.findFirst
-            (x: x == false)
-            true
-            (
-              map
+            lib.lists.all
               (user: user.HashedPasswordFile != null || user.Password != null)
-              cfg.Users
-            );
+              cfg.Users;
           message = "Must Provide either Password or HashedPasswordFile";
         }
         # Make sure not both Password and HashPasswordFile is set
         {
           assertion =
-            lib.lists.findFirst
-            (x: x == false)
-            true
-            (
-              map
+            lib.lists.all
               (user: !(user.HashedPasswordFile != null && user.Password != null))
-              cfg.Users
-            );
+              cfg.Users;
           message = "Can not set both Password and HashedPasswordFile";
         }
         # Check if username provided
         {
           assertion =
-            lib.lists.findFirst
-            (x: x == false)
-            true
-            (
-              map
+            lib.lists.all
               (user: !(isNull user.Username))
-              cfg.Users
-            );
+              cfg.Users;
           message = "Must set a username for user";
         }
       ];
