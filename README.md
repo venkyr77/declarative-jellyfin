@@ -23,7 +23,7 @@ Users, Libraries, Plugins, Settings, etc.
 
 - [x] Users
     - [x] Hashed passwords
-    - [ ] Mutable users (override Users table with configured users table if false, like in nixpkgs user-groups.nix)
+    - [x] Mutable users
 - [ ] Libraries
 - [ ] Plugins
 - [ ] Settings

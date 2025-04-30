@@ -23,16 +23,16 @@ in {
 
         services.declarative-jellyfin = {
           enable = true;
-          Users = [
-            {
-              Username = "admin";
+          Users = {
+            Admin = {
+              Mutable = false;
               Password = "123";
-            }
-            {
-              Username = "other wierd user";
+            };
+            "Some cool user with spaces" = {
+              Mutable = true;
               HashedPasswordFile = ../example_hash.txt;
-            }
-          ];
+            };
+          };
         };
       };
     };

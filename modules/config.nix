@@ -49,183 +49,197 @@ with lib; let
     content = prepass x;
   });
 in {
-  imports = [
-    ./options
-  ];
   config =
     mkIf cfg.enable
     {
-      system.activationScripts = {
-        link-config-xml =
-          lib.stringAfter ["var"]
-          (
-            let
-              commands =
-                concatStringsSep "\n"
-                (map
-                  (x: "test ! -e \"/var/lib/jellyfin/config/${x.file}\" && cp -s \"${pkgs.writeText x.file (toXml x.name x.content)}\" \"/var/lib/jellyfin/config/${x.file}\"")
-                  [
-                    {
-                      name = "NetworkConfiguration";
-                      file = "network.xml";
-                      content = cfg.network;
-                    }
-                    {
-                      name = "EncodingOptions";
-                      file = "encoding.xml";
-                      content = cfg.encoding;
-                    }
-                    {
-                      name = "ServerConfiguration";
-                      file = "system.xml";
-                      content = cfg.system;
-                    }
-                  ]);
-            in ''
-              mkdir -p "/var/lib/jellyfin/config"
-              ${commands}
-            ''
-          );
-
-        create-db = lib.stringAfter ["var"] (
+      system.activationScripts.link-config-xml =
+        lib.stringAfter ["var"]
+        (
           let
-            dbname = "jellyfin.db";
-            defaultDB = ./default.db;
-            sq = "${pkgs.sqlite}/bin/sqlite3 \"${path}/${dbname}\" --";
-            path = "/var/lib/jellyfin/data";
-            options = lib.attrsets.mapAttrsToList (key: value: "${key}") (
-              builtins.removeAttrs (
+            commands =
+              concatStringsSep "\n"
+              (map
+                (x: "test ! -e \"/var/lib/jellyfin/config/${x.file}\" && cp -s \"${pkgs.writeText x.file (toXml x.name x.content)}\" \"/var/lib/jellyfin/config/${x.file}\"")
+                [
+                  {
+                    name = "NetworkConfiguration";
+                    file = "network.xml";
+                    content = cfg.network;
+                  }
+                  {
+                    name = "EncodingOptions";
+                    file = "encoding.xml";
+                    content = cfg.encoding;
+                  }
+                  {
+                    name = "ServerConfiguration";
+                    file = "system.xml";
+                    content = cfg.system;
+                  }
+                ]);
+          in ''
+            mkdir -p "/var/lib/jellyfin/config"
+            ${commands}
+          ''
+        );
+
+      system.activationScripts.create-db = lib.stringAfter ["var"] (
+        let
+          subtitleModes = {
+            Default = 0;
+            Always = 1;
+            OnlyForce = 2;
+            None = 3;
+            Smart = 4;
+          };
+          dbname = "jellyfin.db";
+          nonDBOptions = ["HashedPasswordFile" "Mutable" "_module"];
+          defaultDB = ./default.db;
+          sq = "${pkgs.sqlite}/bin/sqlite3 \"${path}/${dbname}\" --";
+          path = "/var/lib/jellyfin/data";
+          options = lib.attrsets.mapAttrsToList (key: value: "${key}") (
+            (builtins.removeAttrs (
                 (import ./options/users.nix {inherit lib;}).options.services.declarative-jellyfin.Users.type.getSubOptions []
               )
-              ["HashedPasswordFile" "_module"]
-            );
+              nonDBOptions)
+            // {Username = null;}
+          );
+          log = "/var/log/log.txt";
+          print = msg: "echo ${msg} >> ${log} && echo ${msg} > /dev/kmsg";
 
-            subtitleModes = {
-              Default = 0;
-              Always = 1;
-              OnlyForce = 2;
-              None = 3;
-              Smart = 4;
-            };
+          sqliteFormat = attrset:
+            builtins.mapAttrs
+            (
+              name: value:
+                if (isBool value) # bool -> 1 or 0
+                then
+                  if value
+                  then "1"
+                  else "0"
+                else if (isNull value) # null -> NULL
+                then "NULL"
+                else if (name == "SubtitleMode") # SubtitleMode -> 0 | 1 | 2 | 3 | 4
+                then subtitleModes.${value}
+                else if (isString value)
+                then "'${value}'"
+                else value
+            )
+            attrset;
 
-            genUser = index: user: let
-              values = builtins.removeAttrs (
-                builtins.mapAttrs
-                (
-                  name: value:
-                    if (isBool value) # bool -> 1 or 0
-                    then
-                      if value
-                      then "1"
-                      else "0"
-                    else if (isNull value) # null -> NULL
-                    then "NULL"
-                    else if (name == "SubtitleMode") # SubtitleMode -> 0 | 1 | 2 | 3 | 4
-                    then subtitleModes.${value}
-                    else if (isString value)
-                    then "'${value}'"
-                    else value
-                ) (
-                  user
-                  // {
-                    Id =
-                      if !(isNull user.Id)
-                      then user.Id
-                      else "$(${pkgs.libuuid}/bin/uuidgen | ${pkgs.coreutils}/bin/tr '[:lower:]' '[:upper:]')";
-                    InternalId =
-                      if !(isNull user.InternalId)
-                      then user.InternalId
-                      else "$(($maxIndex+${toString (index + 1)}))";
-                    Password =
-                      if !(isNull user.HashedPasswordFile)
-                      then "$(${pkgs.coreutils}/bin/cat \"${user.HashedPasswordFile}\")"
-                      else "$(${genhash}/bin/genhash -k \"${user.Password}\" -i 210000 -l 128 -u)";
-                  }
-                )
-              ) ["HashedPasswordFile"];
-            in
+          genUser = index: username: userOpts: let
+            mutatedUser = builtins.removeAttrs (userOpts
+              // {
+                Username = username;
+                Id =
+                  if !(isNull userOpts.Id)
+                  then userOpts.Id
+                  else "$(${pkgs.libuuid}/bin/uuidgen | ${pkgs.coreutils}/bin/tr '[:lower:]' '[:upper:]')";
+                InternalId =
+                  if !(isNull userOpts.InternalId)
+                  then userOpts.InternalId
+                  else "$(($maxIndex+${toString (index + 1)}))";
+                Password =
+                  if !(isNull userOpts.HashedPasswordFile)
+                  then "$(${pkgs.coreutils}/bin/cat \"${userOpts.HashedPasswordFile}\")"
+                  else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
+              })
+            nonDBOptions;
+            values = concatStringsSep "," (map toString (builtins.attrValues (sqliteFormat mutatedUser)));
+          in
+            if (userOpts.Mutable)
+            then
+              # MutableUsers = true, therefore only overwrite if user doesn't exist
               /*
               bash
               */
               ''
-                if [ -n $(${sq} "SELECT 1 FROM Users WHERE Username = '${user.Username}'") ]; then
-                  echo "User doesn't exist. creaing new: ${user.Username}" >> /var/log/log.txt
-                  # Create user
+                if [ -n $(${sq} "SELECT 1 FROM Users WHERE Username = '${mutatedUser.Username}'") ]; then
+                  ${print "User doesn't exist. creaing new: ${mutatedUser.Username}"}
                   sql="
-                    INSERT INTO Users (${concatStringsSep "," options}) VALUES(${concatStringsSep "," (map toString (builtins.attrValues values))})"
+                    INSERT INTO Users (${concatStringsSep "," options}) VALUES(${values})"
 
-                  echo "SQL COMMAND: $sql" >> /var/log/log.txt
+                  ${print "SQL COMMAND: $sql"}
                   res=$(${sq} "$sql")
-                  echo "OUT: $res" >> /var/log/log.txt
+                  ${print "SQL OUTPUT: $res"}
                 fi
+              ''
+            else
+              # MutableUsers = false, therefore just override any data
+              /*
+              bash
+              */
+              ''
+                sql="
+                  INSERT INTO Users (${concatStringsSep "," options}) VALUES(${values})"
+
+                ${print "SQL COMMAND: $sql"}
+                res=$(${sq} "$sql")
+                ${print "SQL OUTPUT: $res"}
               '';
-          in
-            /*
-            bash
-            */
-            ''
-              mkdir -p /var/log
-              file /var/log/log.txt
+        in
+          /*
+          bash
+          */
+          ''
+            mkdir -p /var/log
+            file /var/log/log.txt
 
-              mkdir -p ${path}
-              # Make sure there is a database
-              if [ ! -e "${path}/${dbname}" ]; then
-                echo "No DB found. Copying default..." >> /var/log/log.txt
-                cp ${defaultDB} "${path}/${dbname}"
-                chmod 770 "${path}/${dbname}"
-              fi
+            mkdir -p ${path}
+            # Make sure there is a database
+            if [ ! -e "${path}/${dbname}" ]; then
+              ${print "No DB found. Copying default..."}
+              cp ${defaultDB} "${path}/${dbname}"
+              chmod 770 "${path}/${dbname}"
+            fi
 
-              maxIndex=$(${sq} 'SELECT InternalId FROM Users ORDER BY InternalId DESC LIMIT 1')
-              if [ -z "$maxIndex" ]; then
-                maxIndex="1"
-              fi
-              echo "Max index: $maxIndex" >> /var/log/log.txt
+            # TODO: Backup database
 
-              ${
-                concatStringsSep "\n"
+            # TODO: if mutableUsers = false, then clear Users table
+
+            maxIndex=$(${sq} 'SELECT InternalId FROM Users ORDER BY InternalId DESC LIMIT 1')
+            if [ -z "$maxIndex" ]; then
+              maxIndex="1"
+            fi
+            ${print "Max index: $maxIndex"}
+
+            ${
+              concatStringsSep "\n"
+              (
+                map ({
+                  fst,
+                  snd,
+                }:
+                  genUser fst snd cfg.Users.${snd})
                 (
-                  map ({
-                    fst,
-                    snd,
-                  }:
-                    genUser snd fst)
+                  lib.lists.zipLists
                   (
-                    lib.lists.zipLists cfg.Users
-                    (
-                      builtins.genList (x: x)
-                      (builtins.length cfg.Users)
-                    )
+                    builtins.genList (x: x)
+                    (builtins.length (builtins.attrValues cfg.Users))
                   )
+                  (builtins.attrNames cfg.Users)
                 )
-              }
-            ''
-        );
-      };
-      assertions = [
-        # Make sure that either Password or HashPasswordFile is provided
-        {
-          assertion =
-            lib.lists.all
-            (user: user.HashedPasswordFile != null || user.Password != null)
-            cfg.Users;
-          message = "Must Provide either Password or HashedPasswordFile";
-        }
-        # Make sure not both Password and HashPasswordFile is set
-        {
-          assertion =
-            lib.lists.all
-            (user: !(user.HashedPasswordFile != null && user.Password != null))
-            cfg.Users;
-          message = "Can not set both Password and HashedPasswordFile";
-        }
-        # Check if username provided
-        {
-          assertion =
-            lib.lists.all
-            (user: !(isNull user.Username))
-            cfg.Users;
-          message = "Must set a username for user";
-        }
-      ];
+              )
+            }
+          ''
+      );
+
+      # assertions = [
+      # Make sure that either Password or HashPasswordFile is provided
+      #   {
+      #     assertion =
+      #       lib.lists.all
+      #       (user: (builtins.hasAttr "HashedPasswordFile" user) || (builtins.hasAttr "Password" user))
+      #       cfg.Users;
+      #     message = "Must Provide either Password or HashedPasswordFile";
+      #   }
+      #   # Check if username provided
+      #   {
+      #     assertion =
+      #       lib.lists.all
+      #       (user: (builtins.hasAttr "Username" user))
+      #       cfg.Users;
+      #     message = "Must set a username for user";
+      #   }
+      # ];
     };
 }
