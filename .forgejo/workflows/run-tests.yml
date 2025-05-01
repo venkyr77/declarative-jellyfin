@@ -27,4 +27,4 @@ jobs:
       
       - name: $ nix flake check
         run: |
-          nix flake check --show-trace --print-build-logs
+          nix flake check --show-trace --print-build-logs --all-systems
