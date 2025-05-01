@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  self,
   ...
 }:
 with lib; let
@@ -98,14 +97,15 @@ in {
           sq = "${pkgs.sqlite}/bin/sqlite3 \"${path}/${dbname}\" --";
           path = "/var/lib/jellyfin/data";
           options = lib.attrsets.mapAttrsToList (key: value: "${key}") (
-            (builtins.removeAttrs (
+            (builtins.removeAttrs
+              (
                 (import ./options/users.nix {inherit lib;}).options.services.declarative-jellyfin.Users.type.getSubOptions []
               )
               nonDBOptions)
             // {Username = null;}
           );
           log = "/var/log/log.txt";
-          print = msg: "echo ${msg} >> ${log} && echo ${msg} > /dev/kmsg";
+          print = msg: "echo ${msg} >> ${log}; echo ${msg} > /dev/kmsg";
 
           sqliteFormat = attrset:
             builtins.mapAttrs
@@ -127,23 +127,25 @@ in {
             attrset;
 
           genUser = index: username: userOpts: let
-            mutatedUser = builtins.removeAttrs (userOpts
-              // {
-                Username = username;
-                Id =
-                  if !(isNull userOpts.Id)
-                  then userOpts.Id
-                  else "$(${pkgs.libuuid}/bin/uuidgen | ${pkgs.coreutils}/bin/tr '[:lower:]' '[:upper:]')";
-                InternalId =
-                  if !(isNull userOpts.InternalId)
-                  then userOpts.InternalId
-                  else "$(($maxIndex+${toString (index + 1)}))";
-                Password =
-                  if !(isNull userOpts.HashedPasswordFile)
-                  then "$(${pkgs.coreutils}/bin/cat \"${userOpts.HashedPasswordFile}\")"
-                  else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
-              })
-            nonDBOptions;
+            mutatedUser =
+              builtins.removeAttrs
+              (userOpts
+                // {
+                  Username = username;
+                  Id =
+                    if !(isNull userOpts.Id)
+                    then userOpts.Id
+                    else "$(${pkgs.libuuid}/bin/uuidgen | ${pkgs.coreutils}/bin/tr '[:lower:]' '[:upper:]')";
+                  InternalId =
+                    if !(isNull userOpts.InternalId)
+                    then userOpts.InternalId
+                    else "$(($maxIndex+${toString (index + 1)}))";
+                  Password =
+                    if !(isNull userOpts.HashedPasswordFile)
+                    then "$(${pkgs.coreutils}/bin/cat \"${userOpts.HashedPasswordFile}\")"
+                    else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
+                })
+              nonDBOptions;
             values = concatStringsSep "," (map toString (builtins.attrValues (sqliteFormat mutatedUser)));
           in
             if (userOpts.Mutable)
@@ -189,6 +191,7 @@ in {
             if [ ! -e "${path}/${dbname}" ]; then
               ${print "No DB found. Copying default..."}
               cp ${defaultDB} "${path}/${dbname}"
+              chown jellyfin:jellyfin "${path}/${dbname}"
               chmod 770 "${path}/${dbname}"
             fi
 
@@ -222,24 +225,5 @@ in {
             }
           ''
       );
-
-      # assertions = [
-      # Make sure that either Password or HashPasswordFile is provided
-      #   {
-      #     assertion =
-      #       lib.lists.all
-      #       (user: (builtins.hasAttr "HashedPasswordFile" user) || (builtins.hasAttr "Password" user))
-      #       cfg.Users;
-      #     message = "Must Provide either Password or HashedPasswordFile";
-      #   }
-      #   # Check if username provided
-      #   {
-      #     assertion =
-      #       lib.lists.all
-      #       (user: (builtins.hasAttr "Username" user))
-      #       cfg.Users;
-      #     message = "Must set a username for user";
-      #   }
-      # ];
     };
 }
