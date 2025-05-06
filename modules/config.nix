@@ -58,7 +58,7 @@ in {
             commands =
               concatStringsSep "\n"
               (map
-                (x: "test ! -e \"/var/lib/jellyfin/config/${x.file}\" && cp -s \"${pkgs.writeText x.file (toXml x.name x.content)}\" \"/var/lib/jellyfin/config/${x.file}\"")
+                (x: "ln -sf \"${pkgs.writeText x.file (toXml x.name x.content)}\" \"/var/lib/jellyfin/config/${x.file}\"")
                 [
                   {
                     name = "NetworkConfiguration";

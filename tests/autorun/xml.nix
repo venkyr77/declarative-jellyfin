@@ -163,6 +163,7 @@ in {
 
         machine.wait_for_unit("multi-user.target");
 
+        # TODO: test other files; system.xml etc.
         with subtest("network.xml"):
           # stupid fucking hack because you cant open files in python for some reason
           xml = machine.succeed("cat /var/lib/jellyfin/config/network.xml")
