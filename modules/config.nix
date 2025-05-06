@@ -78,8 +78,9 @@ in {
                 ]);
           in ''
             mkdir -p "/var/lib/jellyfin/config"
-            chown -R ${config.services.jellyfin.user}:${config.services.jellyfin.group} "/var/lib/jellyfin/config"
             ${commands}
+            chown -R ${config.services.jellyfin.user}:${config.services.jellyfin.group} "/var/lib/jellyfin/config"
+            chmod -R 750 "/var/lib/jellyfin/config"
           ''
         );
 
