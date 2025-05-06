@@ -44,7 +44,7 @@
       else if ((builtins.isInt xml) || (builtins.isNull xml) || (builtins.isFloat xml))
       then (builtins.toString xml)
       else if (builtins.isString xml)
-      then xml
+      then nixpkgs.lib.strings.escapeXML xml
       else if (builtins.isBool xml)
       then
         if xml
