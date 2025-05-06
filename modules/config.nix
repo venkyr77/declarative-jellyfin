@@ -193,9 +193,10 @@ in {
             if [ ! -e "${path}/${dbname}" ]; then
               ${print "No DB found. Copying default..."}
               cp ${defaultDB} "${path}/${dbname}"
-              chown jellyfin:jellyfin "${path}/${dbname}"
-              chmod 770 "${path}/${dbname}"
             fi
+
+            chown -R ${config.services.jellyfin.user}:${config.services.jellyfin.group} "${path}"
+            chmod -R 750 "${path}"
 
             # TODO: Backup database
 
