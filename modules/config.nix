@@ -184,7 +184,7 @@ in {
           */
           ''
             mkdir -p /var/log
-            file /var/log/log.txt
+            touch /var/log/log.txt
 
             mkdir -p ${path}
             # Make sure there is a database
