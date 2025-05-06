@@ -173,6 +173,11 @@ in {
               bash
               */
               ''
+                # FIXME: If user already exists. We need to re-use the Id of the user instead of generating a new one,
+                # or we need to delete the existing user (where foreign keys have ON DELETE CASCADE). Because otherwise
+                # foreign key constraints in the entire db will fail since they reference a deleted user.
+                # mutatedUser.Id = "$(sqlite3 command to get Id)";
+                # updatedOptions = concatStringsSep "," (map toString (builtins.attrValues (sqliteFormat mutatedUser)));
                 sql="
                   REPLACE INTO Users (${concatStringsSep "," options}) VALUES(${values})"
 
