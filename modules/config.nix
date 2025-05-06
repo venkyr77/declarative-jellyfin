@@ -107,7 +107,7 @@ in {
             // {Username = null;}
           );
           log = "/var/log/log.txt";
-          print = msg: "echo ${msg} >> ${log}; echo ${msg} > /dev/kmsg";
+          print = msg: "printf ${msg} >> ${log}; printf ${msg} > /dev/kmsg";
 
           sqliteFormat = attrset:
             builtins.mapAttrs
@@ -160,9 +160,9 @@ in {
                 if [ -n $(${sq} "SELECT 1 FROM Users WHERE Username = '${mutatedUser.Username}'") ]; then
                   ${print "User doesn't exist. creaing new: ${mutatedUser.Username}"}
                   sql="
-                    INSERT INTO Users (${concatStringsSep "," options}) VALUES(${values})"
+                    REPLACE INTO Users (${concatStringsSep "," options}) VALUES(${values})"
 
-                  ${print "SQL COMMAND: $sql"}
+                  ${print "SQL COMMAND: \"$sql\""}
                   res=$(${sq} "$sql")
                   ${print "SQL OUTPUT: $res"}
                 fi
@@ -174,9 +174,9 @@ in {
               */
               ''
                 sql="
-                  INSERT INTO Users (${concatStringsSep "," options}) VALUES(${values})"
+                  REPLACE INTO Users (${concatStringsSep "," options}) VALUES(${values})"
 
-                ${print "SQL COMMAND: $sql"}
+                ${print "SQL COMMAND: \"$sql\""}
                 res=$(${sq} "$sql")
                 ${print "SQL OUTPUT: $res"}
               '';
