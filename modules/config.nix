@@ -77,10 +77,13 @@ in {
                   }
                 ]);
           in ''
-            mkdir -p "/var/lib/jellyfin/config"
+            mkdir -p "${config.services.jellyfin.configDir}"
+            mkdir -p "${config.services.jellyfin.logDir}"
+            mkdir -p "${config.services.jellyfin.dataDir}/metadata"
+            mkdir -p "${config.services.jellyfin.dataDir}/plugins/configurations"
             ${commands}
-            chown -R ${config.services.jellyfin.user}:${config.services.jellyfin.group} "/var/lib/jellyfin/config"
-            chmod -R 750 "/var/lib/jellyfin/config"
+            chown -R ${config.services.jellyfin.user}:${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}"
+            chmod -R 750 "${config.services.jellyfin.dataDir}"
           ''
         );
 
