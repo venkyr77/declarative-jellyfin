@@ -38,7 +38,7 @@ in {
 
     IsStartupWizardCompleted = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
     };
 
     EnableMetrics = mkEnableOption "metrics";
