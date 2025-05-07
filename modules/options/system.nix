@@ -36,7 +36,7 @@ in {
       default = 3;
     };
 
-    IsStartupWizardComplated = mkOption {
+    IsStartupWizardCompleted = mkOption {
       type = types.bool;
       default = true;
     };
