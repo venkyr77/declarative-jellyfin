@@ -47,6 +47,9 @@ with lib; let
     };
     content = prepass x;
   });
+  log = "/var/log/log.txt";
+  print = msg: ''echo "${msg}" | tee --append ${log}'';
+  jellyfin-exec = "${getExe config.services.jellyfin.package} --datadir '${config.services.jellyfin.dataDir}' --configdir '${config.services.jellyfin.configDir}' --cachedir '${config.services.jellyfin.cacheDir}' --logdir '${config.services.jellyfin.logDir}'";
 in {
   config =
     mkIf cfg.enable
@@ -80,6 +83,7 @@ in {
             mkdir -p "${config.services.jellyfin.configDir}"
             mkdir -p "${config.services.jellyfin.logDir}"
             mkdir -p "${config.services.jellyfin.dataDir}/metadata"
+            mkdir -p "${config.services.jellyfin.dataDir}/wwwroot"
             mkdir -p "${config.services.jellyfin.dataDir}/plugins/configurations"
             ${commands}
             chown -R ${config.services.jellyfin.user}:${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}"
@@ -109,8 +113,6 @@ in {
               nonDBOptions)
             // {Username = null;}
           );
-          log = "/var/log/log.txt";
-          print = msg: ''echo "${msg}" | tee --append ${log}'';
 
           sqliteFormat = attrset:
             builtins.mapAttrs
@@ -166,6 +168,7 @@ in {
               } ]; then
                 # User already exists - don't insert a new userID, just re-use the one already present,
                 # so any foreign key relations don't fail because of overwriting with newly generated ID.
+                # FIXME: do the same for useridx (InternalId)
                 sql="REPLACE INTO Users (${concatStringsSep "," options}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormat mutatedUser)))})"
                 if [ -n "$userExists" ]; then
                   ${print "Excluding insertion of UserId, since user already exists in DB"}
@@ -224,5 +227,52 @@ in {
             }
           ''
       );
+
+      systemd.services.jellyfin.serviceConfig.ExecStart = lib.mkForce "${
+        pkgs.writeShellScriptBin "jellyfin-start"
+        /*
+        bash
+        */
+        ''
+          # We need to generate a valid migrations.xml file if it's a first run and
+          # `services.declarative-jellyfin.system.IsStartupWizardCompleted=true`
+          # otherwise jellyfin will try and run deprecated/old migrations, see:
+          # https://github.com/jellyfin/jellyfin/issues/12254
+            ${
+            if (cfg.system.IsStartupWizardCompleted)
+            then
+              /*
+              bash
+              */
+              ''
+                if [ ! -f "${config.services.jellyfin.configDir}/migrations.xml" ]; then
+                  echo "First time run and no migrations.xml. We run jellyfin once to generate it..."
+                  echo "Starting jellyfin with IsStartupWizardCompleted = false"
+                  ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "false" "${config.services.jellyfin.configDir}/system.xml"
+                  ${jellyfin-exec} & disown
+                  echo "Waiting for jellyfin to generate migrations.xml"
+                  until [ -f "${config.services.jellyfin.configDir}/migrations.xml" ]
+                  do
+                    printf "."
+                    sleep 1
+                  done
+                  sleep 1
+                  echo "migrations.xml generated! Restarting jellyfin..."
+                  echo "migrations.xml:"
+                  cat "${config.services.jellyfin.configDir}/migrations.xml"
+                  ${pkgs.procps}/bin/pkill -15 -f ${config.services.jellyfin.package}
+                  echo "Waiting for jellyfin to shut down properly"
+                  while ${pkgs.ps}/bin/ps axg | ${pkgs.gnugrep}/bin/grep -vw grep | ${pkgs.gnugrep}/bin/grep -w ${config.services.jellyfin.package} > /dev/null; do sleep 1 && printf "."; done
+                  echo "Jellyfin terminated. Resetting with IsStartupWizardCompleted set to true"
+                  ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "true" "${config.services.jellyfin.configDir}/system.xml"
+                fi
+              ''
+            else ""
+          }
+
+          # MAIN JELLYFIN START
+          ${jellyfin-exec}
+        ''
+      }/bin/jellyfin-start";
     };
 }
