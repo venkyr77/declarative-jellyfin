@@ -107,7 +107,7 @@ in {
             // {Username = null;}
           );
           log = "/var/log/log.txt";
-          print = msg: ''echo "${msg}" >> ${log}; echo "${msg}" > /dev/kmsg'';
+          print = msg: ''echo "${msg}" | tee --append ${log}'';
 
           sqliteFormat = attrset:
             builtins.mapAttrs
@@ -170,7 +170,7 @@ in {
                 fi
                 ${print "SQL COMMAND: $sql"}
                 res=$(${sq} "$sql")
-                # ${print "SQL OUTPUT: $res"}
+                ${print "SQL OUTPUT: $res"}
               fi
             '';
         in
