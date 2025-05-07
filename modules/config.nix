@@ -107,7 +107,7 @@ in {
             // {Username = null;}
           );
           log = "/var/log/log.txt";
-          print = msg: "printf ${msg} >> ${log}; printf ${msg} > /dev/kmsg";
+          print = msg: ''echo "${msg}" >> ${log}; echo "${msg}" > /dev/kmsg'';
 
           sqliteFormat = attrset:
             builtins.mapAttrs
@@ -148,43 +148,31 @@ in {
                     else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
                 })
               nonDBOptions;
-            values = concatStringsSep "," (map toString (builtins.attrValues (sqliteFormat mutatedUser)));
+            #values = concatStringsSep "," (map toString (builtins.attrValues (sqliteFormat mutatedUser)));
           in
-            if (userOpts.Mutable)
-            then
-              # MutableUsers = true, therefore only overwrite if user doesn't exist
-              /*
-              bash
-              */
-              ''
-                if [ -n $(${sq} "SELECT 1 FROM Users WHERE Username = '${mutatedUser.Username}'") ]; then
-                  ${print "User doesn't exist. creaing new: ${mutatedUser.Username}"}
-                  sql="
-                    REPLACE INTO Users (${concatStringsSep "," options}) VALUES(${values})"
-
-                  ${print "SQL COMMAND: \"$sql\""}
-                  res=$(${sq} "$sql")
-                  ${print "SQL OUTPUT: $res"}
+            /*
+            bash
+            */
+            ''
+              userExists=$(${sq} "SELECT 1 FROM Users WHERE Username = '${mutatedUser.Username}'")
+              # If the user is mutable, only insert the user if it doesn't already exist, otherwise just overwrite
+              if [ ${
+                if (userOpts.Mutable)
+                then "-z $userExists" # user doesn't exist
+                else "-n \"true\""
+              } ]; then
+                # User already exists - don't insert a new userID, just re-use the one already present,
+                # so any foreign key relations don't fail because of overwriting with newly generated ID.
+                sql="REPLACE INTO Users (${concatStringsSep "," options}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormat mutatedUser)))})"
+                if [ -n "$userExists" ]; then
+                  ${print "Excluding insertion of UserId, since user already exists in DB"}
+                  sql="REPLACE INTO Users (${concatStringsSep "," (lib.lists.remove "UserId" options)}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormat (removeAttrs mutatedUser ["UserId"]))))})"
                 fi
-              ''
-            else
-              # MutableUsers = false, therefore just override any data
-              /*
-              bash
-              */
-              ''
-                # FIXME: If user already exists. We need to re-use the Id of the user instead of generating a new one,
-                # or we need to delete the existing user (where foreign keys have ON DELETE CASCADE). Because otherwise
-                # foreign key constraints in the entire db will fail since they reference a deleted user.
-                # mutatedUser.Id = "$(sqlite3 command to get Id)";
-                # updatedOptions = concatStringsSep "," (map toString (builtins.attrValues (sqliteFormat mutatedUser)));
-                sql="
-                  REPLACE INTO Users (${concatStringsSep "," options}) VALUES(${values})"
-
-                ${print "SQL COMMAND: \"$sql\""}
+                ${print "SQL COMMAND: $sql"}
                 res=$(${sq} "$sql")
-                ${print "SQL OUTPUT: $res"}
-              '';
+                # ${print "SQL OUTPUT: $res"}
+              fi
+            '';
         in
           /*
           bash

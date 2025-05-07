@@ -17,6 +17,8 @@ Users, Libraries, Plugins, Settings, etc.
         - [ ] Delete users
         - [ ] Insert users in middle (test InternalId)
         - [ ] MustUpdatePassword test
+        - [ ] Mutable flag
+        - [ ] Make sure REPLACE will use existing user id primary key on multiple rebuilds
     - [ ] Libraries
     - [ ] Connecting
     - [ ] Fetching files
@@ -24,6 +26,13 @@ Users, Libraries, Plugins, Settings, etc.
 - [x] Users
     - [x] Hashed passwords
     - [x] Mutable users
+    - [ ] Global flag to disable new users (users in DB but not specified in config will be deleted)
+- [ ] Final Integrity Checks
+    - [ ] Check all users exists
+    - [ ] Verify libraries
+    - [ ] Warn user
+    - [ ] Restore backup
+    - [ ] Fail activation script
 - [ ] Libraries
 - [ ] Plugins
 - [ ] Settings
