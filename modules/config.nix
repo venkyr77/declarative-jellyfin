@@ -93,6 +93,33 @@ in {
 
       system.activationScripts.create-db = lib.stringAfter ["var"] (
         let
+          # See: https://github.com/jellyfin/jellyfin/blob/master/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/PermissionKind.cs#L6
+          permissionKindToDBInteger = {
+            IsAdministrator = 0;
+            IsHidden = 1;
+            IsDisabled = 2;
+            EnableSharedDeviceControl = 3;
+            EnableRemoteAccess = 4;
+            EnableLiveTvManagement = 5;
+            EnableLiveTvAccess = 6;
+            EnableMediaPlayback = 7;
+            EnableAudioPlaybackTranscoding = 8;
+            EnableVideoPlaybackTranscoding = 9;
+            EnableContentDeletion = 10;
+            EnableContentDownloading = 11;
+            EnableSyncTranscoding = 12;
+            EnableMediaConversion = 13;
+            EnableAllDevices = 14;
+            EnableAllChannels = 15;
+            EnableAllFolders = 16;
+            EnablePublicSharing = 17;
+            EnableRemoteControlOfOtherUsers = 18;
+            EnablePlaybackRemuxing = 19;
+            ForceRemoteSourceTranscoding = 20;
+            EnableCollectionManagement = 21;
+            EnableSubtitleManagement = 22;
+            EnableLyricManagement = 23;
+          };
           subtitleModes = {
             Default = 0;
             Always = 1;
@@ -153,7 +180,6 @@ in {
                     else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
                 })
               nonDBOptions;
-            #values = concatStringsSep "," (map toString (builtins.attrValues (sqliteFormat mutatedUser)));
           in
             /*
             bash
@@ -177,6 +203,25 @@ in {
                 ${print "SQL COMMAND: $sql"}
                 res=$(${sq} "$sql")
                 ${print "SQL OUTPUT: $res"}
+
+                # Handle user permissions
+                ${concatStringsSep "\n" (lib.attrsets.mapAttrsToList (
+                  permission: enabled:
+                  /*
+                  bash
+                  */
+                  ''
+                    userId=$(${sq} "SELECT Id FROM Users WHERE Username = '${mutatedUser.Username}'")
+                    sql="REPLACE INTO Permissions (Kind, Value, UserId, Permission_Permissions_Guid, RowVersion) VALUES(${toString permissionKindToDBInteger.${permission}}, ${
+                      if enabled
+                      then "1"
+                      else "0"
+                    }, $(echo "'$userId'"), NULL, 0)"
+                    ${print "SQL COMMAND: $sql"}
+                    ${sq} "$sql"
+                  ''
+                )
+                userOpts.Permissions)}
               fi
             '';
         in
