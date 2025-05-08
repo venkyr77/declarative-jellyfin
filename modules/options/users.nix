@@ -1,11 +1,152 @@
 {lib, ...}:
 with lib; let
+  # See: https://github.com/jellyfin/jellyfin/blob/master/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/PermissionKind.cs
+  # Defaults: https://github.com/jellyfin/jellyfin/blob/master/Jellyfin.Data/UserEntityExtensions.cs#L170
+  PermissionOpts = {
+    name,
+    config,
+    ...
+  }: {
+    options = {
+      IsAdministrator = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the user is an administrator";
+      };
+      IsHidden = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user is hidden";
+      };
+      IsDisabled = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the user is disabled";
+      };
+      EnableSharedDeviceControl = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user can control shared devices";
+      };
+      EnableRemoteAccess = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user can access the server remotely";
+      };
+      EnableLiveTvManagement = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user can manage live tv";
+      };
+      EnableLiveTvAccess = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user can access live tv";
+      };
+      EnableMediaPlayback = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user can play media";
+      };
+      EnableAudioPlaybackTranscoding = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the server should transcode audio for the user if requested";
+      };
+      EnableVideoPlaybackTranscoding = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the server should transcode video for the user if requested";
+      };
+      EnableContentDeletion = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the user can delete content";
+      };
+      EnableContentDownloading = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user can download content";
+      };
+      EnableSyncTranscoding = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to enable sync transcoding for the user";
+      };
+      EnableMediaConversion = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user can do media conversion";
+      };
+      EnableAllDevices = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user has access to all devices";
+      };
+      EnableAllChannels = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user has access to all channels";
+      };
+      EnableAllFolders = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user has access to all folders";
+      };
+      EnablePublicSharing = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to enable public sharing for the user";
+      };
+      EnableRemoteControlOfOtherUsers = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the user can remotely control other users";
+      };
+      EnablePlaybackRemuxing = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether the user is permitted to do playback remuxing";
+      };
+      ForceRemoteSourceTranscoding = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the server should force transcoding on remote connections for the user";
+      };
+      EnableCollectionManagement = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the user can create, modify and delete collections";
+      };
+      EnableSubtitleManagement = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the user can edit subtitles";
+      };
+      EnableLyricManagement = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the user can edit lyrics";
+      };
+    };
+  };
   UserOpts = {
     name,
     config,
     ...
   }: {
     options = {
+      Permissions = mkOption {
+        description = "Permissions for this user";
+        default = {};
+        type = with types; submodule PermissionOpts;
+        example = {
+          IsAdministrator = true;
+          EnableContentDeletion = false;
+          EnableSubtitleManagement = true;
+          IsDisabled = false;
+        };
+      };
       Mutable = mkOption {
         type = types.bool;
         example = false;

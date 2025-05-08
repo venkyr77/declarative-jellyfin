@@ -27,6 +27,11 @@ in {
             Admin = {
               Mutable = false;
               Password = "123";
+              Permissions = {
+                IsAdministrator = true;
+                IsDisabled = false;
+                # ...
+              };
             };
             "Some cool user with spaces" = {
               Mutable = true;

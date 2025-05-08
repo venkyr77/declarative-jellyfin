@@ -101,7 +101,7 @@ in {
             Smart = 4;
           };
           dbname = "jellyfin.db";
-          nonDBOptions = ["HashedPasswordFile" "Mutable" "_module"];
+          nonDBOptions = ["HashedPasswordFile" "Mutable" "Permissions" "_module"];
           defaultDB = ./default.db;
           sq = "${pkgs.sqlite}/bin/sqlite3 \"${path}/${dbname}\" --";
           path = "/var/lib/jellyfin/data";
