@@ -192,13 +192,12 @@ in {
                 then "-z $userExists" # user doesn't exist
                 else "-n \"true\""
               } ]; then
-                # User already exists - don't insert a new userID, just re-use the one already present,
+                # User already exists - don't insert a new Id, just re-use the one already present,
                 # so any foreign key relations don't fail because of overwriting with newly generated ID.
-                # FIXME: do the same for useridx (InternalId)
                 sql="REPLACE INTO Users (${concatStringsSep "," options}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormat mutatedUser)))})"
                 if [ -n "$userExists" ]; then
-                  ${print "Excluding insertion of UserId, since user already exists in DB"}
-                  sql="REPLACE INTO Users (${concatStringsSep "," (lib.lists.remove "UserId" options)}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormat (removeAttrs mutatedUser ["UserId"]))))})"
+                  ${print "Excluding insertion of Id/InternalId, since user already exists in DB"}
+                  sql="REPLACE INTO Users (${concatStringsSep "," (lib.lists.remove "InternalId" (lib.lists.remove "Id" options))}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormat (removeAttrs mutatedUser ["Id" "InternalId"]))))})"
                 fi
                 ${print "SQL COMMAND: $sql"}
                 res=$(${sq} "$sql")
