@@ -141,25 +141,27 @@ in {
             // {Username = null;}
           );
 
-          sqliteFormat = attrset:
+          sqliteFormat = key: value:
+            if (isBool value) # bool -> 1 or 0
+            then
+              if value
+              then "1"
+              else "0"
+            else if (isNull value) # null -> NULL
+            then "NULL"
+            else if (key == "SubtitleMode") # SubtitleMode -> 0 | 1 | 2 | 3 | 4
+            then subtitleModes.${value}
+            else if (isString value)
+            then "'${value}'"
+            else value;
+          sqliteFormatAttrs = attrset:
             builtins.mapAttrs
             (
-              name: value:
-                if (isBool value) # bool -> 1 or 0
-                then
-                  if value
-                  then "1"
-                  else "0"
-                else if (isNull value) # null -> NULL
-                then "NULL"
-                else if (name == "SubtitleMode") # SubtitleMode -> 0 | 1 | 2 | 3 | 4
-                then subtitleModes.${value}
-                else if (isString value)
-                then "'${value}'"
-                else value
+              name: value: sqliteFormat name value
             )
             attrset;
 
+          optionsNoId = lib.lists.remove "Id" (lib.lists.remove "InternalId" options);
           genUser = index: username: userOpts: let
             mutatedUser =
               builtins.removeAttrs
@@ -180,6 +182,7 @@ in {
                     else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
                 })
               nonDBOptions;
+            userWithNoId = removeAttrs mutatedUser ["Id" "InternalId"];
           in
             /*
             bash
@@ -192,12 +195,26 @@ in {
                 then "-z $userExists" # user doesn't exist
                 else "-n \"true\""
               } ]; then
+                sql="INSERT INTO Users (${concatStringsSep "," options}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormatAttrs mutatedUser)))})"
                 # User already exists - don't insert a new Id, just re-use the one already present,
                 # so any foreign key relations don't fail because of overwriting with newly generated ID.
-                sql="REPLACE INTO Users (${concatStringsSep "," options}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormat mutatedUser)))})"
                 if [ -n "$userExists" ]; then
                   ${print "Excluding insertion of Id/InternalId, since user already exists in DB"}
-                  sql="REPLACE INTO Users (${concatStringsSep "," (lib.lists.remove "InternalId" (lib.lists.remove "Id" options))}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormat (removeAttrs mutatedUser ["Id" "InternalId"]))))})"
+                   sql="UPDATE Users SET ${concatStringsSep "," (map (
+                  {
+                    fst,
+                    snd,
+                  }:
+                  /*
+                  bash
+                  */
+                  ''
+                    ${fst} = ${toString (sqliteFormat fst snd)}
+                  ''
+                )
+                (lib.lists.zipLists
+                  optionsNoId
+                  (attrValues userWithNoId)))} WHERE Username = '${mutatedUser.Username}'"
                 fi
                 ${print "SQL COMMAND: $sql"}
                 res=$(${sq} "$sql")
