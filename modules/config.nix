@@ -340,8 +340,7 @@ in {
             })
           cfg.libraries;
 
-          libraryCommands =
-            builtins.concatStringsSep "\n" (mapAttrsToList (name: value: let
+          libraryCommands = builtins.concatStringsSep "\n" (mapAttrsToList (name: value: let
               path = "${config.services.jellyfin.dataDir}/root/default/${name}";
             in ''
               mkdir -p '${path}'
