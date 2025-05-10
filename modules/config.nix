@@ -289,6 +289,72 @@ in {
           ''
       );
 
+      system.activationScripts.create-libraries = lib.stringAfter ["var"] (
+        let
+          # This needs to convert the `options` structure of
+          #
+          # TypeOptions
+          # ├── Series
+          # │   ├── MetadataFetchers
+          # │   └── ImageFetchers
+          # ├── Season
+          # │   ├── MetadataFetchers
+          # │   └── ImageFetchers
+          # └── Episode
+          #     ├── MetadataFetchers
+          #     └── ImageFetchers
+          #
+          # To the expected structure in the file of
+          #
+          # TypeOptions
+          # ├── TypeOptions
+          # │   ├── Type Series
+          # │   ├── MetadataFetchers
+          # │   ├── MetadataFetcherOrder
+          # │   ├── ImageFetchers
+          # │   └── ImageFetcherOrder
+          # ├── TypeOptions
+          # │   ├── Type Season
+          # │   ├── MetadataFetchers
+          # │   ├── MetadataFetcherOrder
+          # │   ├── ImageFetchers
+          # │   └── ImageFetcherOrder
+          # └── TypeOptions
+          #     ├── Type Episode
+          #     ├── MetadataFetchers
+          #     ├── MetadataFetcherOrder
+          #     ├── ImageFetchers
+          #     └── ImageFetcherOrder
+          prepassedLibraries = builtins.mapAttrs (name: value:
+            value
+            // {
+              TypeOptions = mapAttrsToList (name: value: {
+                TypeOptions = with value; {
+                  Type = name;
+                  inherit MetadataFetchers;
+                  MetadataFetcherOrder = MetadataFetchers;
+                  inherit ImageFetchers;
+                  ImageFetcherOrder = ImageFetchers;
+                };
+              });
+            })
+          cfg.libraries;
+
+          libraryCommands =
+            builtins.concatStringsSep "\n" (mapAttrsToList (name: value: let
+              path = "${config.services.jellyfin.dataDir}/root/default/${name}";
+            in ''
+              mkdir -p '${path}'
+              cp -lf '${path}/options.xml' '${toXml "LibraryOptions" value}'
+            '')
+            cfg.libraries);
+        in ''
+          ${libraryCommands}
+          chown -R ${config.services.jellyfin.user}:${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}"
+          chmod -R 750 ${config.services.jellyfin.user}:${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}"
+        ''
+      );
+
       systemd.services.jellyfin.serviceConfig.ExecStart = lib.mkForce "${
         pkgs.writeShellScriptBin "jellyfin-start"
         /*
