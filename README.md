@@ -58,7 +58,7 @@ Example minimal flake.nix:
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    declarative-jellyfin.url = "gitlab:SpoodyTheOne/declarative-jellyfin";
+    declarative-jellyfin.url = "git+https://git.spoodythe.one/spoody/declarative-jellyfin.git";
     # optional follow:
     declarative-jellyfin.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -76,4 +76,26 @@ Example minimal flake.nix:
     };
   };
 }
+```
+
+## Generate user password hash
+Use the `genhash` script bundled in this flake with the parameters the jellyfin DB expects:
+```nix
+nix run git+https://git.spoodythe.one/spoody/declarative-jellyfin.git#genhash -- -i 210000 -l 128 -u -k "your super secret password"
+```
+
+## Usage with sops-nix
+First make sure that sops extracts secrets before the declarative-jellyfin activationScript runs.
+Add this to your `configuration.nix`:
+```nix
+system.activationScripts.create-db.deps = ["setupSecrets"];
+```
+
+Then just extract the secret and use the `HashedPasswordFile`:
+```nix
+sops.secrets.example-user-password = {
+    owner = config.services.jellyfin.user;
+    group = config.services.jellyfin.group;
+};
+services.declarative-jellyfin.Users.example-user.HashedPasswordFile = config.sops.secrets.example-user-password.path;
 ```
