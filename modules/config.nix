@@ -79,6 +79,7 @@ in {
             mkdir -p "${config.services.jellyfin.configDir}"
             mkdir -p "${config.services.jellyfin.logDir}"
             mkdir -p "${config.services.jellyfin.dataDir}/metadata"
+            mkdir -p "${config.services.jellyfin.dataDir}/playlists"
             mkdir -p "${config.services.jellyfin.dataDir}/wwwroot"
             mkdir -p "${config.services.jellyfin.dataDir}/plugins/configurations"
             ${configCopyCommands}
@@ -325,18 +326,23 @@ in {
           #     ├── MetadataFetcherOrder
           #     ├── ImageFetchers
           #     └── ImageFetcherOrder
+          #
+          # It also needs to convert PathInfos from a listOf str to listOf MediaPathInfo->Path->String
           prepassedLibraries = builtins.mapAttrs (name: value:
             value
             // {
-              TypeOptions = mapAttrsToList (name: value: {
-                TypeOptions = with value; {
-                  Type = name;
-                  inherit MetadataFetchers;
-                  MetadataFetcherOrder = MetadataFetchers;
-                  inherit ImageFetchers;
-                  ImageFetcherOrder = ImageFetchers;
-                };
-              });
+              TypeOptions =
+                mapAttrsToList (name: value: {
+                  TypeOptions = with value; {
+                    Type = name;
+                    inherit MetadataFetchers;
+                    MetadataFetcherOrder = MetadataFetchers;
+                    inherit ImageFetchers;
+                    ImageFetcherOrder = ImageFetchers;
+                  };
+                })
+                cfg.libraries.${name}.TypeOptions;
+              PathInfos = builtins.map (x: {MediaPathInfo.Path = x;}) value.PathInfos;
             })
           cfg.libraries;
 
@@ -344,13 +350,18 @@ in {
               path = "${config.services.jellyfin.dataDir}/root/default/${name}";
             in ''
               mkdir -p '${path}'
-              cp -lf '${path}/options.xml' '${toXml "LibraryOptions" value}'
+              cp -f '${pkgs.writeText "options.xml" (toXml "LibraryOptions" value)}' '${path}/options.xml'
+              # Create .mblink files foreach path in library
+              ${
+                concatStringsSep "\n"
+                (map (pathInfo: ''echo -n "${pathInfo.MediaPathInfo.Path}" > "${config.services.jellyfin.dataDir}/root/default/${name}/${builtins.baseNameOf pathInfo.MediaPathInfo.Path}.mblink"'') value.PathInfos)
+              }
             '')
-            cfg.libraries);
+            prepassedLibraries);
         in ''
           ${libraryCommands}
           chown -R ${config.services.jellyfin.user}:${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}"
-          chmod -R 750 ${config.services.jellyfin.user}:${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}"
+          chmod -R 700 "${config.services.jellyfin.dataDir}"
         ''
       );
 

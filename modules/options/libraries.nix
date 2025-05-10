@@ -195,8 +195,8 @@ with lib; let
         default = "AllowAll";
         description = "Disable subtitles that are packaged within media containers. Requires a full library refresh.";
       };
-      # OBS:  This is an abstraction of the file contents. It will need to be transformed
-      #       before use.
+      # NOTE: This is an abstraction of the file contents. It will need to be transformed
+      # before use.
       TypeOptions = let
         typeOption = {
           MetadataFetchers = mkOption {
