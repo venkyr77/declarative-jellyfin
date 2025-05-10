@@ -49,6 +49,22 @@ with lib; let
   });
   log = "/var/log/log.txt";
   print = msg: ''echo "${msg}" | tee --append ${log}'';
+  jellyfinConfigFiles = {
+    "network.xml" = {
+      name = "NetworkConfiguration";
+      content = cfg.network;
+    };
+    "encoding.xml" = {
+      name = "EncodingOptions";
+      content = cfg.encoding;
+    };
+    "system.xml" = {
+      name = "ServerConfiguration";
+      content = cfg.system;
+    };
+  };
+  jellyfinDerivations = mapAttrs (file: cfg: pkgs.writeText file (toXml cfg.name cfg.content)) jellyfinConfigFiles;
+  # jellyfinDeriviations = map (config: nameValuePair config.file (pkgs.writeText config.file (toXml config.name config.content))) jellyfinConfigFiles;
   jellyfin-exec = "${getExe config.services.jellyfin.package} --datadir '${config.services.jellyfin.dataDir}' --configdir '${config.services.jellyfin.configDir}' --cachedir '${config.services.jellyfin.cacheDir}' --logdir '${config.services.jellyfin.logDir}'";
 in {
   config =
@@ -58,34 +74,14 @@ in {
         lib.stringAfter ["var"]
         (
           let
-            commands =
-              concatStringsSep "\n"
-              (map
-                (x: ''cp -f "${pkgs.writeText x.file (toXml x.name x.content)}" "${config.services.jellyfin.configDir}/${x.file}"'')
-                [
-                  {
-                    name = "NetworkConfiguration";
-                    file = "network.xml";
-                    content = cfg.network;
-                  }
-                  {
-                    name = "EncodingOptions";
-                    file = "encoding.xml";
-                    content = cfg.encoding;
-                  }
-                  {
-                    name = "ServerConfiguration";
-                    file = "system.xml";
-                    content = cfg.system;
-                  }
-                ]);
+            configCopyCommands = concatStringsSep "\n" (mapAttrsToList (file: path: ''cp -f "${path}" "${config.services.jellyfin.configDir}/${file}"'') jellyfinDerivations);
           in ''
             mkdir -p "${config.services.jellyfin.configDir}"
             mkdir -p "${config.services.jellyfin.logDir}"
             mkdir -p "${config.services.jellyfin.dataDir}/metadata"
             mkdir -p "${config.services.jellyfin.dataDir}/wwwroot"
             mkdir -p "${config.services.jellyfin.dataDir}/plugins/configurations"
-            ${commands}
+            ${configCopyCommands}
             chown -R ${config.services.jellyfin.user}:${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}"
             chmod -R 750 "${config.services.jellyfin.dataDir}"
           ''
@@ -200,7 +196,7 @@ in {
                 # so any foreign key relations don't fail because of overwriting with newly generated ID.
                 if [ -n "$userExists" ]; then
                   ${print "Excluding insertion of Id/InternalId, since user already exists in DB"}
-                   sql="UPDATE Users SET ${concatStringsSep "," (map (
+                   sql="UPDATE Users SET ${concatStringsSep ",\n" (map (
                   {
                     fst,
                     snd,
@@ -208,9 +204,7 @@ in {
                   /*
                   bash
                   */
-                  ''
-                    ${fst} = ${toString (sqliteFormat fst snd)}
-                  ''
+                  ''${fst} = ${toString (sqliteFormat fst snd)}''
                 )
                 (lib.lists.zipLists
                   optionsNoId
@@ -286,6 +280,12 @@ in {
                 )
               )
             }
+
+            # Restart jellyfin if running
+            if ${pkgs.systemd}/bin/systemctl is-active --quiet jellyfin.service; then
+              echo "Restarting jellyfin.service"
+              ${pkgs.systemd}/bin/systemctl restart jellyfin.service
+            fi
           ''
       );
 
