@@ -27,7 +27,7 @@ Users, Libraries, Plugins, Settings, etc.
     - [x] Hashed passwords
     - [x] Mutable users
     - [ ] Global flag to disable new users (users in DB but not specified in config will be deleted)
-    - [ ] User permissions
+    - [x] User permissions
 - [ ] Final Integrity Checks
     - [ ] Check all users exists
     - [ ] Verify libraries
