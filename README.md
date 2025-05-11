@@ -77,6 +77,37 @@ Example minimal flake.nix:
   };
 }
 ```
+## Hardware Acceleration
+First figure out what HW acceleration methods your system supports: https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration/
+
+Then configure the options through `services.declarative-jellyfin.encoding`.
+
+### Example with AMD VA-API:
+```nix
+# AMD VA-API and VDPAU should work out of the box with mesa
+hardware.graphics.enable = true;
+users.users.${config.services.jellyfin.user}.extraGroups = ["video" "render"];
+
+services.declarative-jellyfin = {
+    # ... other configuration ...
+    encoding = {
+      EnableHardwareEncoding = true;
+      HardwareAccelerationType = "vaapi";
+      EnableDecodingColorDepth10Hevc = true; # enable if your system supports
+      AllowHevcEncoding = true; # enable if your system supports
+      AllowAv1Encoding = true; # enable if your system supports
+      HardwareDecodingCodecs = [ # enable the codecs your system supports
+        "h264"
+        "hevc"
+        "mpeg2video"
+        "vc1"
+        "vp9"
+        "av1"
+      ];
+    };
+};
+```
+Use `vainfo` from `libva-utils` to see the codec capabilities for your VA-API device.
 
 ## Generate user password hash
 Use the `genhash` script bundled in this flake with the parameters the jellyfin DB expects:
