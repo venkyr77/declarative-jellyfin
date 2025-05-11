@@ -47,6 +47,16 @@ with lib; let
         default = false;
         description = "Whether or not trickplay images should be extracted during the library scan";
       };
+      SaveTrickplayWithMedia = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Saving trickplay images into media folders will put them next to your media for easy migration and access";
+      };
+      SaveLyricsWithMedia = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Saving lyrics into media folders will put them next to your media for easy migration and access";
+      };
       PathInfos = mkOption {
         type = with types; listOf str;
         description = "List of paths for media in this library";
