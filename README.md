@@ -34,7 +34,7 @@ Users, Libraries, Plugins, Settings, etc.
     - [ ] Warn user
     - [ ] Restore backup
     - [ ] Fail activation script
-- [ ] Libraries
+- [x] Libraries
 - [ ] Plugins
 - [ ] Settings
     - [ ] Scheduled jobs
