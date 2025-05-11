@@ -5,6 +5,21 @@
 }:
 with lib; {
   options.services.declarative-jellyfin.encoding = {
+    EnableHardwareEncoding = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to do Hardware Acceleration";
+    };
+    AllowHevcEncoding = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether HEVC encoding is enabled";
+    };
+    AllowAv1Encoding = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether AV1 encoding is enabled";
+    };
     EncodingThreadCount = mkOption {
       type = types.int;
       default = -1;
@@ -177,7 +192,7 @@ with lib; {
 
         Both recommended and default values are 1.
       '';
-      default = 0;
+      default = 1;
     };
 
     H254Crf = mkOption {
