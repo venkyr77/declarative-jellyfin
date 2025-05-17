@@ -282,13 +282,10 @@ in {
               )
             }
 
-            # Restart jellyfin if running
-            if ${pkgs.systemd}/bin/systemctl is-active --quiet jellyfin.service; then
-              echo "Restarting jellyfin.service"
-              ${pkgs.systemd}/bin/systemctl restart jellyfin.service
-            fi
+            # echo "Restarting jellyfin.service"
           ''
       );
+      # ${pkgs.service-wrapper}/bin/service jellyfin restart
 
       system.activationScripts.create-libraries = lib.stringAfter ["var"] (
         let
