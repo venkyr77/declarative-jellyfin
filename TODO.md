@@ -1,0 +1,39 @@
+# TODO
+- [ ] Move to systemd service instead of activation script
+- [ ] Rotating backups
+- [ ] Wrap `services.jellyfin` instead of having both
+- [ ] Only restart jellyfin when needed (change to db/xml files)
+- [x] Users
+    - [x] Hashed passwords
+    - [x] Mutable users
+    - [x] User permissions
+    - [ ] Override users (delete all users before inserting configured users)
+    - [ ] Global flag to disable new users (users in DB but not specified in config will be deleted)
+    - [ ] HashedPassword (not a path but hashed string)
+- [ ] Libraries
+    - [x] Folders
+    - [ ] Fix photo folders (see https://git.spoodythe.one/spoody/declarative-jellyfin/issues/1)
+- [ ] Preferences
+    - [ ] Specific library access
+- [ ] Final Integrity Checks (run last)
+    - [ ] Check all users exists
+    - [ ] Verify libraries
+    - [ ] On failure
+        - [ ] Warn user
+        - [ ] Restore backup
+        - [ ] Fail service
+- [ ] Plugins
+- [ ] Settings
+    - [x] Networking
+    - [x] Encoding
+    - [x] System settings
+    - [ ] Branding
+
+## Test cases
+- [x] XML Generation
+- [x] Networking
+- [ ] Make sure jellyfin doesn't crash on example configs
+- [ ] Users
+    - [x] Create users
+    - [ ] MustUpdatePassword test
+    - [ ] Mutable flag
