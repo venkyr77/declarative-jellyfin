@@ -66,10 +66,55 @@ with lib; let
   jellyfinDerivations = mapAttrs (file: cfg: pkgs.writeText file (toXml cfg.name cfg.content)) jellyfinConfigFiles;
   # jellyfinDeriviations = map (config: nameValuePair config.file (pkgs.writeText config.file (toXml config.name config.content))) jellyfinConfigFiles;
   jellyfin-exec = "${getExe config.services.jellyfin.package} --datadir '${config.services.jellyfin.dataDir}' --configdir '${config.services.jellyfin.configDir}' --cachedir '${config.services.jellyfin.cacheDir}' --logdir '${config.services.jellyfin.logDir}'";
+  jellyfin-init =
+    pkgs.writeShellScriptBin "jellyfin-init"
+    /*
+    bash
+    */
+    ''
+        # We need to generate a valid migrations.xml file if it's a first run and
+        # `services.declarative-jellyfin.system.IsStartupWizardCompleted=true`
+        # otherwise jellyfin will try and run deprecated/old migrations, see:
+        # https://github.com/jellyfin/jellyfin/issues/12254
+        ${
+        lib.optionalString cfg.system.IsStartupWizardCompleted
+        /*
+        bash
+        */
+        ''
+          if [ ! -f "${config.services.jellyfin.configDir}/migrations.xml" ]; then
+            echo "First time run and no migrations.xml. We run jellyfin once to generate it..."
+            echo "Starting jellyfin with IsStartupWizardCompleted = false"
+            ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "false" "${config.services.jellyfin.configDir}/system.xml"
+            ${jellyfin-exec} & disown
+            echo "Waiting for jellyfin to generate migrations.xml"
+            until [ -f "${config.services.jellyfin.configDir}/migrations.xml" ]
+            do
+              printf "."
+              sleep 1
+            done
+            sleep 1
+            echo "migrations.xml generated! Restarting jellyfin..."
+            echo "migrations.xml:"
+            cat "${config.services.jellyfin.configDir}/migrations.xml"
+            ${pkgs.procps}/bin/pkill -15 -f ${config.services.jellyfin.package}
+            echo "Waiting for jellyfin to shut down properly"
+            while ${pkgs.ps}/bin/ps axg | ${pkgs.gnugrep}/bin/grep -vw grep | ${pkgs.gnugrep}/bin/grep -w ${config.services.jellyfin.package} > /dev/null; do sleep 1 && printf "."; done
+            echo "Jellyfin terminated. Resetting with IsStartupWizardCompleted set to true"
+            ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "true" "${config.services.jellyfin.configDir}/system.xml"
+          fi
+        ''
+      }
+
+      ${jellyfin-exec}
+    '';
 in {
   config =
     mkIf cfg.enable
     {
+      services.jellyfin.enable = true;
+      systemd.services.jellyfin.serviceConfig.ExecStart = lib.mkForce "${jellyfin-init}/bin/jellyfin-init";
+
       system.activationScripts.link-config-xml =
         lib.stringAfter ["var"]
         (
@@ -361,52 +406,5 @@ in {
           chmod -R 700 "${config.services.jellyfin.dataDir}"
         ''
       );
-
-      systemd.services.jellyfin.serviceConfig.ExecStart = lib.mkForce "${
-        pkgs.writeShellScriptBin "jellyfin-start"
-        /*
-        bash
-        */
-        ''
-          # We need to generate a valid migrations.xml file if it's a first run and
-          # `services.declarative-jellyfin.system.IsStartupWizardCompleted=true`
-          # otherwise jellyfin will try and run deprecated/old migrations, see:
-          # https://github.com/jellyfin/jellyfin/issues/12254
-            ${
-            if (cfg.system.IsStartupWizardCompleted)
-            then
-              /*
-              bash
-              */
-              ''
-                if [ ! -f "${config.services.jellyfin.configDir}/migrations.xml" ]; then
-                  echo "First time run and no migrations.xml. We run jellyfin once to generate it..."
-                  echo "Starting jellyfin with IsStartupWizardCompleted = false"
-                  ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "false" "${config.services.jellyfin.configDir}/system.xml"
-                  ${jellyfin-exec} & disown
-                  echo "Waiting for jellyfin to generate migrations.xml"
-                  until [ -f "${config.services.jellyfin.configDir}/migrations.xml" ]
-                  do
-                    printf "."
-                    sleep 1
-                  done
-                  sleep 1
-                  echo "migrations.xml generated! Restarting jellyfin..."
-                  echo "migrations.xml:"
-                  cat "${config.services.jellyfin.configDir}/migrations.xml"
-                  ${pkgs.procps}/bin/pkill -15 -f ${config.services.jellyfin.package}
-                  echo "Waiting for jellyfin to shut down properly"
-                  while ${pkgs.ps}/bin/ps axg | ${pkgs.gnugrep}/bin/grep -vw grep | ${pkgs.gnugrep}/bin/grep -w ${config.services.jellyfin.package} > /dev/null; do sleep 1 && printf "."; done
-                  echo "Jellyfin terminated. Resetting with IsStartupWizardCompleted set to true"
-                  ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "true" "${config.services.jellyfin.configDir}/system.xml"
-                fi
-              ''
-            else ""
-          }
-
-          # MAIN JELLYFIN START
-          ${jellyfin-exec}
-        ''
-      }/bin/jellyfin-start";
     };
 }
