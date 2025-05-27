@@ -1,8 +1,9 @@
 # TODO
-- [ ] Move to systemd service instead of activation script
+- [x] Move to systemd service instead of activation script
 - [ ] Rotating backups
 - [ ] Wrap `services.jellyfin` instead of having both
 - [ ] Only restart jellyfin when needed (change to db/xml files)
+- [ ] Dynamically generate default db (run jellyfin once to generate)
 - [x] Users
     - [x] Hashed passwords
     - [x] Mutable users

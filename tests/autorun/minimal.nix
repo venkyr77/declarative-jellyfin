@@ -31,6 +31,7 @@ in {
       */
       ''
         machine.wait_for_unit("jellyfin.service")
+        machine.succeed("ls -la /var/lib/jellyfin")
         # Make sure no errors are happening while jellyfin starts up
         # we ignore download plugin errors
         for i in range(10):

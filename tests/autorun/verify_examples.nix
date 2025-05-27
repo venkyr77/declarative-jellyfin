@@ -32,6 +32,8 @@ in {
         for node in machines:
           node.wait_for_unit("jellyfin.service")
 
+        for node in machines:
+          node.succeed("ls -la /var/lib/jellyfin")
         for i in range(10):
           for node in machines:
             node.succeed("! journalctl --no-pager -b -u jellyfin.service | grep -v \"plugin\" | grep -q \"ERR\"")

@@ -161,7 +161,7 @@ in {
       ''
         import xml.etree.ElementTree as ET
 
-        machine.wait_for_unit("multi-user.target");
+        machine.wait_for_unit("jellyfin.service");
 
         # TODO: test other files; system.xml etc.
         with subtest("network.xml"):
