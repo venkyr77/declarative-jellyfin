@@ -49,10 +49,9 @@ in {
       ''
         machine.start()
         machine.wait_for_unit("jellyfin.service");
+        machine.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=30)
         output = machine.succeed("cat /var/log/jellyfin.txt")
         print("Log: " + output)
-        machine.succeed("file /var/lib/jellyfin/data/jellyfin.db")
-        machine.succeed("sleep 5") # HACK: requierd otherwise db is locked
         users = machine.succeed("sqlite3 /var/lib/jellyfin/data/jellyfin.db -- \"SELECT * FROM Users\"")
         print("Users: " + users)
 

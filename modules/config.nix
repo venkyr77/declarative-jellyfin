@@ -64,8 +64,6 @@ with lib; let
     };
   };
 
-  defaultDB = ./default.db;
-
   # See: https://github.com/jellyfin/jellyfin/blob/master/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/PermissionKind.cs
   permissionKindToDBInteger = {
     IsAdministrator = 0;
@@ -264,6 +262,7 @@ with lib; let
     })
   cfg.libraries;
 
+  jellyfinDoneTag = "/var/log/jellyfin-init-done";
   configDerivations = mapAttrs (file: cfg: pkgs.writeText file (toXml cfg.name cfg.content)) jellyfinConfigFiles;
   jellyfin-exec = "${getExe config.services.jellyfin.package} --datadir '${config.services.jellyfin.dataDir}' --configdir '${config.services.jellyfin.configDir}' --cachedir '${config.services.jellyfin.cacheDir}' --logdir '${config.services.jellyfin.logDir}'";
   jellyfin-init =
@@ -272,13 +271,16 @@ with lib; let
     bash
     */
     ''
+        rm -rf "${jellyfinDoneTag}"
+        trap "rm -rf '${jellyfinDoneTag}'" exit
+
         # u=rwx
         # g=r-x
         # o=---
         umask 027
 
         install -Dm 774 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} /dev/null "${log}"
-        echo "log init" > "${log}"
+        ${print "Log init"}
 
         # Setup directories
         install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.configDir}"
@@ -293,12 +295,6 @@ with lib; let
         (mapAttrsToList
           (file: path: ''install -Dm 640 "${path}" "${config.services.jellyfin.configDir}/${file}"'')
           configDerivations)}
-
-        # Make sure there is a database
-        if [ ! -e "${config.services.jellyfin.dataDir}/data/${dbname}" ]; then
-          ${print "No DB found. Copying default..."}
-          install -Dm 640 ${defaultDB} "${config.services.jellyfin.dataDir}/data/${dbname}"
-        fi
 
         ${
         lib.optionalString cfg.system.IsStartupWizardCompleted
@@ -318,10 +314,9 @@ with lib; let
             echo "Waiting for jellyfin to generate migrations.xml"
             until [ -f "${config.services.jellyfin.configDir}/migrations.xml" ]
             do
-              printf "."
               sleep 1
             done
-            sleep 1
+            sleep 5
             echo "migrations.xml generated! Restarting jellyfin..."
             echo "migrations.xml:"
             cat "${config.services.jellyfin.configDir}/migrations.xml"
@@ -333,6 +328,26 @@ with lib; let
           fi
         ''
       }
+
+      # Make sure there is a database
+      if [ ! -e "${config.services.jellyfin.dataDir}/data/${dbname}" ]; then
+        ${print "No DB found. First time run detected. Launching jellyfin once to generate initial config + DB..."}
+        ${jellyfin-exec} & disown
+
+        ${print "Waiting for jellyfin finish startup"}
+        until [ -f "${config.services.jellyfin.dataDir}/data/${dbname}" ]
+        do
+          sleep 1
+        done
+        sleep 5
+        ${print "Initial jellyfin setup done"}
+        ${pkgs.procps}/bin/pkill -15 -f ${config.services.jellyfin.package}
+        ${print "Waiting for jellyfin to shut down properly"}
+        while ${pkgs.ps}/bin/ps axg | ${pkgs.gnugrep}/bin/grep -vw grep | ${pkgs.gnugrep}/bin/grep -w ${config.services.jellyfin.package} > /dev/null; do sleep 1 && printf "."; done
+        cat "${config.services.jellyfin.configDir}/migrations.xml"
+        ${print "Jellyfin terminated"}
+      fi
+
 
       # TODO: Backup database
 
@@ -384,8 +399,10 @@ with lib; let
               '')
             value.PathInfos)
           }
-        '') prepassedLibraries)}
+        '')
+      prepassedLibraries)}
 
+      touch '${jellyfinDoneTag}'
       ${jellyfin-exec}
     '';
 in {
