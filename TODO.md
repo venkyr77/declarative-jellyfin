@@ -33,7 +33,7 @@
 ## Test cases
 - [x] XML Generation
 - [x] Networking
-- [ ] Make sure jellyfin doesn't crash on example configs
+- [x] Make sure jellyfin doesn't crash on example configs
 - [ ] Users
     - [x] Create users
     - [ ] MustUpdatePassword test
