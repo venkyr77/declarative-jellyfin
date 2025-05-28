@@ -63,28 +63,27 @@ with lib; let
     (plugin:
       plugin
       // {
-        package =
-          (pkgs.stdenvNoCC.mkDerivation {
-            name = plugin.name;
-            version = plugin.version;
+        package = pkgs.stdenvNoCC.mkDerivation {
+          name = plugin.name;
+          version = plugin.version;
 
-            src = builtins.fetchurl (with plugin; {
-              inherit url sha256;
-            });
-
-            nativeBuildInputs = with pkgs; [
-              unzip
-              jq
-            ];
-
-            phases = ["checkPhase" "buildPhase"];
-
-            buildPhase = ''
-              mkdir output
-              mkdir $out
-              ${pkgs.unzip}/bin/unzip $src $out
-            '';
+          src = builtins.fetchurl (with plugin; {
+            inherit url sha256;
           });
+
+          nativeBuildInputs = with pkgs; [
+            unzip
+            jq
+          ];
+
+          phases = ["checkPhase" "buildPhase"];
+
+          buildPhase = ''
+            mkdir output
+            mkdir $out
+            ${pkgs.unzip}/bin/unzip $src $out
+          '';
+        };
       })
     cfg.plugins;
 
