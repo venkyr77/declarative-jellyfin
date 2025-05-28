@@ -1,12 +1,13 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 with lib; let
   cfg = config.services.declarative-jellyfin;
-  genhash = import ./pbkdf2-sha512.nix { inherit pkgs; };
-  toXml' = (import ../lib { nixpkgs = pkgs; }).toXMLGeneric;
+  genhash = import ./pbkdf2-sha512.nix {inherit pkgs;};
+  toXml' = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
   isStrList = x: all (x: isString x) x;
   prepass = x:
     if (isAttrs x)
@@ -14,11 +15,11 @@ with lib; let
       if !(hasAttr "tag" x)
       then
         attrsets.mapAttrsToList
-          (tag: value: {
-            inherit tag;
-            content = prepass value;
-          })
-          x
+        (tag: value: {
+          inherit tag;
+          content = prepass value;
+        })
+        x
       else if (hasAttr "content" x)
       then {
         tag = x.tag;
@@ -38,27 +39,28 @@ with lib; let
       else map prepass x
     else x;
 
-  system = cfg.system //
-    {
+  system =
+    cfg.system
+    // {
       # We need to transform cfg.plugins into PluginRepositories for system
       PluginRepositories =
         lib.attrsets.mapAttrsToList
-          (name: value: {
-            tag = "RepositoryInfo";
-            content = {
-              Name = builtins.foldl (a: b: "${a}, ${b}") "Manifest for " value;
-              Url = name;
-            };
-          })
-          (
-            builtins.groupBy (x: x.url)
-              (lib.attrsets.mapAttrsToList
-                (name: value: {
-                  name = value.name;
-                  url = value.manifest;
-                })
-                cfg.plugins));
-
+        (name: value: {
+          tag = "RepositoryInfo";
+          content = {
+            Name = builtins.foldl (a: b: "${a}, ${b}") "Manifest for " value;
+            Url = name;
+          };
+        })
+        (
+          builtins.groupBy (x: x.url)
+          (lib.attrsets.mapAttrsToList
+            (name: value: {
+              name = value.name;
+              url = value.manifest;
+            })
+            cfg.plugins)
+        );
     };
 
   toXml = tag: x: (toXml' {
@@ -121,15 +123,15 @@ with lib; let
     Smart = 4;
   };
   dbname = "jellyfin.db";
-  nonDBOptions = [ "HashedPasswordFile" "Mutable" "Permissions" "_module" ];
+  nonDBOptions = ["HashedPasswordFile" "Mutable" "Permissions" "_module"];
   sq = "${pkgs.sqlite}/bin/sqlite3 \"${config.services.jellyfin.dataDir}/data/${dbname}\" --";
   options = lib.attrsets.mapAttrsToList (key: value: "${key}") (
     (builtins.removeAttrs
       (
-        (import ./options/users.nix { inherit lib; }).options.services.declarative-jellyfin.Users.type.getSubOptions [ ]
+        (import ./options/users.nix {inherit lib;}).options.services.declarative-jellyfin.Users.type.getSubOptions []
       )
       nonDBOptions)
-    // { Username = null; }
+    // {Username = null;}
   );
 
   sqliteFormat = key: value:
@@ -147,38 +149,37 @@ with lib; let
     else value;
   sqliteFormatAttrs = attrset:
     builtins.mapAttrs
-      (
-        name: value: sqliteFormat name value
-      )
-      attrset;
+    (
+      name: value: sqliteFormat name value
+    )
+    attrset;
 
   optionsNoId = lib.lists.remove "Id" (lib.lists.remove "InternalId" options);
-  genUser = index: username: userOpts:
-    let
-      mutatedUser =
-        builtins.removeAttrs
-          (userOpts
-            // {
-            Username = username;
-            Id =
-              if !(isNull userOpts.Id)
-              then userOpts.Id
-              else "$(${pkgs.libuuid}/bin/uuidgen | ${pkgs.coreutils}/bin/tr '[:lower:]' '[:upper:]')";
-            InternalId =
-              if !(isNull userOpts.InternalId)
-              then userOpts.InternalId
-              else "$(($maxIndex+${toString (index + 1)}))";
-            Password =
-              if !(isNull userOpts.HashedPasswordFile)
-              then "$(${pkgs.coreutils}/bin/cat \"${userOpts.HashedPasswordFile}\")"
-              else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
-          })
-          nonDBOptions;
-      userWithNoId = removeAttrs mutatedUser [ "Id" "InternalId" ];
-    in
-      /*
-        bash
-          */
+  genUser = index: username: userOpts: let
+    mutatedUser =
+      builtins.removeAttrs
+      (userOpts
+        // {
+          Username = username;
+          Id =
+            if !(isNull userOpts.Id)
+            then userOpts.Id
+            else "$(${pkgs.libuuid}/bin/uuidgen | ${pkgs.coreutils}/bin/tr '[:lower:]' '[:upper:]')";
+          InternalId =
+            if !(isNull userOpts.InternalId)
+            then userOpts.InternalId
+            else "$(($maxIndex+${toString (index + 1)}))";
+          Password =
+            if !(isNull userOpts.HashedPasswordFile)
+            then "$(${pkgs.coreutils}/bin/cat \"${userOpts.HashedPasswordFile}\")"
+            else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
+        })
+      nonDBOptions;
+    userWithNoId = removeAttrs mutatedUser ["Id" "InternalId"];
+  in
+    /*
+    bash
+    */
     ''
       userExists=$(${sq} "SELECT 1 FROM Users WHERE Username = '${mutatedUser.Username}'")
       # If the user is mutable, only insert the user if it doesn't already exist, otherwise just overwrite
@@ -267,23 +268,24 @@ with lib; let
   #     └── ImageFetcherOrder
   #
   # It also needs to convert PathInfos from a listOf str to listOf MediaPathInfo->Path->String
-  prepassedLibraries = builtins.mapAttrs
+  prepassedLibraries =
+    builtins.mapAttrs
     (name: value:
       value
       // {
         TypeOptions =
           mapAttrsToList
-            (name: value: {
-              TypeOptions = with value; {
-                Type = name;
-                inherit MetadataFetchers;
-                MetadataFetcherOrder = MetadataFetchers;
-                inherit ImageFetchers;
-                ImageFetcherOrder = ImageFetchers;
-              };
-            })
-            cfg.libraries.${name}.TypeOptions;
-        PathInfos = builtins.map (x: { MediaPathInfo.Path = x; }) value.PathInfos;
+          (name: value: {
+            TypeOptions = with value; {
+              Type = name;
+              inherit MetadataFetchers;
+              MetadataFetcherOrder = MetadataFetchers;
+              inherit ImageFetchers;
+              ImageFetcherOrder = ImageFetchers;
+            };
+          })
+          cfg.libraries.${name}.TypeOptions;
+        PathInfos = builtins.map (x: {MediaPathInfo.Path = x;}) value.PathInfos;
       })
     cfg.libraries;
 
@@ -319,42 +321,42 @@ with lib; let
 
           # Install each config
           ${concatStringsSep "\n"
-          (mapAttrsToList
-            (file: path: ''install -Dm 640 "${path}" "${config.services.jellyfin.configDir}/${file}"'')
-            configDerivations)}
+        (mapAttrsToList
+          (file: path: ''install -Dm 640 "${path}" "${config.services.jellyfin.configDir}/${file}"'')
+          configDerivations)}
 
           ${
-          lib.optionalString cfg.system.IsStartupWizardCompleted
-          /*
+        lib.optionalString cfg.system.IsStartupWizardCompleted
+        /*
         bash
         */
-          ''
-            # We need to generate a valid migrations.xml file if it's a first run and
-            # `services.declarative-jellyfin.system.IsStartupWizardCompleted=true`
-            # otherwise jellyfin will try and run deprecated/old migrations, see:
-            # https://github.com/jellyfin/jellyfin/issues/12254
-            if [ ! -f "${config.services.jellyfin.configDir}/migrations.xml" ]; then
-              echo "First time run and no migrations.xml. We run jellyfin once to generate it..."
-              echo "Starting jellyfin with IsStartupWizardCompleted = false"
-              ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "false" "${config.services.jellyfin.configDir}/system.xml"
-              ${jellyfin-exec} & disown
-              echo "Waiting for jellyfin to generate migrations.xml"
-              until [ -f "${config.services.jellyfin.configDir}/migrations.xml" ]
-              do
-                sleep 1
-              done
-              sleep 5
-              echo "migrations.xml generated! Restarting jellyfin..."
-              echo "migrations.xml:"
-              cat "${config.services.jellyfin.configDir}/migrations.xml"
-              ${pkgs.procps}/bin/pkill -15 -f ${config.services.jellyfin.package}
-              echo "Waiting for jellyfin to shut down properly"
-              while ${pkgs.ps}/bin/ps axg | ${pkgs.gnugrep}/bin/grep -vw grep | ${pkgs.gnugrep}/bin/grep -w ${config.services.jellyfin.package} > /dev/null; do sleep 1 && printf "."; done
-              echo "Jellyfin terminated. Resetting with IsStartupWizardCompleted set to true"
-              ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "true" "${config.services.jellyfin.configDir}/system.xml"
-            fi
-          ''
-        }
+        ''
+          # We need to generate a valid migrations.xml file if it's a first run and
+          # `services.declarative-jellyfin.system.IsStartupWizardCompleted=true`
+          # otherwise jellyfin will try and run deprecated/old migrations, see:
+          # https://github.com/jellyfin/jellyfin/issues/12254
+          if [ ! -f "${config.services.jellyfin.configDir}/migrations.xml" ]; then
+            echo "First time run and no migrations.xml. We run jellyfin once to generate it..."
+            echo "Starting jellyfin with IsStartupWizardCompleted = false"
+            ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "false" "${config.services.jellyfin.configDir}/system.xml"
+            ${jellyfin-exec} & disown
+            echo "Waiting for jellyfin to generate migrations.xml"
+            until [ -f "${config.services.jellyfin.configDir}/migrations.xml" ]
+            do
+              sleep 1
+            done
+            sleep 5
+            echo "migrations.xml generated! Restarting jellyfin..."
+            echo "migrations.xml:"
+            cat "${config.services.jellyfin.configDir}/migrations.xml"
+            ${pkgs.procps}/bin/pkill -15 -f ${config.services.jellyfin.package}
+            echo "Waiting for jellyfin to shut down properly"
+            while ${pkgs.ps}/bin/ps axg | ${pkgs.gnugrep}/bin/grep -vw grep | ${pkgs.gnugrep}/bin/grep -w ${config.services.jellyfin.package} > /dev/null; do sleep 1 && printf "."; done
+            echo "Jellyfin terminated. Resetting with IsStartupWizardCompleted set to true"
+            ${pkgs.xmlstarlet}/bin/xmlstarlet ed -L -u "//IsStartupWizardCompleted" -v "true" "${config.services.jellyfin.configDir}/system.xml"
+          fi
+        ''
+      }
 
         # Make sure there is a database
         if [ ! -e "${config.services.jellyfin.dataDir}/data/${dbname}" ]; then
@@ -410,58 +412,57 @@ with lib; let
 
         # Generate each user
         ${
-          concatStringsSep "\n"
+        concatStringsSep "\n"
+        (
+          map ({
+            fst,
+            snd,
+          }:
+            genUser fst snd cfg.Users.${snd})
           (
-            map ({
-              fst,
-              snd,
-            }:
-              genUser fst snd cfg.Users.${snd})
+            lib.lists.zipLists
             (
-              lib.lists.zipLists
-              (
-                builtins.genList (x: x)
-                (builtins.length (builtins.attrValues cfg.Users))
-              )
-              (builtins.attrNames cfg.Users)
+              builtins.genList (x: x)
+              (builtins.length (builtins.attrValues cfg.Users))
             )
+            (builtins.attrNames cfg.Users)
           )
-        }
+        )
+      }
 
         # Handle libraries
         ${builtins.concatStringsSep "\n" (mapAttrsToList (name: value: let
-          path = "${config.services.jellyfin.dataDir}/root/default/${name}";
-        in
-          /*
+        path = "${config.services.jellyfin.dataDir}/root/default/${name}";
+      in
+        /*
         bash
         */
-          ''
-            install -Dm 740 '${pkgs.writeText "options.xml" (toXml "LibraryOptions" value)}' "${path}/options.xml"
-            # Create .mblink files foreach path in library
-            ${
-              concatStringsSep "\n"
-              (map (pathInfo:
-                /*
+        ''
+          install -Dm 740 '${pkgs.writeText "options.xml" (toXml "LibraryOptions" value)}' "${path}/options.xml"
+          # Create .mblink files foreach path in library
+          ${
+            concatStringsSep "\n"
+            (map (pathInfo:
+              /*
               bash
               */
-                ''
-                  install -Dm 740 "${config.services.jellyfin.dataDir}/root/default/${name}/${baseNameOf pathInfo.MediaPathInfo.Path}.mblink"
-                  echo -n "${pathInfo.MediaPathInfo.Path}" > "${config.services.jellyfin.dataDir}/root/default/${name}/${baseNameOf pathInfo.MediaPathInfo.Path}.mblink"
-                '')
-              value.PathInfos)
-            }
-          '')
-        prepassedLibraries)}
+              ''
+                install -Dm 740 "${config.services.jellyfin.dataDir}/root/default/${name}/${baseNameOf pathInfo.MediaPathInfo.Path}.mblink"
+                echo -n "${pathInfo.MediaPathInfo.Path}" > "${config.services.jellyfin.dataDir}/root/default/${name}/${baseNameOf pathInfo.MediaPathInfo.Path}.mblink"
+              '')
+            value.PathInfos)
+          }
+        '')
+      prepassedLibraries)}
 
         touch '${jellyfinDoneTag}'
         ${jellyfin-exec}
-      '';
-in
-{
+    '';
+in {
   config =
     mkIf cfg.enable
-      {
-        services.jellyfin.enable = true;
-        systemd.services.jellyfin.serviceConfig.ExecStart = lib.mkForce "+${jellyfin-init}/bin/jellyfin-init";
-      };
+    {
+      services.jellyfin.enable = true;
+      systemd.services.jellyfin.serviceConfig.ExecStart = lib.mkForce "+${jellyfin-init}/bin/jellyfin-init";
+    };
 }
