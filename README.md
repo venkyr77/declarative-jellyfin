@@ -84,14 +84,7 @@ nix run git+https://git.spoodythe.one/spoody/declarative-jellyfin.git#genhash --
 ```
 
 ## Usage with sops-nix
-<!-- TODO: when we move to systemd service this is not required anymore -->
-First make sure that sops extracts secrets before the declarative-jellyfin activationScript runs.
-Add this to your `configuration.nix`:
-```nix
-system.activationScripts.create-db.deps = ["setupSecrets"];
-```
-
-Then just extract the secret and use the `HashedPasswordFile`:
+Extract the secret and use the `HashedPasswordFile`:
 ```nix
 sops.secrets.example-user-password = {
     owner = config.services.jellyfin.user;
