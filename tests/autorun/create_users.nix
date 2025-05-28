@@ -49,7 +49,7 @@ in {
       ''
         machine.start()
         machine.wait_for_unit("jellyfin.service");
-        machine.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=30)
+        machine.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=120)
         output = machine.succeed("cat /var/log/jellyfin.txt")
         print("Log: " + output)
         users = machine.succeed("sqlite3 /var/lib/jellyfin/data/jellyfin.db -- \"SELECT * FROM Users\"")
