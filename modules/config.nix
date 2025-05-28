@@ -540,10 +540,6 @@ with lib; let
         # Install libraries
         ${pluginLinkCommands}
 
-        for i in $(seq 1 100); do
-          echo "LINK COMMANDS ABOVE";
-        done
-
         touch '${jellyfinDoneTag}'
         ${jellyfin-exec}
     '';
