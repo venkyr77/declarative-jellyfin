@@ -27,4 +27,4 @@ jobs:
       
       - name: $ nix flake check
         run: |
-          nix run github:Mic92/nix-fast-build -- --skip-cache --no-nom --no-link
+          nix flake check --show-trace --print-build-logs
