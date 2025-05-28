@@ -1,4 +1,8 @@
-{lib, ...}:
+{
+  lib,
+  pkgs,
+  ...
+}:
 with lib; {
   imports = [
     ./system.nix
@@ -7,9 +11,16 @@ with lib; {
     ./branding.nix
     ./users.nix
     ./libraries.nix
+    ./plugins.nix
   ];
   options.services.declarative-jellyfin = {
     enable = mkEnableOption "Jellyfin Service";
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.jellyfin;
+      description = "Which package to use. Overrides `services.jellyfin.package`";
+    };
 
     backups = mkOption {
       type = types.bool;

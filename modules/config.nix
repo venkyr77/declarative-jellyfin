@@ -40,28 +40,66 @@ with lib; let
     else x;
 
   system =
-    cfg.system
-    // {
-      # We need to transform cfg.plugins into PluginRepositories for system
-      PluginRepositories =
-        lib.attrsets.mapAttrsToList
-        (name: value: {
-          tag = "RepositoryInfo";
-          content = {
-            Name = builtins.foldl (a: b: "${a}, ${b}") "Manifest for " value;
-            Url = name;
-          };
-        })
-        (
-          builtins.groupBy (x: x.url)
-          (lib.attrsets.mapAttrsToList
-            (name: value: {
-              name = value.name;
-              url = value.manifest;
-            })
-            cfg.plugins)
-        );
-    };
+    cfg.system;
+  # // {
+  #   # We need to transform cfg.plugins into PluginRepositories for system
+  #   PluginRepositories =
+  #     lib.attrsets.mapAttrsToList
+  #     (name: value: {
+  #       tag = "RepositoryInfo";
+  #       content = {
+  #         Name = builtins.foldl' (a: b: "${a}, ${b}") "Manifest for " (builtins.map (x: x.name) value);
+  #         Url = name;
+  #       };
+  #     })
+  #     (
+  #       builtins.groupBy (x: x.manifest)
+  #       cfg.plugins
+  #     );
+  # };
+
+  plugins =
+    builtins.map
+    (plugin:
+      plugin
+      // {
+        package =
+          (pkgs.stdenvNoCC.mkDerivation {
+            name = plugin.name;
+            version = plugin.version;
+
+            src = builtins.fetchurl (with plugin; {
+              inherit url sha256;
+            });
+
+            nativeBuildInputs = with pkgs; [
+              unzip
+              jq
+            ];
+
+            phases = ["checkPhase" "buildPhase"];
+
+            buildPhase = ''
+              mkdir output
+              mkdir $out
+              ${pkgs.unzip}/bin/unzip $src $out
+            '';
+          });
+      })
+    cfg.plugins;
+
+  pluginLinkCommands = builtins.concatStringsSep "\n" (builtins.map
+    (plugin:
+      /*
+      bash
+      */
+      ''
+        if [ -f /var/lib/jellyfin/plugins/${plugin.name} ]; then
+          rm -rf /var/lib/jellyfin/plugins/${plugin.name}
+        fi
+        ln -ls ${plugin.package} /var/lib/jellyfin/plugins/${plugin.name}
+      '')
+    plugins);
 
   toXml = tag: x: (toXml' {
     inherit tag;
@@ -229,6 +267,8 @@ with lib; let
           ''
         )
         userOpts.Permissions)}
+
+        ${pluginLinkCommands}
       fi
     '';
 
@@ -463,6 +503,9 @@ in {
     mkIf cfg.enable
     {
       services.jellyfin.enable = true;
+      services.jellyfin.package = cfg.package.overrideAttrs (old: {
+        buildInputs = old.buildInputs ++ (builtins.map (x: x.package) plugins);
+      });
       systemd.services.jellyfin.serviceConfig.ExecStart = lib.mkForce "+${jellyfin-init}/bin/jellyfin-init";
     };
 }
