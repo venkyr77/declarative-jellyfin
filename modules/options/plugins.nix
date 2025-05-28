@@ -23,6 +23,12 @@ with lib; let
         type = types.str;
         description = "sha-256 hash to match against the downloaded files";
       };
+      targetAbi = mkOption {
+        type = types.str;
+        description = "in case a plugin doesnt provide a meta.json file this has to be specified";
+        example = "10.10.7.0";
+        default = "";
+      };
     };
   };
 in {
