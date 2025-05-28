@@ -301,19 +301,19 @@ in {
       default = [];
     };
 
-    PluginRepositories = mkOption {
-      type = with types; listOf attrs;
-      default = [
-        {
-          tag = "RepositoryInfo";
-          content = {
-            Name = "Jellyfin Stable";
-            Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
-          };
-        }
-      ];
-      description = "Configure which plugin repositories you use.";
-    };
+    # PluginRepositories = mkOption {
+    #   type = with types; listOf attrs;
+    #   default = [
+    #     {
+    #       tag = "RepositoryInfo";
+    #       content = {
+    #         Name = "Jellyfin Stable";
+    #         Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
+    #       };
+    #     }
+    #   ];
+    #   description = "Configure which plugin repositories you use.";
+    # };
 
     EnableExternalContentInSuggestions = mkOption {
       type = types.bool;
