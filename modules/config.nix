@@ -64,7 +64,7 @@ with lib; let
       plugin
       // {
         package = pkgs.stdenvNoCC.mkDerivation {
-          name = plugin.name;
+          name = "${plugin.name} v${plugin.version}";
           version = plugin.version;
 
           src = builtins.fetchurl (with plugin; {
@@ -76,13 +76,22 @@ with lib; let
             jq
           ];
 
-          phases = ["checkPhase" "buildPhase"];
+          phases = ["unpackPhase" "buildPhase"];
+
+          unpackPhase = ''
+            ${pkgs.unzip}/bin/unzip $src
+          '';
 
           buildPhase = ''
-            mkdir output
+            ${pkgs.jq}/bin/jq '. + {assemblies:[],autoUpdate:false,status:"Active"}' < meta.json > better_meta.json
+            mv better_meta.json meta.json
+
+
             mkdir $out
-            ${pkgs.unzip}/bin/unzip $src $out
+            mv * $out/
           '';
+
+          installPhase = "";
         };
       })
     cfg.plugins;
@@ -93,10 +102,9 @@ with lib; let
       bash
       */
       ''
-        if [ -f /var/lib/jellyfin/plugins/${plugin.name} ]; then
-          rm -rf /var/lib/jellyfin/plugins/${plugin.name}
-        fi
-        ln -ls ${plugin.package} /var/lib/jellyfin/plugins/${plugin.name}
+        echo "Moving ${plugin.package} to ${config.services.jellyfin.configDir}/plugins/${plugin.name}_${plugin.version}"
+        # install -Dm 750 -d -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${plugin.package}" "${config.services.jellyfin.dataDir}/plugins/${plugin.name}_${plugin.version}"
+        cp -R "${plugin.package}" "${config.services.jellyfin.dataDir}/plugins/${plugin.name}_${plugin.version}"
       '')
     plugins);
 
