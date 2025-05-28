@@ -271,6 +271,7 @@ with lib; let
     bash
     */
     ''
+        set -euo pipefail
         rm -rf "${jellyfinDoneTag}"
         trap "rm -rf '${jellyfinDoneTag}'" exit
 
@@ -285,6 +286,7 @@ with lib; let
         # Setup directories
         install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.configDir}"
         install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.logDir}"
+        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.cacheDir}"
         install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/metadata"
         install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/playlists"
         install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/wwwroot"
@@ -348,8 +350,32 @@ with lib; let
         ${print "Jellyfin terminated"}
       fi
 
+      # Rotating backups
+      ${
+        lib.optionalString cfg.backups
+        /*
+        bash
+        */
+        ''
+          # Make sure ${cfg.backupDir} exists
+          install -d -m 775 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${cfg.backupDir}"
+          backupName="${cfg.backupDir}/backup_$(date +%Y%m%d%H%M%S).tar.gz"
 
-      # TODO: Backup database
+          ${pkgs.gnutar}/bin/tar -cf - -C / ${removePrefix "/" config.services.jellyfin.logDir} -C / ${removePrefix "/" config.services.jellyfin.dataDir} -C / ${removePrefix "/" config.services.jellyfin.configDir} -C / ${removePrefix "/" config.services.jellyfin.cacheDir} | ${pkgs.gzip}/bin/gzip > "$backupName"
+
+          # Rotate backups
+          num_backups=$(ls -1 "${cfg.backupDir}" | wc -l)
+          num_backups_to_remove=$((num_backups - ${toString cfg.backupCount}))
+
+          if [ $num_backups_to_remove -gt 0 ]; then
+            old_backups=$(ls -1 "${cfg.backupDir}" | sort | head -n "$num_backups_to_remove")
+            for old_backup in $old_backups; do
+              rm "${cfg.backupDir}/$old_backup"
+              ${print "Purged backup: $old_backup"}
+            done
+          fi
+        ''
+      }
 
       maxIndex=$(${sq} 'SELECT InternalId FROM Users ORDER BY InternalId DESC LIMIT 1')
       if [ -z "$maxIndex" ]; then
