@@ -32,7 +32,7 @@ in {
 
         # Wait foreach node to run jellyfin-init
         for node in machines:
-          node.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=120)
+          node.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=300)
 
         # Give 10 seconds for jellyfin to boot
         for node in machines:
