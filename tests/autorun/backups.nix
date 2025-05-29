@@ -37,7 +37,7 @@ in {
         start_all()
 
         for node in machines:
-          node.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=300)
+          node.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=120)
 
         # Make sure they created 1 backup
         for node in machines:
@@ -51,7 +51,7 @@ in {
           node.succeed("! test -e /var/log/jellyfin-init-done")
 
         for node in machines:
-          node.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=300)
+          node.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=120)
 
         # Make sure 2nd is created
         for node in machines:
@@ -65,7 +65,7 @@ in {
           node.succeed("! test -e /var/log/jellyfin-init-done")
 
         for node in machines:
-          node.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=300)
+          node.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=120)
 
         # Should still only be 2 backups
         for node in machines:
