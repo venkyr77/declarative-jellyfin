@@ -548,10 +548,15 @@ in {
   config =
     mkIf cfg.enable
     {
-      services.jellyfin.enable = true;
-      services.jellyfin.package = cfg.package.overrideAttrs (old: {
-        buildInputs = old.buildInputs ++ (builtins.map (x: x.package) plugins);
-      });
+      services.jellyfin = {
+        enable = true;
+        package = cfg.package.overrideAttrs (old: {
+          buildInputs = old.buildInputs ++ (builtins.map (x: x.package) plugins);
+        });
+        inherit (cfg) user group dataDir configDir cacheDir logDir;
+      };
+
+      networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [cfg.network.PublicHttpPort cfg.network.PublicHttpsPort];
       systemd.services.jellyfin.serviceConfig.ExecStart = lib.mkForce "+${jellyfin-init}/bin/jellyfin-init";
     };
 }
