@@ -13,6 +13,7 @@ Users, Libraries, Plugins, Settings, etc.
     * System
     * Network
     * Encoding (HW acceleration)
+* Declarative plugins (no way to configure them yet though)
 * Libraries (photo libraries currently doesn't work)
 <!-- * Backup (in case we corrupt the db >=<) -->
 
