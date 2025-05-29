@@ -104,6 +104,15 @@ This will download the specified verson of the plugin and install it for you dur
 
 This is still not possible, but is being worked on.
 
+## Migrating from existing config
+
+Declarative Jellyfin is designed to be a drop-in replacement for the normal jellyfin service.
+
+```diff
+- services.jellyfin = {
++ services.declarative-jellyfin = {
+```
+
 ## Generate user password hash
 Jellyfin uses pbkdf2-sha512 hashes to store passwords.
 Use the `genhash` script bundled in this flake with the parameters the jellyfin DB expects:
