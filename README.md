@@ -79,6 +79,31 @@ services.declarative-jellyfin = {
 ```
 Use `vainfo` from `libva-utils` to see the codec capabilities for your VA-API device.
 
+## Plugins
+
+Installed plugins can be configured declaratively using the `declarative-jellyfin.plugins` attribute.
+
+```nix
+services.declarative-jellyfin = {
+    enable = true;
+    plugins = [
+        {
+            name = "intro skipper";
+            url = "https://github.com/intro-skipper/intro-skipper/releases/download/10.10/v1.10.10.19/intro-skipper-v1.10.10.19.zip";
+            version = "1.10.10.19";
+            targetAbi = "10.10.7.0"; # Required as intro-skipper doesn't provide a meta.json file
+            sha256 = "sha256:12hby8vkb6q2hn97a596d559mr9cvrda5wiqnhzqs41qg6i8p2fd";
+        }
+    ];
+};
+```
+
+This will download the specified verson of the plugin and install it for you during evaluation.
+
+### Configuring plugins
+
+This is still not possible, but is being worked on.
+
 ## Generate user password hash
 Jellyfin uses pbkdf2-sha512 hashes to store passwords.
 Use the `genhash` script bundled in this flake with the parameters the jellyfin DB expects:
