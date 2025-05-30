@@ -314,42 +314,6 @@ with lib; let
       fi
     '';
 
-  # This needs to convert the `options` structure of
-  #
-  # TypeOptions
-  # ├── Series
-  # │   ├── MetadataFetchers
-  # │   └── ImageFetchers
-  # ├── Season
-  # │   ├── MetadataFetchers
-  # │   └── ImageFetchers
-  # └── Episode
-  #     ├── MetadataFetchers
-  #     └── ImageFetchers
-  #
-  # To the expected structure in the file of
-  #
-  # TypeOptions
-  # ├── TypeOptions
-  # │   ├── Type Series
-  # │   ├── MetadataFetchers
-  # │   ├── MetadataFetcherOrder
-  # │   ├── ImageFetchers
-  # │   └── ImageFetcherOrder
-  # ├── TypeOptions
-  # │   ├── Type Season
-  # │   ├── MetadataFetchers
-  # │   ├── MetadataFetcherOrder
-  # │   ├── ImageFetchers
-  # │   └── ImageFetcherOrder
-  # └── TypeOptions
-  #     ├── Type Episode
-  #     ├── MetadataFetchers
-  #     ├── MetadataFetcherOrder
-  #     ├── ImageFetchers
-  #     └── ImageFetcherOrder
-  #
-  # It also needs to convert PathInfos from a listOf str to listOf MediaPathInfo->Path->String
   prepassedLibraries =
     builtins.mapAttrs
     (name: value:
@@ -366,7 +330,7 @@ with lib; let
               ImageFetcherOrder = ImageFetchers;
             };
           })
-          cfg.libraries.${name}.TypeOptions;
+          cfg.libraries."${name}".TypeOptions;
         PathInfos = builtins.map (x: {MediaPathInfo.Path = x;}) value.PathInfos;
       })
     cfg.libraries;
