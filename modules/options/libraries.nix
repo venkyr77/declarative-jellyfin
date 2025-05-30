@@ -295,25 +295,6 @@ with lib; let
         type = with types; attrsOf attrs;
         default = defaultTypeOptions.${cfg.libraries."${name}".ContentType};
       };
-      # TypeOptions = builtins.trace defaultTypeOptions.${cfg.libraries."${name}".ContentType} {};
-      # TypeOptions = let
-      #   typeOption = {
-      #     MetadataFetchers = mkOption {
-      #       type = with types; listOf str;
-      #       default = ["TheTVDB" "The Open Movie Database" "TheMovieDb"];
-      #       description = "Enable and rank your preferred metadata downloaders in order of priority. Lower priority downloaders will only be used to fill in missing information.";
-      #     };
-      #     ImageFetchers = mkOption {
-      #       type = with types; listOf str;
-      #       default = ["TheTVDB" "TheMovieDb"];
-      #       description = "Enable and rank your preferred image fetchers in order of priority.";
-      #     };
-      #   };
-      # in {
-      #   Series = typeOption;
-      #   Season = typeOption;
-      #   Episode = typeOption;
-      # };
     };
   };
 in {
@@ -324,7 +305,7 @@ in {
     example = {
       "Anime" = {
         Enabled = true;
-        ContentType = "MixedMoviesAndShows";
+        ContentType = "boxsets";
         EnableTrickplayImageExtraction = true;
         TypeOptions.Series.MetadataFetchers = ["TheTVDB" "TheMovieDb" "AniList"];
       };

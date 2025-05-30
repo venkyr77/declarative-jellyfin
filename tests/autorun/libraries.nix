@@ -25,6 +25,7 @@ in {
             mkdir -p /data/Movies
             mkdir -p /data/Shows
             mkdir -p /data/Pictures
+            mkdir -p /data/Videos
             mkdir -p /data/Books
             mkdir -p /data/Music
           '';
@@ -53,10 +54,10 @@ in {
               ContentType = "tvshows";
               PathInfos = ["/data/Shows"];
             };
-            Photos = {
+            "Photos and videos" = {
               Enabled = true;
               ContentType = "homevideos";
-              PathInfos = ["/data/Pictures"];
+              PathInfos = ["/data/Pictures" "/data/Videos"];
             };
             Books = {
               Enabled = true;
