@@ -47,6 +47,74 @@ Example minimal flake.nix:
   };
 }
 ```
+## Libraries
+You can configure libraries with the options provided by `services.declarative-jellyfin.libraries`.
+
+Below are some examples of different types of libraries:
+
+<details>
+    <summary>Movies</summary>
+
+    ```nix
+    services.declarative-jellyfin.libraries.Movies = {
+      Enabled = true;
+      ContentType = "movies";
+      PathInfos = ["/data/Movies"];
+    };
+    ```
+</details>
+
+<details>
+    <summary>TV Shows</summary>
+
+    ```nix
+    services.declarative-jellyfin.libraries.Shows = {
+      Enabled = true;
+      ContentType = "tvshows";
+      PathInfos = ["/data/Shows"];
+    };
+    ```
+</details>
+
+<details>
+    <summary>Home Videos and Photos</summary>
+
+    ```nix
+    services.declarative-jellyfin.libraries."Family photos" = {
+      Enabled = true;
+      ContentType = "homevideos";
+      PathInfos = ["/data/Famility/Photos" "/data/Family/Videos"];
+    };
+    ```
+</details>
+
+<details>
+    <summary>Books</summary>
+
+    ```nix
+    services.declarative-jellyfin.libraries.Books = {
+      Enabled = true;
+      ContentType = "books";
+      PathInfos = ["/data/Books"];
+    };
+    ```
+</details>
+
+<details>
+    <summary>Music</summary>
+
+    ```nix
+    services.declarative-jellyfin.libraries.Music = {
+      Enabled = true;
+      ContentType = "music";
+      PathInfos = ["/data/Music"];
+    };
+    ```
+</details>
+
+See the [source code](https://github.com/jellyfin/jellyfin/blob/master/MediaBrowser.Model/Entities/CollectionTypeOptions.cs)
+for possible library content types.
+
 ## Hardware Acceleration
 First figure out what HW acceleration methods your system supports: https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration/
 
