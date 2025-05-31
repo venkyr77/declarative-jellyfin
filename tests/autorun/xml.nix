@@ -136,6 +136,18 @@ in {
               content = false;
             })
           )
+          (
+            genTest "tags with attrib should close after attrib"
+            ''
+              <?xml version='1.0' encoding='utf-8'?>
+              <LibraryOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema">test</LibraryOptions>
+            ''
+            (toXml {
+              tag = "LibraryOptions";
+              attrib = {"xmlns:xsd" = "http://www.w3.org/2001/XMLSchema";};
+              content = "test";
+            })
+          )
         ];
 
         virtualisation.memorySize = 1024;
