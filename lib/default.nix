@@ -23,7 +23,8 @@ in
               builtins.concatStringsSep " " (
                 attrsets.mapAttrsToList (
                   name: value: "${name}=\"${strings.escapeXML value}\""
-                ) xml.attrib
+                )
+                xml.attrib
               )
             }"
             else ""
