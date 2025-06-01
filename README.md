@@ -7,15 +7,16 @@ Users, Libraries, Plugins, Settings, etc.
 
 # Features
 * Declarative users
-    * passwords + hashed passwords
     * permissions
+    * coming soon: preferences
 * Server Settings
     * System
     * Network
     * Encoding (HW acceleration)
 * Declarative plugins (no way to configure them yet though)
-* Libraries (photo libraries currently doesn't work)
-<!-- * Backup (in case we corrupt the db >=<) -->
+* Libraries
+* Automatic backups
+* API keys
 
 # Usage
 ## Setup
@@ -55,61 +56,61 @@ Below are some examples of different types of libraries:
 <details>
     <summary>Movies</summary>
 
-    ```nix
-    services.declarative-jellyfin.libraries.Movies = {
-      Enabled = true;
-      ContentType = "movies";
-      PathInfos = ["/data/Movies"];
-    };
-    ```
+```nix
+services.declarative-jellyfin.libraries.Movies = {
+  Enabled = true;
+  ContentType = "movies";
+  PathInfos = ["/data/Movies"];
+};
+```
 </details>
 
 <details>
     <summary>TV Shows</summary>
 
-    ```nix
-    services.declarative-jellyfin.libraries.Shows = {
-      Enabled = true;
-      ContentType = "tvshows";
-      PathInfos = ["/data/Shows"];
-    };
-    ```
+```nix
+services.declarative-jellyfin.libraries.Shows = {
+  Enabled = true;
+  ContentType = "tvshows";
+  PathInfos = ["/data/Shows"];
+};
+```
 </details>
 
 <details>
     <summary>Home Videos and Photos</summary>
 
-    ```nix
-    services.declarative-jellyfin.libraries."Family photos" = {
-      Enabled = true;
-      ContentType = "homevideos";
-      PathInfos = ["/data/Famility/Photos" "/data/Family/Videos"];
-    };
-    ```
+```nix
+services.declarative-jellyfin.libraries."Family photos" = {
+  Enabled = true;
+  ContentType = "homevideos";
+  PathInfos = ["/data/Famility/Photos" "/data/Family/Videos"];
+};
+```
 </details>
 
 <details>
     <summary>Books</summary>
 
-    ```nix
-    services.declarative-jellyfin.libraries.Books = {
-      Enabled = true;
-      ContentType = "books";
-      PathInfos = ["/data/Books"];
-    };
-    ```
+```nix
+services.declarative-jellyfin.libraries.Books = {
+  Enabled = true;
+  ContentType = "books";
+  PathInfos = ["/data/Books"];
+};
+```
 </details>
 
 <details>
     <summary>Music</summary>
 
-    ```nix
-    services.declarative-jellyfin.libraries.Music = {
-      Enabled = true;
-      ContentType = "music";
-      PathInfos = ["/data/Music"];
-    };
-    ```
+```nix
+services.declarative-jellyfin.libraries.Music = {
+  Enabled = true;
+  ContentType = "music";
+  PathInfos = ["/data/Music"];
+};
+```
 </details>
 
 See the [source code](https://github.com/jellyfin/jellyfin/blob/master/MediaBrowser.Model/Entities/CollectionTypeOptions.cs)
