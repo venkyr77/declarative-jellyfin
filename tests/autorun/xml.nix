@@ -1,5 +1,10 @@
 {pkgs ? import <nixpkgs> {}, ...}: let
-  name = "networking";
+  name = "xmltests";
+  configs = {
+    system = "/var/lib/jellyfin/config/system.xml";
+    network = "/var/lib/jellyfin/config/network.xml";
+    encoding = "/var/lib/jellyfin/config/encoding.xml";
+  };
 in {
   inherit name;
   test = pkgs.nixosTest {
@@ -13,6 +18,7 @@ in {
         imports = [
           ../../modules/default.nix
         ];
+        environment.systemPackages = [pkgs.xmlstarlet];
 
         # assertions = let
         #   toXml = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
@@ -173,12 +179,15 @@ in {
       ''
         import xml.etree.ElementTree as ET
 
-        machine.wait_for_unit("jellyfin.service");
+        machine.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=120)
 
-        # TODO: test other files; system.xml etc.
+        # Make sure every config can be parsed without erros
+        ${pkgs.lib.concatStringsSep "\n" (pkgs.lib.mapAttrsToList (name: path: "machine.succeed(\"xmlstarlet val '${path}'\")") configs)}
+
+
         with subtest("network.xml"):
           # stupid fucking hack because you cant open files in python for some reason
-          xml = machine.succeed("cat /var/lib/jellyfin/config/network.xml")
+          xml = machine.succeed("cat '${configs.network}'")
           tree = ET.ElementTree(ET.fromstring(xml))
           root = tree.getroot()
 
@@ -210,8 +219,6 @@ in {
                   break
             else:
               assert False, "The shit was not found. Full XML: " + xml
-
-        machine.shutdown()
       '';
   };
 }
