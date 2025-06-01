@@ -6,7 +6,7 @@ in {
   test = pkgs.nixosTest {
     inherit name;
     nodes = {
-      machine = {
+      ${name} = {
         config,
         pkgs,
         ...
@@ -32,9 +32,6 @@ in {
       */
       ''
         start_all()
-
-        for node in machines:
-          node.wait_for_unit("jellyfin.service")
 
         # Wait foreach node to run jellyfin-init
         for node in machines:

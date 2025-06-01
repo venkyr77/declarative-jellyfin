@@ -1,6 +1,7 @@
 {...}: {
   services.declarative-jellyfin = {
     enable = true;
+
     Users = {
       Admin = {
         Mutable = false;
@@ -11,17 +12,26 @@
       };
       Alice = {
         Mutable = false;
-        Password = "456";
+        HashedPassword = builtins.readFile ../tests/example_hash.txt;
         Permissions = {
           IsAdministrator = true;
         };
       };
       Bob = {
         Mutable = false;
-        Password = "789";
+        HashedPasswordFile = ../tests/example_hash.txt;
         Permissions = {
           IsAdministrator = false;
         };
+      };
+    };
+
+    apikeys = {
+      Jellyseerr = {
+        key = "78878bf9fc654ff78ae332c63de5aeb6";
+      };
+      Homarr = {
+        keyPath = ../tests/example_apikey.txt;
       };
     };
 

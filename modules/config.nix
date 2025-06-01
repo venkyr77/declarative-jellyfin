@@ -508,6 +508,20 @@ with lib; let
         # Install libraries
         ${pluginLinkCommands}
 
+        # API Keys
+        ${concatStringsSep "\n" (mapAttrsToList (appName: value:
+        /*
+        bash
+        */
+        ''
+          ${sq} "REPLACE INTO ApiKeys (DateCreated, DateLastActivity, Name, AccessToken) VALUES(time(), time(), '${appName}', ${
+            if !(isNull value.key)
+            then "'${value.key}'"
+            else "'$(cat \"${value.keyPath}\")'"
+          })"
+        '')
+      cfg.apikeys)}
+
         touch '${jellyfinDoneTag}'
         ${jellyfin-exec}
     '';
