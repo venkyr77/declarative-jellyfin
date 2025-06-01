@@ -205,7 +205,7 @@ with lib; let
     Smart = 4;
   };
   dbname = "jellyfin.db";
-  nonDBOptions = ["HashedPasswordFile" "Mutable" "Permissions" "_module"];
+  nonDBOptions = ["HashedPasswordFile" "HashedPassword" "Mutable" "Permissions" "_module"];
   sq = "${pkgs.sqlite}/bin/sqlite3 \"${config.services.jellyfin.dataDir}/data/${dbname}\" --";
   options = lib.attrsets.mapAttrsToList (key: value: "${key}") (
     (builtins.removeAttrs
@@ -254,6 +254,8 @@ with lib; let
           Password =
             if !(isNull userOpts.HashedPasswordFile)
             then "$(${pkgs.coreutils}/bin/cat \"${userOpts.HashedPasswordFile}\")"
+            else if !(isNull userOpts.HashedPassword)
+            then "$(echo -n '${userOpts.HashedPassword}')"
             else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
         })
       nonDBOptions;

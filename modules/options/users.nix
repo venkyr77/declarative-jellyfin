@@ -242,6 +242,15 @@ with lib; let
         type = with types; nullOr str;
         default = null;
       };
+      HashedPassword = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          A pbkdf2-sha512 hash of the users password. Can be generated with the genhash flake app.
+          See docs for `HashedPasswordFile` for details on how to generate a hash
+        '';
+        example = "$PBKDF2-SHA512$iterations=210000$D12C02D1DD15949D867BCA9971BE9987$67E75CDCD14E7F6FDDF96BAACBE9E84E5197FB9FE454FB039F5CD773D7DF558B57DC81DB42B6F7CF0E6B8207A771E5C0EE0DBFD91CE5BAF804FE53F70E61CD2E";
+      };
       HashedPasswordFile = mkOption {
         type = types.nullOr types.path;
         description = ''
