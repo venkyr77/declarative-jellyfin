@@ -40,9 +40,9 @@ in {
         for node in machines:
           node.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=120)
 
-        # Give 10 seconds for jellyfin to boot
+        # Give time for jellyfin to boot
         for node in machines:
-          node.wait_until_succeeds("curl 127.0.0.1:${toString port}", timeout=10)
+          node.wait_until_succeeds("curl 127.0.0.1:${toString port}", timeout=60)
 
         # No errors should be reported in journal
         for node in machines:

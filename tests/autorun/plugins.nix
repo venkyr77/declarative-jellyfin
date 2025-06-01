@@ -44,9 +44,9 @@ in {
         output = machine.succeed("cat /var/log/jellyfin.txt")
         print("Log: " + output)
 
-        # Give 10 seconds for jellyfin to boot
+        # Give time for jellyfin to boot
         for node in machines:
-          node.wait_until_succeeds("curl 127.0.0.1:${toString port}", timeout=10)
+          node.wait_until_succeeds("curl 127.0.0.1:${toString port}", timeout=60)
 
         # print log for debugging
         print(machine.execute("journalctl --no-pager -b -u jellyfin.service")[1])

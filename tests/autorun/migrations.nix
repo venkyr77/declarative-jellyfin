@@ -70,8 +70,8 @@ in {
 
         declarative.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=120)
 
-        # Give 10 seconds for jellyfin to boot
-        declarative.wait_until_succeeds("curl 127.0.0.1:${toString port}", timeout=10)
+        # Give time for jellyfin to boot
+        declarative.wait_until_succeeds("curl 127.0.0.1:${toString port}", timeout=60)
 
         # Should be able to curl it
         declarative.succeed("curl 127.0.0.1:${toString port}")

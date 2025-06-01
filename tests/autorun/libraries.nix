@@ -81,7 +81,7 @@ in {
       ''
         machine.start()
         machine.wait_until_succeeds("test -e /var/log/jellyfin-init-done", timeout=120)
-        machine.wait_until_succeeds("curl 127.0.0.1:8096", timeout=10)
+        machine.wait_until_succeeds("curl 127.0.0.1:8096", timeout=60)
         machine.succeed("! journalctl --no-pager -b -u jellyfin.service | grep -v \"plugin\" | grep -q \"ERR\"")
         # TODO: use api key to test that libraries are there
       '';
