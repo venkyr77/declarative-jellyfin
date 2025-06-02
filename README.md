@@ -1,5 +1,5 @@
 # Declarative Jellyfin
-![workflows badge](https://git.spoodythe.one/spoody/declarative-jellyfin/badges/workflows/run-tests.yml/badge.svg)
+![workflows badge](https://git.spoodythe.one/spoody/declarative-jellyfin/badges/workflows/run-tests.yml/badge.svg?branch=main)
 ![issues badge](https://git.spoodythe.one/spoody/declarative-jellyfin/badges/issues.svg)
 
 This repository provides a nix flake that allows for declarative configuration of
