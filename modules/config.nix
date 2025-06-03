@@ -197,6 +197,9 @@ with lib; let
     EnableSubtitleManagement = 22;
     EnableLyricManagement = 23;
   };
+  preferenceKindToDBInteger = {
+    EnabledFolders = 5;
+  };
   subtitleModes = {
     Default = 0;
     Always = 1;
@@ -235,6 +238,34 @@ with lib; let
       name: value: sqliteFormat name value
     )
     attrset;
+
+  genfolderuuid =
+    pkgs.writeShellScriptBin "genfolderuuid"
+    /*
+    bash
+    */
+    ''
+      key="root\\default\\$1"
+      type="MediaBrowser.Controller.Entities.CollectionFolder"
+
+      # Concatenate type.FullName + key
+      input="''${type}''${key}"
+
+      # Convert to UTF-16LE and hash with MD5
+      md5hex=$(echo -n "$input" | ${pkgs.iconv}/bin/iconv -f UTF-8 -t UTF-16LE | md5sum | ${pkgs.gawk}/bin/awk '{print $1}')
+
+      # Format as GUID with .NET byte order (little-endian for first 3 fields)
+      a="''${md5hex:6:2}''${md5hex:4:2}''${md5hex:2:2}''${md5hex:0:2}"
+      b="''${md5hex:10:2}''${md5hex:8:2}"
+      c="''${md5hex:14:2}''${md5hex:12:2}"
+      d="''${md5hex:16:4}"
+      e="''${md5hex:20:12}"
+
+      guid="''${a}-''${b}-''${c}-''${d:0:4}-''${d:4:8}''${e}"
+
+      # Lowercase to match .NET format
+      echo "$(echo $guid | tr '[:upper:]' '[:lower:]')"
+    '';
 
   optionsNoId = lib.lists.remove "Id" (lib.lists.remove "InternalId" options);
   genUser = index: username: userOpts: let
@@ -295,6 +326,19 @@ with lib; let
         res=$(${sq} "$sql")
         ${print "SQL OUTPUT: $res"}
 
+        # Handle user preferences
+        ${
+        lib.optionalString (userOpts.Preferences.EnabledLibraries != [])
+        /*
+        bash
+        */
+        ''
+          userId=$(${sq} "SELECT Id From Users WHERE Username = '${mutatedUser.Username}'")
+          ${sq} "REPLACE INTO Preferences(Kind, RowVersion, UserId, Value) VALUES(${toString preferenceKindToDBInteger.EnabledFolders}, 0, $(echo "'$userId'"),
+          '${concatStringsSep "," (map (enabledLib: "$(${genfolderuuid}/bin/genfolderuuid \"${enabledLib}\")") userOpts.Preferences.EnabledLibraries)}')"
+        ''
+      }
+
         # Handle user permissions
         ${concatStringsSep "\n" (lib.attrsets.mapAttrsToList (
           permission: enabled:
@@ -336,34 +380,6 @@ with lib; let
         PathInfos = builtins.map (x: {MediaPathInfo.Path = x;}) value.PathInfos;
       })
     cfg.libraries;
-
-  genfolderuuid = folder:
-    pkgs.writeShellScriptBin "genfolderuuid"
-    /*
-    bash
-    */
-    ''
-      key="root\\default\\${folder}"
-      type="MediaBrowser.Controller.Entities.CollectionFolder"
-
-      # Concatenate type.FullName + key
-      input="\${type}\${key}"
-
-      # Convert to UTF-16LE and hash with MD5
-      md5hex=$(echo -n "$input" | iconv -f UTF-8 -t UTF-16LE | md5sum | awk '{print $1}')
-
-      # Format as GUID with .NET byte order (little-endian for first 3 fields)
-      a="\${md5hex:6:2}\${md5hex:4:2}\${md5hex:2:2}\${md5hex:0:2}"
-      b="\${md5hex:10:2}\${md5hex:8:2}"
-      c="\${md5hex:14:2}\${md5hex:12:2}"
-      d="\${md5hex:16:4}"
-      e="\${md5hex:20:12}"
-
-      guid="\${a}-\${b}-\${c}-\${d:0:4}-\${d:4:8}\${e}"
-
-      # Lowercase to match .NET format
-      echo "$(echo $guid | tr '[:upper:]' '[:lower:]')"
-    '';
 
   jellyfinDoneTag = "/var/log/jellyfin-init-done";
   configDerivations = mapAttrs (file: cfg: pkgs.writeText file (toXml cfg.name cfg.content)) jellyfinConfigFiles;
