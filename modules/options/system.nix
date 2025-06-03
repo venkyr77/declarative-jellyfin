@@ -38,7 +38,12 @@ in {
 
     IsStartupWizardCompleted = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
+      description = ''
+        Controls whether or not Declarative Jellyfin will mark the startup wizard as completed.
+        Set to `false` to show the startup wizard when visiting jellyfin (not recommended as this
+        will happen every time jellyfin is restarted)
+      '';
     };
 
     EnableMetrics = mkEnableOption "metrics";
