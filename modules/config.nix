@@ -337,6 +337,34 @@ with lib; let
       })
     cfg.libraries;
 
+  genfolderuuid = folder:
+    pkgs.writeShellScriptBin "genfolderuuid"
+    /*
+    bash
+    */
+    ''
+      key="root\\default\\${folder}"
+      type="MediaBrowser.Controller.Entities.CollectionFolder"
+
+      # Concatenate type.FullName + key
+      input="\${type}\${key}"
+
+      # Convert to UTF-16LE and hash with MD5
+      md5hex=$(echo -n "$input" | iconv -f UTF-8 -t UTF-16LE | md5sum | awk '{print $1}')
+
+      # Format as GUID with .NET byte order (little-endian for first 3 fields)
+      a="\${md5hex:6:2}\${md5hex:4:2}\${md5hex:2:2}\${md5hex:0:2}"
+      b="\${md5hex:10:2}\${md5hex:8:2}"
+      c="\${md5hex:14:2}\${md5hex:12:2}"
+      d="\${md5hex:16:4}"
+      e="\${md5hex:20:12}"
+
+      guid="\${a}-\${b}-\${c}-\${d:0:4}-\${d:4:8}\${e}"
+
+      # Lowercase to match .NET format
+      echo "$(echo $guid | tr '[:upper:]' '[:lower:]')"
+    '';
+
   jellyfinDoneTag = "/var/log/jellyfin-init-done";
   configDerivations = mapAttrs (file: cfg: pkgs.writeText file (toXml cfg.name cfg.content)) jellyfinConfigFiles;
   jellyfin-exec = "${getExe config.services.jellyfin.package} --datadir '${config.services.jellyfin.dataDir}' --configdir '${config.services.jellyfin.configDir}' --cachedir '${config.services.jellyfin.cacheDir}' --logdir '${config.services.jellyfin.logDir}'";
