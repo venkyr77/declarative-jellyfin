@@ -116,6 +116,22 @@ services.declarative-jellyfin.libraries.Music = {
 See the [source code](https://github.com/jellyfin/jellyfin/blob/master/MediaBrowser.Model/Entities/CollectionTypeOptions.cs)
 for possible library content types.
 
+### Limit a users access to specific libraries
+To whitelist the libraries the user have access to, you can use `services.declarative-jellyfin.Users.<name>.Preferences.EnabledLibraries`:
+
+```nix
+services.declarative-jellyfin.Users.your-username = {
+  # ...
+  Preferences = {
+    EnabledLibraries = ["Movies" "Photos and Videos"]; # Libraries that the user has access to
+  };
+  Permissions = {
+    EnableAllFolders = false;
+  };
+};
+```
+It's important to disable `Permissions.EnableAllFolders` otherwise the preferences won't have any effect.
+
 ## Hardware Acceleration
 First figure out what HW acceleration methods your system supports: https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration/
 
