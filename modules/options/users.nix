@@ -17,7 +17,7 @@ with lib; let
           The libraries are specified by the library name specified in
           `services.declarative-jellyfin.libraries.<name>`
         '';
-        example = [ "Movies" "Family Photos" ];
+        example = ["Movies" "Family Photos"];
       };
     };
   };
@@ -163,7 +163,7 @@ with lib; let
         type = with types; submodule PreferenceOpts;
         example = {
           # Whitelist libraries
-          EnabledLibraries = [ "TV Shows" "Movies" ];
+          EnabledLibraries = ["TV Shows" "Movies"];
         };
       };
       Permissions = mkOption {

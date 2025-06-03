@@ -47,7 +47,7 @@
         };
         Preferences = {
           # Only allow access to photos and music
-          EnabledLibraries = [ "Photos and Videos" "Music" ];
+          EnabledLibraries = ["Photos and Videos" "Music"];
         };
       };
       Bob = {
