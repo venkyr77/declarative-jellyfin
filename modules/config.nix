@@ -197,6 +197,7 @@ with lib; let
     EnableSubtitleManagement = 22;
     EnableLyricManagement = 23;
   };
+  # See: https://github.com/jellyfin/jellyfin/blob/master/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/PreferenceKind.cs
   preferenceKindToDBInteger = {
     EnabledFolders = 5;
   };
@@ -326,7 +327,7 @@ with lib; let
         res=$(${sq} "$sql")
         ${print "SQL OUTPUT: $res"}
 
-        # Handle user preferences
+        # Handle admin user preferences
         ${
         lib.optionalString (userOpts.Preferences.EnabledLibraries != [])
         /*
