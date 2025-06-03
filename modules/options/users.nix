@@ -1,5 +1,26 @@
 {lib, ...}:
 with lib; let
+  PreferenceOpts = {
+    name,
+    config,
+    ...
+  }: {
+    options = {
+      # NOTE: renamed from internal EnabledFolders, since
+      # it makes more sense to call it library not folder
+      EnabledLibraries = mkOption {
+        type = types.listOf types.str;
+        default = []; # empty means all are enabled
+        description = ''
+          A list of libraries this user as access to.
+          If it is empty, it means that the user has access to all libraries.
+          The libraries are specified by the library name specified in
+          `services.declarative-jellyfin.libraries.<name>`
+        '';
+        example = [ "Movies" "Family Photos" ];
+      };
+    };
+  };
   # See: https://github.com/jellyfin/jellyfin/blob/master/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/PermissionKind.cs
   # Defaults: https://github.com/jellyfin/jellyfin/blob/master/Jellyfin.Data/UserEntityExtensions.cs#L170
   PermissionOpts = {
@@ -136,6 +157,15 @@ with lib; let
     ...
   }: {
     options = {
+      Preferences = mkOption {
+        description = "Preferences for this user";
+        default = {};
+        type = with types; submodule PreferenceOpts;
+        example = {
+          # Whitelist libraries
+          EnabledLibraries = [ "TV Shows" "Movies" ];
+        };
+      };
       Permissions = mkOption {
         description = "Permissions for this user";
         default = {};

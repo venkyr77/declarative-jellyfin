@@ -205,7 +205,7 @@ with lib; let
     Smart = 4;
   };
   dbname = "jellyfin.db";
-  nonDBOptions = ["HashedPasswordFile" "HashedPassword" "Mutable" "Permissions" "_module"];
+  nonDBOptions = ["HashedPasswordFile" "HashedPassword" "Mutable" "Permissions" "Preferences" "_module"];
   sq = "${pkgs.sqlite}/bin/sqlite3 \"${config.services.jellyfin.dataDir}/data/${dbname}\" --";
   options = lib.attrsets.mapAttrsToList (key: value: "${key}") (
     (builtins.removeAttrs
