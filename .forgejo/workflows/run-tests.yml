@@ -1,15 +1,6 @@
 name: Run tests
 
-on:
-  push:
-    paths:
-      - '.forgejo/workflows/**/*'
-      - 'flake.nix'
-      - 'flake.lock'
-      - 'options/**/*'
-      - 'modules/**/*'
-      - 'lib/**/*'
-      - 'tests/**/*'
+on: [push]
 
 jobs:
   run_tests:
