@@ -155,5 +155,12 @@ in {
       assertion = all (apikey: (!isNull apikey.key) || (!isNull apikey.keyPath)) (attrValues cfg.apikeys);
       message = "API key must be spcecified";
     }
+    {
+      assertion = all (userOpts: !(userOpts.Preferences.EnabledLibraries != [] && userOpts.Permissions.EnableAllFolders)) (attrValues cfg.Users);
+      message = ''
+        When specifying custom library access with `Preferences.EnabledLibraries`, you have
+        to set `Permission.EnableAllFolders = false` for the user.
+      '';
+    }
   ];
 }

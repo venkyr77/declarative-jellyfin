@@ -43,6 +43,7 @@
         HashedPassword = builtins.readFile ../tests/example_hash.txt;
         Permissions = {
           IsAdministrator = true;
+          EnableAllFolders = false;
         };
         Preferences = {
           # Only allow access to photos and music
