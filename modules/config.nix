@@ -210,7 +210,6 @@ with lib; let
   };
   dbname = "jellyfin.db";
   nonDBOptions = ["HashedPasswordFile" "HashedPassword" "Mutable" "Permissions" "Preferences" "_module"];
-  sq = "${pkgs.sqlite}/bin/sqlite3 \"${config.services.jellyfin.dataDir}/data/${dbname}\" --";
   options = lib.attrsets.mapAttrsToList (key: value: "${key}") (
     (builtins.removeAttrs
       (
@@ -240,6 +239,13 @@ with lib; let
     )
     attrset;
 
+  # This function replicates the LibraryManager.GetNewItemId() from the jellyfin source code.
+  # It's used to generate the DB id used for referenceing specific folders/libraries (CollectionFolder)
+  # The id of a CollectionFolder (library) is: The Folder class' fullname concattenated
+  # with the path of to the library relative from the "virtual" jellyfin root with \ for path seperator
+  # This generates a key like MediaBrowser.Controller.Entities.CollectionFolderroot\default\<library name>.
+  # This gets converted to UTF-16LE and the md5 hash of that gets used as a GUID.
+  # Don't ask me why they do it like this 💀
   genfolderuuid =
     pkgs.writeShellScriptBin "genfolderuuid"
     /*
@@ -297,6 +303,7 @@ with lib; let
     bash
     */
     ''
+      userId=${mutatedUser.Id}
       userExists=$(${sq} "SELECT 1 FROM Users WHERE Username = '${mutatedUser.Username}'")
       # If the user is mutable, only insert the user if it doesn't already exist, otherwise just overwrite
       if [ ${
@@ -323,9 +330,7 @@ with lib; let
           optionsNoId
           (attrValues userWithNoId)))} WHERE Username = '${mutatedUser.Username}'"
         fi
-        ${print "SQL COMMAND: $sql"}
-        res=$(${sq} "$sql")
-        ${print "SQL OUTPUT: $res"}
+        echo "''${sql};" >> "$dbcmds"
 
         # Handle admin user preferences
         ${
@@ -334,9 +339,8 @@ with lib; let
         bash
         */
         ''
-          userId=$(${sq} "SELECT Id From Users WHERE Username = '${mutatedUser.Username}'")
-          ${sq} "REPLACE INTO Preferences(Kind, RowVersion, UserId, Value) VALUES(${toString preferenceKindToDBInteger.EnabledFolders}, 0, $(echo "'$userId'"),
-          '${concatStringsSep "," (map (enabledLib: "$(${genfolderuuid}/bin/genfolderuuid \"${enabledLib}\")") userOpts.Preferences.EnabledLibraries)}')"
+          echo "REPLACE INTO Preferences(Kind, RowVersion, UserId, Value) VALUES(${toString preferenceKindToDBInteger.EnabledFolders}, 0, $(echo "'$userId'"),
+          '${concatStringsSep "," (map (enabledLib: "$(${genfolderuuid}/bin/genfolderuuid \"${enabledLib}\")") userOpts.Preferences.EnabledLibraries)}');" >> "$dbcmds"
         ''
       }
 
@@ -347,14 +351,12 @@ with lib; let
           bash
           */
           ''
-            userId=$(${sq} "SELECT Id FROM Users WHERE Username = '${mutatedUser.Username}'")
             sql="REPLACE INTO Permissions (Kind, Value, UserId, Permission_Permissions_Guid, RowVersion) VALUES(${toString permissionKindToDBInteger.${permission}}, ${
               if enabled
               then "1"
               else "0"
-            }, $(echo "'$userId'"), NULL, 0)"
-            ${print "SQL COMMAND: $sql"}
-            ${sq} "$sql"
+            }, $(echo "'$userId'"), NULL, 0);"
+            echo "$sql" >> "$dbcmds"
           ''
         )
         userOpts.Permissions)}
@@ -382,6 +384,8 @@ with lib; let
       })
     cfg.libraries;
 
+  sq = "${pkgs.sqlite}/bin/sqlite3 \"${config.services.jellyfin.dataDir}/data/${dbname}\" --";
+  dbcmdfile = "dbcommands.sql";
   jellyfinDoneTag = "/var/log/jellyfin-init-done";
   configDerivations = mapAttrs (file: cfg: pkgs.writeText file (toXml cfg.name cfg.content)) jellyfinConfigFiles;
   jellyfin-exec = "${getExe config.services.jellyfin.package} --datadir '${config.services.jellyfin.dataDir}' --configdir '${config.services.jellyfin.configDir}' --cachedir '${config.services.jellyfin.cacheDir}' --logdir '${config.services.jellyfin.logDir}'";
@@ -393,15 +397,32 @@ with lib; let
     ''
         set -euo pipefail
         rm -rf "${jellyfinDoneTag}"
-        trap "rm -rf '${jellyfinDoneTag}'" exit
+        trap cleanup EXIT SIGINT SIGTERM SIGHUP SIGQUIT
+        trap handle_error ERR
 
-          # u=rwx
-          # g=r-x
-          # o=---
-          umask 027
+        # u=rwx
+        # g=r-x
+        # o=---
+        umask 027
 
-          install -Dm 774 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} /dev/null "${log}"
-          ${print "Log init"}
+        install -Dm 774 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} /dev/null "${log}"
+
+        ${print "Log init"}
+
+        function handle_error() {
+          ${print "An ERROR occured during jellyfin-init!"}
+          ${print "Log file:\n$(cat \"${log}\")"}
+        }
+
+        function cleanup() {
+          ${print "REMOVING DONE TAG"}
+          rm -rf "${jellyfinDoneTag}"
+        }
+
+        dbcmds="$(mktemp -d)/${dbcmdfile}"
+        install -Dm 774 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} /dev/null "$dbcmds"
+        trap "rm -rf \"$dbcmds\"" exit
+        echo "BEGIN TRANSACTION;" > "$dbcmds"
 
         # Setup directories
         install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.configDir}"
@@ -559,16 +580,21 @@ with lib; let
         bash
         */
         ''
-          ${sq} "REPLACE INTO ApiKeys (DateCreated, DateLastActivity, Name, AccessToken) VALUES(time(), time(), '${appName}', ${
+          echo "REPLACE INTO ApiKeys (DateCreated, DateLastActivity, Name, AccessToken) VALUES(time(), time(), '${appName}', ${
             if !(isNull value.key)
             then "'${value.key}'"
             else "'$(cat \"${value.keyPath}\")'"
-          })"
+          });" >> "$dbcmds"
         '')
       cfg.apikeys)}
 
-        touch '${jellyfinDoneTag}'
-        ${jellyfin-exec}
+      # Commit SQL commands
+      echo "COMMIT TRANSACTION;" >> "$dbcmds"
+      ${print "Executing SQL Commands:\n$(cat \"$dbcmds\")"}
+      ${pkgs.sqlite}/bin/sqlite3 "${config.services.jellyfin.dataDir}/data/${dbname}" < "$dbcmds"
+
+      touch '${jellyfinDoneTag}'
+      ${jellyfin-exec}
     '';
 in {
   config =

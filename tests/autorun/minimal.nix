@@ -35,7 +35,7 @@ in {
         # Make sure no errors are happening while jellyfin starts up
         # we ignore download plugin errors
         for i in range(10):
-          machine.succeed("! journalctl --no-pager -b -u jellyfin.service | grep -v \"plugin\" grep -q \"ERR\"")
+          machine.succeed("! journalctl --no-pager -b -u jellyfin.service | grep -v \"plugin\" | grep -q \"ERR\"")
           machine.succeed("sleep 1")
 
         # print log for debugging
