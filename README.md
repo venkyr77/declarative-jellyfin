@@ -5,16 +5,23 @@
 This repository provides a nix flake that allows for declarative configuration of
 Users, Libraries, Plugins, Settings, etc.
 
+> [!WARNING]
+This project is still in early stage, so beaware of bugs.
+It is highly recommended to manually take a backup of your jellyfin directory
+(usually `/var/lib/jellyfin`) if you're migrating, even though this script takes
+automatic backups before doing anything.
+
 # Features
 * Declarative users
     * permissions
-    * coming soon: preferences
+* Libraries
+    * User specific library access
 * Server Settings
     * System
     * Network
     * Encoding (HW acceleration)
-* Declarative plugins (no way to configure them yet though)
-* Libraries
+    * Coming soon: Branding (see #9)
+* Declarative plugins (Still a WIP)
 * Automatic backups
 * API keys
 
