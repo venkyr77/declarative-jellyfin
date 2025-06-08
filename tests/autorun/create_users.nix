@@ -23,22 +23,22 @@ in {
 
         services.declarative-jellyfin = {
           enable = true;
-          Users = {
+          users = {
             Admin = {
-              Mutable = false;
-              Password = "123";
-              Permissions = {
-                IsAdministrator = true;
-                IsDisabled = false;
+              mutable = false;
+              password = "123";
+              permissions = {
+                isAdministrator = true;
+                isDisabled = false;
                 # ...
               };
             };
             "Some cool user with spaces" = {
-              Mutable = true;
-              HashedPasswordFile = ../example_hash.txt;
+              mutable = true;
+              hashedPasswordFile = ../example_hash.txt;
             };
             alice = {
-              HashedPassword = "$PBKDF2-SHA512$iterations=210000$D12C02D1DD15949D867BCA9971BE9987$67E75CDCD14E7F6FDDF96BAACBE9E84E5197FB9FE454FB039F5CD773D7DF558B57DC81DB42B6F7CF0E6B8207A771E5C0EE0DBFD91CE5BAF804FE53F70E61CD2E";
+              hashedPassword = "$PBKDF2-SHA512$iterations=210000$D12C02D1DD15949D867BCA9971BE9987$67E75CDCD14E7F6FDDF96BAACBE9E84E5197FB9FE454FB039F5CD773D7DF558B57DC81DB42B6F7CF0E6B8207A771E5C0EE0DBFD91CE5BAF804FE53F70E61CD2E";
             };
           };
         };

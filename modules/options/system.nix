@@ -11,32 +11,32 @@ with lib; let
     };
 in {
   options.services.declarative-jellyfin.system = {
-    ServerName = mkStrOption config.networking.hostName ''
+    serverName = mkStrOption config.networking.hostName ''
       This name will be used to identify the server and will default to the server's hostname.
     '';
 
     # Language
-    PreferredMetadataLanguage = mkStrOption "en" "Display language of jellyfin.";
+    preferredMetadataLanguage = mkStrOption "en" "Display language of jellyfin.";
 
-    MetadataCountryCode = mkStrOption "US" ''
+    metadataCountryCode = mkStrOption "US" ''
       Country code for language. Determines stuff like dates, comma placement etc.
     '';
 
     # Paths
-    CachePath = mkStrOption "/var/cache/jellyfin" ''
+    cachePath = mkStrOption "/var/cache/jellyfin" ''
       Specify a custom location for server cache files such as images.
     '';
 
-    MetadataPath = mkStrOption "/var/lib/jellyfin/metadata" ''
+    metadataPath = mkStrOption "/var/lib/jellyfin/metadata" ''
       Specify a custom location for downloaded artwork and metadata.
     '';
 
-    LogFileRetentionDays = mkOption {
+    logFileRetentionDays = mkOption {
       type = types.int;
       default = 3;
     };
 
-    IsStartupWizardCompleted = mkOption {
+    isStartupWizardCompleted = mkOption {
       type = types.bool;
       default = true;
       description = ''
@@ -46,19 +46,19 @@ in {
       '';
     };
 
-    EnableMetrics = mkEnableOption "metrics";
+    enableMetrics = mkEnableOption "metrics";
 
-    EnableNormalizedItemByNameIds = mkOption {
+    enableNormalizedItemByNameIds = mkOption {
       type = types.bool;
       default = true;
     };
 
-    IsPortAuthorized = mkOption {
+    isPortAuthorized = mkOption {
       type = types.bool;
       default = true;
     };
 
-    QuickConnectAvailable = mkOption {
+    quickConnectAvailable = mkOption {
       type = types.bool;
       default = true;
       description = ''
@@ -66,17 +66,17 @@ in {
       '';
     };
 
-    EnableCaseSensitiveItemIds = mkOption {
+    enableCaseSensitiveItemIds = mkOption {
       type = types.bool;
       default = true;
     };
 
-    DisableLiveTvChannelUserDataName = mkOption {
+    disableLiveTvChannelUserDataName = mkOption {
       type = types.bool;
       default = true;
     };
 
-    SortReplaceCharacters = mkOption {
+    sortReplaceCharacters = mkOption {
       type = with types; listOf str;
       default = [
         "."
@@ -85,7 +85,7 @@ in {
       ];
     };
 
-    SortRemoveCharacters = mkOption {
+    sortRemoveCharacters = mkOption {
       type = with types; listOf str;
       default = [
         ","
@@ -97,7 +97,7 @@ in {
       ];
     };
 
-    SortRemoveWords = mkOption {
+    sortRemoveWords = mkOption {
       type = with types; listOf str;
       default = [
         "the"
@@ -107,7 +107,7 @@ in {
     };
 
     # Resume
-    MinResumePct = mkOption {
+    minResumePct = mkOption {
       type = types.int;
       default = 5;
       description = ''
@@ -115,7 +115,7 @@ in {
       '';
     };
 
-    MaxResumePct = mkOption {
+    maxResumePct = mkOption {
       type = types.int;
       default = 90;
       description = ''
@@ -123,7 +123,7 @@ in {
       '';
     };
 
-    MinAudiobookResume = mkOption {
+    minAudiobookResume = mkOption {
       type = types.int;
       default = 5;
       description = ''
@@ -131,7 +131,7 @@ in {
       '';
     };
 
-    MaxAudiobookResume = mkOption {
+    maxAudiobookResume = mkOption {
       type = types.int;
       default = 5;
       description = ''
@@ -139,7 +139,7 @@ in {
       '';
     };
 
-    MinResumeDurationSeconds = mkOption {
+    minResumeDurationSeconds = mkOption {
       type = types.int;
       default = 300;
       description = ''
@@ -147,130 +147,130 @@ in {
       '';
     };
 
-    InactiveSessionThreshhold = mkOption {
+    inactiveSessionThreshhold = mkOption {
       type = types.int;
       default = 0;
     };
 
-    LibraryMonitorDelay = mkOption {
+    libraryMonitorDelay = mkOption {
       type = types.int;
       default = 60;
     };
 
-    LibraryUpdateDuration = mkOption {
+    libraryUpdateDuration = mkOption {
       type = types.int;
       default = 30;
     };
 
-    ImageSavingConvention = mkOption {
+    imageSavingConvention = mkOption {
       type = types.enum ["Legacy"];
       default = "Legacy";
       description = "i got no idea what this is";
     };
 
-    MetadataOptions = mkOption {
+    metadataOptions = mkOption {
       type = with types; listOf attrs;
       default = [
         {
           tag = "MetadataOptions";
           content = {
-            ItemType = "Movie";
-            DisabledMetadataSavers = [];
-            DisabledMetadataFetchers = [];
-            LocalMetadataReaderOrder = [];
-            MetadataFetcherOrder = [];
-            DisabledImageFetchers = [];
+            itemType = "Movie";
+            disabledMetadataSavers = [];
+            disabledMetadataFetchers = [];
+            localMetadataReaderOrder = [];
+            metadataFetcherOrder = [];
+            disabledImageFetchers = [];
+            imageFetcherOrder = [];
+          };
+        }
+        {
+          tag = "MetadataOptions";
+          content = {
+            itemType = "MusicVideo";
+            disabledMetadataSavers = [];
+            disabledMetadataFetchers = ["The Open Movie Database"];
+            localMetadataReaderOrder = [];
+            metadataFetcherOrder = [];
+            disabledImageFetchers = ["The Open Movie Database"];
+            imageFetcherOrder = [];
+          };
+        }
+        {
+          tag = "MetadataOptions";
+          content = {
+            itemType = "Series";
+            disabledMetadataSavers = [];
+            disabledMetadataFetchers = [];
+            localMetadataReaderOrder = [];
+            metadataFetcherOrder = [];
+            disabledImageFetchers = [];
+            imageFetcherOrder = [];
+          };
+        }
+        {
+          tag = "MetadataOptions";
+          content = {
+            itemType = "MusicAlbum";
+            disabledMetadataSavers = [];
+            disabledMetadataFetchers = ["TheAudioDB"];
+            localMetadataReaderOrder = [];
+            metadataFetcherOrder = [];
+            disabledImageFetchers = [];
+            imageFetcherOrder = [];
+          };
+        }
+        {
+          tag = "MetadataOptions";
+          content = {
+            itemType = "MusicArtist";
+            disabledMetadataSavers = [];
+            disabledMetadataFetchers = ["TheAudioDB"];
+            localMetadataReaderOrder = [];
+            metadataFetcherOrder = [];
+            disabledImageFetchers = [];
             ImageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
-            ItemType = "MusicVideo";
-            DisabledMetadataSavers = [];
-            DisabledMetadataFetchers = ["The Open Movie Database"];
-            LocalMetadataReaderOrder = [];
-            MetadataFetcherOrder = [];
-            DisabledImageFetchers = ["The Open Movie Database"];
-            ImageFetcherOrder = [];
+            itemType = "BoxSet";
+            disabledMetadataSavers = [];
+            disabledMetadataFetchers = [];
+            localMetadataReaderOrder = [];
+            metadataFetcherOrder = [];
+            disabledImageFetchers = [];
+            imageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
-            ItemType = "Series";
-            DisabledMetadataSavers = [];
-            DisabledMetadataFetchers = [];
-            LocalMetadataReaderOrder = [];
-            MetadataFetcherOrder = [];
-            DisabledImageFetchers = [];
-            ImageFetcherOrder = [];
+            itemType = "Season";
+            disabledMetadataSavers = [];
+            disabledMetadataFetchers = [];
+            localMetadataReaderOrder = [];
+            metadataFetcherOrder = [];
+            disabledImageFetchers = [];
+            imageFetcherOrder = [];
           };
         }
         {
           tag = "MetadataOptions";
           content = {
-            ItemType = "MusicAlbum";
-            DisabledMetadataSavers = [];
-            DisabledMetadataFetchers = ["TheAudioDB"];
-            LocalMetadataReaderOrder = [];
-            MetadataFetcherOrder = [];
-            DisabledImageFetchers = [];
-            ImageFetcherOrder = [];
-          };
-        }
-        {
-          tag = "MetadataOptions";
-          content = {
-            ItemType = "MusicArtist";
-            DisabledMetadataSavers = [];
-            DisabledMetadataFetchers = ["TheAudioDB"];
-            LocalMetadataReaderOrder = [];
-            MetadataFetcherOrder = [];
-            DisabledImageFetchers = [];
-            ImageFetcherOrder = [];
-          };
-        }
-        {
-          tag = "MetadataOptions";
-          content = {
-            ItemType = "BoxSet";
-            DisabledMetadataSavers = [];
-            DisabledMetadataFetchers = [];
-            LocalMetadataReaderOrder = [];
-            MetadataFetcherOrder = [];
-            DisabledImageFetchers = [];
-            ImageFetcherOrder = [];
-          };
-        }
-        {
-          tag = "MetadataOptions";
-          content = {
-            ItemType = "Season";
-            DisabledMetadataSavers = [];
-            DisabledMetadataFetchers = [];
-            LocalMetadataReaderOrder = [];
-            MetadataFetcherOrder = [];
-            DisabledImageFetchers = [];
-            ImageFetcherOrder = [];
-          };
-        }
-        {
-          tag = "MetadataOptions";
-          content = {
-            ItemType = "Episode";
-            DisabledMetadataSavers = [];
-            DisabledMetadataFetchers = [];
-            LocalMetadataReaderOrder = [];
-            MetadataFetcherOrder = [];
-            DisabledImageFetchers = [];
-            ImageFetcherOrder = [];
+            itemType = "Episode";
+            disabledMetadataSavers = [];
+            disabledMetadataFetchers = [];
+            localMetadataReaderOrder = [];
+            metadataFetcherOrder = [];
+            disabledImageFetchers = [];
+            imageFetcherOrder = [];
           };
         }
       ];
     };
 
-    SkipDeserializationForBasicTypes = mkOption {
+    skipDeserializationForBasicTypes = mkOption {
       type = types.bool;
       default = true;
     };
@@ -280,28 +280,28 @@ in {
       default = "en-US";
     };
 
-    SaveMetadataHidden = mkEnableOption "";
+    saveMetadataHidden = mkEnableOption "";
 
-    ContentTypes = mkOption {
+    contentTypes = mkOption {
       type = with types; listOf str;
       default = [];
     };
 
-    RemoteClientBitrateLimit = mkOption {
+    remoteClientBitrateLimit = mkOption {
       type = types.int;
       default = 0;
     };
 
-    EnableFolderView = mkEnableOption "";
+    enableFolderView = mkEnableOption "";
 
-    EnableGroupingIntoCollections = mkEnableOption "";
+    enableGroupingIntoCollections = mkEnableOption "";
 
-    DisplaySpecialsWithinSeasons = mkOption {
+    displaySpecialsWithinSeasons = mkOption {
       type = types.bool;
       default = true;
     };
 
-    CodecsUsed = mkOption {
+    codecsUsed = mkOption {
       type = with types; listOf str;
       default = [];
     };
@@ -320,46 +320,46 @@ in {
     #   description = "Configure which plugin repositories you use.";
     # };
 
-    EnableExternalContentInSuggestions = mkOption {
+    enableExternalContentInSuggestions = mkOption {
       type = types.bool;
       default = true;
     };
 
-    ImageExtractionTimeoutMs = mkOption {
+    imageExtractionTimeoutMs = mkOption {
       type = types.int;
       default = 0;
       description = "Leave at 0 for no timeout";
     };
 
-    PathSubstitutions = mkOption {
+    pathSubstitutions = mkOption {
       type = with types; listOf str;
       default = [];
     };
 
-    EnableSlowResponseWarning = mkOption {
+    enableSlowResponseWarning = mkOption {
       type = types.bool;
       default = true;
     };
 
-    SlowResponseThresholdMs = mkOption {
+    slowResponseThresholdMs = mkOption {
       type = types.int;
       default = 500;
       description = "How slow (in ms) would a response have to be before a warning is shown";
     };
 
-    CorsHosts = mkOption {
+    corsHosts = mkOption {
       type = with types; listOf str;
       default = [
         "*"
       ];
     };
 
-    ActivityLogRetentionDays = mkOption {
+    activityLogRetentionDays = mkOption {
       type = types.int;
       default = 30;
     };
 
-    LibraryScanFanoutConcurrency = mkOption {
+    libraryScanFanoutConcurrency = mkOption {
       type = types.int;
       default = 0;
       description = ''
@@ -369,7 +369,7 @@ in {
       '';
     };
 
-    LibraryMetadataRefreshConcurrency = mkOption {
+    libraryMetadataRefreshConcurrency = mkOption {
       type = types.int;
       default = 0;
       description = ''
@@ -379,22 +379,22 @@ in {
       '';
     };
 
-    RemoveOldPlugins = mkOption {
+    removeOldPlugins = mkOption {
       type = types.bool;
       default = true;
     };
 
-    AllowClientLogUpload = mkOption {
+    allowClientLogUpload = mkOption {
       type = types.bool;
       default = true;
     };
 
-    DummyChapterDuration = mkOption {
+    dummyChapterDuration = mkOption {
       type = types.int;
       default = 0;
     };
 
-    ChapterImageResolution = mkOption {
+    chapterImageResolution = mkOption {
       type = types.enum [
         "MatchSource"
         "2160p"
@@ -413,7 +413,7 @@ in {
       '';
     };
 
-    ParallelImageEncodingLimit = mkOption {
+    parallelImageEncodingLimit = mkOption {
       type = types.int;
       default = 0;
       description = ''
@@ -422,7 +422,7 @@ in {
       '';
     };
 
-    CastReceiverApplications = mkOption {
+    castReceiverApplications = mkOption {
       type = with types; listOf attrs;
       default = [
         {
@@ -442,17 +442,17 @@ in {
       ];
     };
 
-    TrickplayOptions = {
-      EnableHwAcceleration = mkEnableOption "Enable hardware acceleration";
+    trickplayOptions = {
+      enableHwAcceleration = mkEnableOption "Enable hardware acceleration";
 
-      EnableHwEncoding = mkEnableOption "Currently only available on QSV, VA-API, VideoToolbox and RKMPP, this option has no effect on other hardware acceleration methods.";
+      enableHwEncoding = mkEnableOption "Currently only available on QSV, VA-API, VideoToolbox and RKMPP, this option has no effect on other hardware acceleration methods.";
 
-      EnableKeyFrameOnlyExtraction = mkEnableOption ''
+      enableKeyFrameOnlyExtraction = mkEnableOption ''
         Extract key frames only for significantly faster processing with less accurate timing.
         If the configured hardware decoder does not support this mode, will use the software decoder instead.
       '';
 
-      ScanBehavior = mkOption {
+      scanBehavior = mkOption {
         type = types.enum ["NonBlocking" "Blocking"];
         default = "NonBlocking";
         description = ''
@@ -460,7 +460,7 @@ in {
         '';
       };
 
-      ProcessPriority = mkOption {
+      processPriority = mkOption {
         type = types.enum [
           "High"
           "AboveNormal"
@@ -475,7 +475,7 @@ in {
         '';
       };
 
-      Interval = mkOption {
+      interval = mkOption {
         type = types.int;
         default = 10000;
         description = ''
@@ -483,7 +483,7 @@ in {
         '';
       };
 
-      WidthResolutions = mkOption {
+      widthResolutions = mkOption {
         type = with types; listOf attrs;
         default = [
           {
@@ -497,7 +497,7 @@ in {
         '';
       };
 
-      TileWidth = mkOption {
+      tileWidth = mkOption {
         type = types.int;
         default = 10;
         description = ''
@@ -505,7 +505,7 @@ in {
         '';
       };
 
-      TileHeight = mkOption {
+      tileHeight = mkOption {
         type = types.int;
         default = 10;
         description = ''
@@ -513,7 +513,7 @@ in {
         '';
       };
 
-      Qscale = mkOption {
+      qscale = mkOption {
         type = types.ints.between 2 31;
         default = 4;
         description = ''
@@ -521,7 +521,7 @@ in {
         '';
       };
 
-      JpegQuality = mkOption {
+      jpegQuality = mkOption {
         type = types.ints.between 0 100;
         default = 90;
         description = ''
@@ -529,7 +529,7 @@ in {
         '';
       };
 
-      ProcessThreads = mkOption {
+      processThreads = mkOption {
         type = types.int;
         default = 1;
         description = ''

@@ -7,7 +7,7 @@
 with lib;
 with types; let
   cfg = config.services.declarative-jellyfin;
-  ApiKeyOpts = {
+  apikeyOpts = {
     name,
     config,
     ...
@@ -49,7 +49,7 @@ in {
     apikeys = mkOption {
       description = "API keys configuration";
       default = {};
-      type = attrsOf (submodule ApiKeyOpts);
+      type = attrsOf (submodule apikeyOpts);
       example = {
         Jellyseerr = {
           # You can use `key`, but use with caution! It is stored in plain text
@@ -156,7 +156,7 @@ in {
       message = "API key must be spcecified";
     }
     {
-      assertion = all (userOpts: !(userOpts.Preferences.EnabledLibraries != [] && userOpts.Permissions.EnableAllFolders)) (attrValues cfg.Users);
+      assertion = all (userOpts: !(userOpts.preferences.enabledLibraries != [] && userOpts.permissions.enableAllFolders)) (attrValues cfg.users);
       message = ''
         When specifying custom library access with `Preferences.EnabledLibraries`, you have
         to set `Permission.EnableAllFolders = false` for the user.

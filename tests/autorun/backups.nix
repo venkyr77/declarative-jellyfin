@@ -21,7 +21,7 @@ in {
 
         services.declarative-jellyfin = {
           enable = true;
-          network.PublicHttpPort = port;
+          network.publicHttpPort = port;
           backups = true;
           inherit backupDir;
           inherit backupCount;

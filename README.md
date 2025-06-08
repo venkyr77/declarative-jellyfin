@@ -71,7 +71,7 @@ services.declarative-jellyfin.system = {
     enableHwAcceleration = true;
     enableHwEncoding = true;
   };
-  uiCulture = "da"; # danish
+  UICulture = "da"; # danish
 };
 ```
 
@@ -85,10 +85,10 @@ services.declarative-jellyfin.users = {
   admin = {
     mutable = false; # overwrite user settings
     permissions.isAdministrator = true;
-    HashedPasswordFile = config.sops.secrets.jellyfin-admin-passwd.path;
+    hashedPasswordFile = config.sops.secrets.jellyfin-admin-passwd.path;
   };
   "Alice Doe" = {
-    Password = "123"; # WARNING: plain text!
+    password = "123"; # WARNING: plain text!
     permissions.enableMediaPlayback = false; # this user is not allowed to play media
   };
 };
@@ -108,13 +108,13 @@ nix run git+https://git.spoodythe.one/spoody/declarative-jellyfin.git#genhash --
 ```
 
 ### Usage with sops-nix
-Extract the secret and use the `HashedPasswordFile`:
+Extract the secret and use the `hashedPasswordFile`:
 ```nix
 sops.secrets.example-user-password = {
     owner = config.services.jellyfin.user;
     group = config.services.jellyfin.group;
 };
-services.declarative-jellyfin.Users.example-user.HashedPasswordFile = config.sops.secrets.example-user-password.path;
+services.declarative-jellyfin.users.example-user.hashedPasswordFile = config.sops.secrets.example-user-password.path;
 ```
 
 ## Libraries
@@ -127,9 +127,9 @@ Below are some examples of different types of libraries:
 
 ```nix
 services.declarative-jellyfin.libraries.Movies = {
-  Enabled = true;
-  ContentType = "movies";
-  PathInfos = ["/data/Movies"];
+  enabled = true;
+  contentType = "movies";
+  pathInfos = ["/data/Movies"];
 };
 ```
 </details>
@@ -139,9 +139,9 @@ services.declarative-jellyfin.libraries.Movies = {
 
 ```nix
 services.declarative-jellyfin.libraries.Shows = {
-  Enabled = true;
-  ContentType = "tvshows";
-  PathInfos = ["/data/Shows"];
+  enabled = true;
+  contentType = "tvshows";
+  pathInfos = ["/data/Shows"];
 };
 ```
 </details>
@@ -151,9 +151,9 @@ services.declarative-jellyfin.libraries.Shows = {
 
 ```nix
 services.declarative-jellyfin.libraries."Family photos" = {
-  Enabled = true;
-  ContentType = "homevideos";
-  PathInfos = ["/data/Famility/Photos" "/data/Family/Videos"];
+  enabled = true;
+  contentType = "homevideos";
+  pathInfos = ["/data/Famility/Photos" "/data/Family/Videos"];
 };
 ```
 </details>
@@ -163,9 +163,9 @@ services.declarative-jellyfin.libraries."Family photos" = {
 
 ```nix
 services.declarative-jellyfin.libraries.Books = {
-  Enabled = true;
-  ContentType = "books";
-  PathInfos = ["/data/Books"];
+  enabled = true;
+  contentType = "books";
+  pathInfos = ["/data/Books"];
 };
 ```
 </details>
@@ -175,9 +175,9 @@ services.declarative-jellyfin.libraries.Books = {
 
 ```nix
 services.declarative-jellyfin.libraries.Music = {
-  Enabled = true;
-  ContentType = "music";
-  PathInfos = ["/data/Music"];
+  enabled = true;
+  contentType = "music";
+  pathInfos = ["/data/Music"];
 };
 ```
 </details>
@@ -190,20 +190,20 @@ By declaring libraries through your nixos configuration, any changes through the
 If you want to change settings through the GUI, you must not specify the library in your configuration, otherwise you've to specify the options in the config.
 
 ### Limit a user's access to specific libraries
-To whitelist the libraries the user have access to, you can use `services.declarative-jellyfin.Users.<name>.Preferences.EnabledLibraries`:
+To whitelist the libraries the user have access to, you can use `services.declarative-jellyfin.users.<name>.preferences.enabledLibraries`:
 
 ```nix
-services.declarative-jellyfin.Users.your-username = {
+services.declarative-jellyfin.users.your-username = {
   # ...
-  Preferences = {
-    EnabledLibraries = ["Movies" "Photos and Videos"]; # Libraries that the user has access to
+  preferences = {
+    enabledLibraries = ["Movies" "Photos and Videos"]; # Libraries that the user has access to
   };
-  Permissions = {
-    EnableAllFolders = false;
+  permissions = {
+    enableAllFolders = false;
   };
 };
 ```
-It's important to disable `Permissions.EnableAllFolders` otherwise the preferences won't have any effect.
+It's important to disable `permissions.enableAllFolders` otherwise the preferences won't have any effect.
 
 ## Hardware Acceleration
 First figure out what HW acceleration methods your system supports: https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration/
@@ -219,12 +219,12 @@ users.users.${config.services.jellyfin.user}.extraGroups = ["video" "render"];
 services.declarative-jellyfin = {
     # ... other configuration ...
     encoding = {
-      EnableHardwareEncoding = true;
-      HardwareAccelerationType = "vaapi";
-      EnableDecodingColorDepth10Hevc = true; # enable if your system supports
-      AllowHevcEncoding = true; # enable if your system supports
-      AllowAv1Encoding = true; # enable if your system supports
-      HardwareDecodingCodecs = [ # enable the codecs your system supports
+      enableHardwareEncoding = true;
+      hardwareAccelerationType = "vaapi";
+      enableDecodingColorDepth10Hevc = true; # enable if your system supports
+      allowHevcEncoding = true; # enable if your system supports
+      allowAv1Encoding = true; # enable if your system supports
+      hardwareDecodingCodecs = [ # enable the codecs your system supports
         "h264"
         "hevc"
         "mpeg2video"
@@ -243,7 +243,7 @@ Use `vainfo` from `libva-utils` to see the codec capabilities for your VA-API de
 At the moment plugins are speculated to cause some bugs, most notably: https://git.spoodythe.one/spoody/declarative-jellyfin/issues/18.
 So at the moment it is recommended to install plugins imperatively through the GUI until declarative plugins are properly tested.
 
-Installed plugins can be configured declaratively using the `declarative-jellyfin.plugins` attribute.
+Installed plugins can be configured declaratively using the `declarative-jellyfin.plugins` option.
 
 ```nix
 services.declarative-jellyfin = {

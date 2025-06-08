@@ -31,43 +31,43 @@ in {
           '';
 
         services.declarative-jellyfin = {
-          network.PublicHttpPort = port;
+          network.publicHttpPort = port;
           enable = true;
-          system.IsStartupWizardCompleted = true;
+          system.isStartupWizardCompleted = true;
           openFirewall = true;
-          Users = {
+          users = {
             admin = {
-              Password = "admin";
-              Permissions = {
-                IsAdministrator = true;
+              password = "admin";
+              permissions = {
+                isAdministrator = true;
               };
             };
           };
           libraries = {
             Movies = {
-              Enabled = true;
-              ContentType = "movies";
-              PathInfos = ["/data/Movies"];
+              enabled = true;
+              contentType = "movies";
+              pathInfos = ["/data/Movies"];
             };
             Shows = {
-              Enabled = true;
-              ContentType = "tvshows";
-              PathInfos = ["/data/Shows"];
+              enabled = true;
+              contentType = "tvshows";
+              pathInfos = ["/data/Shows"];
             };
             "Photos and videos" = {
-              Enabled = true;
-              ContentType = "homevideos";
-              PathInfos = ["/data/Pictures" "/data/Videos"];
+              enabled = true;
+              contentType = "homevideos";
+              pathInfos = ["/data/Pictures" "/data/Videos"];
             };
             Books = {
-              Enabled = true;
-              ContentType = "books";
-              PathInfos = ["/data/Books"];
+              enabled = true;
+              contentType = "books";
+              pathInfos = ["/data/Books"];
             };
             Music = {
-              Enabled = true;
-              ContentType = "music";
-              PathInfos = ["/data/Music"];
+              enabled = true;
+              contentType = "music";
+              pathInfos = ["/data/Music"];
             };
           };
         };

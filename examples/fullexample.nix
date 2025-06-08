@@ -4,57 +4,57 @@
 
     libraries = {
       Movies = {
-        Enabled = true;
-        ContentType = "movies";
-        PathInfos = ["/data/Movies"];
+        enabled = true;
+        contentType = "movies";
+        pathInfos = ["/data/Movies"];
       };
       Shows = {
-        Enabled = true;
-        ContentType = "tvshows";
-        PathInfos = ["/data/Shows"];
+        enabled = true;
+        contentType = "tvshows";
+        pathInfos = ["/data/Shows"];
       };
       "Photos and videos" = {
-        Enabled = true;
-        ContentType = "homevideos";
-        PathInfos = ["/data/Pictures" "/data/Videos"];
+        enabled = true;
+        contentType = "homevideos";
+        pathInfos = ["/data/Pictures" "/data/Videos"];
       };
       Books = {
-        Enabled = true;
-        ContentType = "books";
-        PathInfos = ["/data/Books"];
+        enabled = true;
+        contentType = "books";
+        pathInfos = ["/data/Books"];
       };
       Music = {
-        Enabled = true;
-        ContentType = "music";
-        PathInfos = ["/data/Music"];
+        enabled = true;
+        contentType = "music";
+        pathInfos = ["/data/Music"];
       };
     };
 
-    Users = {
+    users = {
       Admin = {
-        Mutable = false;
-        Password = "123";
-        Permissions = {
-          IsAdministrator = true;
+        mutable = false;
+        password = "123";
+        permissions = {
+          isAdministrator = true;
         };
       };
       Alice = {
-        Mutable = false;
-        HashedPassword = builtins.readFile ../tests/example_hash.txt;
-        Permissions = {
-          IsAdministrator = true;
-          EnableAllFolders = false;
+        mutable = false;
+        hashedPassword = builtins.readFile ../tests/example_hash.txt;
+        permissions = {
+          isAdministrator = true;
+          enableAllFolders = false;
         };
-        Preferences = {
+        preferences = {
           # Only allow access to photos and music
-          EnabledLibraries = ["Photos and Videos" "Music"];
+          enabledLibraries = ["Photos and Videos" "Music"];
         };
       };
       Bob = {
-        Mutable = false;
-        HashedPasswordFile = ../tests/example_hash.txt;
-        Permissions = {
-          IsAdministrator = false;
+        mutable = false;
+        hashedPasswordFile = ../tests/example_hash.txt;
+        permissions = {
+          isAdministrator = false;
         };
       };
     };

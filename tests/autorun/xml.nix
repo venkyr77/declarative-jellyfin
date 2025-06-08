@@ -161,12 +161,12 @@ in {
         services.declarative-jellyfin = {
           enable = true;
           network = {
-            PublishedServerUriBySubnet = [
+            publishedServerUriBySubnet = [
               "all=https://test.test.test"
             ];
-            EnableHttps = true;
-            RequireHttps = true;
-            CertificatePath = "/path/to/cert";
+            enableHttps = true;
+            requireHttps = true;
+            certificatePath = "/path/to/cert";
           };
         };
       };

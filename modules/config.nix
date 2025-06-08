@@ -7,7 +7,9 @@
 with lib; let
   cfg = config.services.declarative-jellyfin;
   genhash = import ./pbkdf2-sha512.nix {inherit pkgs;};
-  toXml' = (import ../lib {nixpkgs = pkgs;}).toXMLGeneric;
+  djLib = import ../lib {nixpkgs = pkgs;};
+  toXml' = djLib.toXMLGeneric;
+  toPascalCase = djLib.toPascalCase;
   isStrList = x: all (x: isString x) x;
   prepass = x:
     if (isAttrs x)
@@ -38,25 +40,6 @@ with lib; let
           x)
       else map prepass x
     else x;
-
-  system =
-    cfg.system;
-  # // {
-  #   # We need to transform cfg.plugins into PluginRepositories for system
-  #   PluginRepositories =
-  #     lib.attrsets.mapAttrsToList
-  #     (name: value: {
-  #       tag = "RepositoryInfo";
-  #       content = {
-  #         Name = builtins.foldl' (a: b: "${a}, ${b}") "Manifest for " (builtins.map (x: x.name) value);
-  #         Url = name;
-  #       };
-  #     })
-  #     (
-  #       builtins.groupBy (x: x.manifest)
-  #       cfg.plugins
-  #     );
-  # };
 
   plugins =
     builtins.map
@@ -158,66 +141,66 @@ with lib; let
   jellyfinConfigFiles = {
     "network.xml" = {
       name = "NetworkConfiguration";
-      content = cfg.network;
+      content = toPascalCase.fromAttrsRecursive cfg.network;
     };
     "encoding.xml" = {
       name = "EncodingOptions";
-      content = cfg.encoding;
+      content = toPascalCase.fromAttrsRecursive cfg.encoding;
     };
     "system.xml" = {
       name = "ServerConfiguration";
-      content = system;
+      content = toPascalCase.fromAttrsRecursive cfg.system;
     };
   };
 
   # See: https://github.com/jellyfin/jellyfin/blob/master/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/PermissionKind.cs
   permissionKindToDBInteger = {
-    IsAdministrator = 0;
-    IsHidden = 1;
-    IsDisabled = 2;
-    EnableSharedDeviceControl = 3;
-    EnableRemoteAccess = 4;
-    EnableLiveTvManagement = 5;
-    EnableLiveTvAccess = 6;
-    EnableMediaPlayback = 7;
-    EnableAudioPlaybackTranscoding = 8;
-    EnableVideoPlaybackTranscoding = 9;
-    EnableContentDeletion = 10;
-    EnableContentDownloading = 11;
-    EnableSyncTranscoding = 12;
-    EnableMediaConversion = 13;
-    EnableAllDevices = 14;
-    EnableAllChannels = 15;
-    EnableAllFolders = 16;
-    EnablePublicSharing = 17;
-    EnableRemoteControlOfOtherUsers = 18;
-    EnablePlaybackRemuxing = 19;
-    ForceRemoteSourceTranscoding = 20;
-    EnableCollectionManagement = 21;
-    EnableSubtitleManagement = 22;
-    EnableLyricManagement = 23;
+    isAdministrator = 0;
+    isHidden = 1;
+    isDisabled = 2;
+    enableSharedDeviceControl = 3;
+    enableRemoteAccess = 4;
+    enableLiveTvManagement = 5;
+    enableLiveTvAccess = 6;
+    enableMediaPlayback = 7;
+    enableAudioPlaybackTranscoding = 8;
+    enableVideoPlaybackTranscoding = 9;
+    enableContentDeletion = 10;
+    enableContentDownloading = 11;
+    enableSyncTranscoding = 12;
+    enableMediaConversion = 13;
+    enableAllDevices = 14;
+    enableAllChannels = 15;
+    enableAllFolders = 16;
+    enablePublicSharing = 17;
+    enableRemoteControlOfOtherUsers = 18;
+    enablePlaybackRemuxing = 19;
+    forceRemoteSourceTranscoding = 20;
+    enableCollectionManagement = 21;
+    enableSubtitleManagement = 22;
+    enableLyricManagement = 23;
   };
   # See: https://github.com/jellyfin/jellyfin/blob/master/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/PreferenceKind.cs
   preferenceKindToDBInteger = {
-    EnabledFolders = 5;
+    enabledFolders = 5;
   };
   subtitleModes = {
-    Default = 0;
-    Always = 1;
-    OnlyForce = 2;
-    None = 3;
-    Smart = 4;
+    default = 0;
+    always = 1;
+    onlyForce = 2;
+    none = 3;
+    smart = 4;
   };
   dbname = "jellyfin.db";
-  nonDBOptions = ["HashedPasswordFile" "HashedPassword" "Mutable" "Permissions" "Preferences" "_module"];
-  options = lib.attrsets.mapAttrsToList (key: value: "${key}") (
+  nonDBOptions = ["hashedPasswordFile" "hashedPassword" "mutable" "permissions" "preferences" "_module"];
+  options = map (camelcase: toPascalCase.fromString camelcase) (lib.attrsets.mapAttrsToList (key: value: "${key}") (
     (builtins.removeAttrs
       (
-        (import ./options/users.nix {inherit lib;}).options.services.declarative-jellyfin.Users.type.getSubOptions []
+        (import ./options/users.nix {inherit lib;}).options.services.declarative-jellyfin.users.type.getSubOptions []
       )
       nonDBOptions)
-    // {Username = null;}
-  );
+    // {username = null;}
+  ));
 
   sqliteFormat = key: value:
     if (isBool value) # bool -> 1 or 0
@@ -227,7 +210,7 @@ with lib; let
       else "0"
     else if (isNull value) # null -> NULL
     then "NULL"
-    else if (key == "SubtitleMode") # SubtitleMode -> 0 | 1 | 2 | 3 | 4
+    else if (key == "subtitleMode") # subtitleMode -> 0 | 1 | 2 | 3 | 4
     then subtitleModes.${value}
     else if (isString value)
     then "'${value}'"
@@ -274,49 +257,56 @@ with lib; let
       echo "$(echo $guid | tr '[:upper:]' '[:lower:]')"
     '';
 
-  optionsNoId = lib.lists.remove "Id" (lib.lists.remove "InternalId" options);
+  optionsNoId = builtins.trace options (lib.lists.remove "Id" (lib.lists.remove "InternalId" options));
   genUser = index: username: userOpts: let
     mutatedUser =
       builtins.removeAttrs
       (userOpts
         // {
-          Username = username;
-          Id =
-            if !(isNull userOpts.Id)
-            then userOpts.Id
+          inherit username;
+          id =
+            if !(isNull userOpts.id)
+            then userOpts.id
             else "$(${pkgs.libuuid}/bin/uuidgen | ${pkgs.coreutils}/bin/tr '[:lower:]' '[:upper:]')";
-          InternalId =
-            if !(isNull userOpts.InternalId)
-            then userOpts.InternalId
+          internalId =
+            if !(isNull userOpts.internalId)
+            then userOpts.internalId
             else "$(($maxIndex+${toString (index + 1)}))";
-          Password =
-            if !(isNull userOpts.HashedPasswordFile)
-            then "$(${pkgs.coreutils}/bin/cat \"${userOpts.HashedPasswordFile}\")"
-            else if !(isNull userOpts.HashedPassword)
-            then "$(echo -n '${userOpts.HashedPassword}')"
-            else "$(${genhash}/bin/genhash -k \"${userOpts.Password}\" -i 210000 -l 128 -u)";
+          password =
+            if !(isNull userOpts.hashedPasswordFile)
+            then "$(${pkgs.coreutils}/bin/cat \"${userOpts.hashedPasswordFile}\")"
+            else if !(isNull userOpts.hashedPassword)
+            then "$(echo -n '${userOpts.hashedPassword}')"
+            else "$(${genhash}/bin/genhash -k \"${userOpts.password}\" -i 210000 -l 128 -u)";
         })
       nonDBOptions;
-    userWithNoId = removeAttrs mutatedUser ["Id" "InternalId"];
+    userWithNoId = removeAttrs mutatedUser ["id" "internalId"];
   in
     /*
     bash
     */
     ''
-      userId=${mutatedUser.Id}
-      userExists=$(${sq} "SELECT 1 FROM Users WHERE Username = '${mutatedUser.Username}'")
+      userExists=$(${sq} "SELECT 1 FROM Users WHERE Username = '${mutatedUser.username}'")
+      userId="${mutatedUser.id}"
+      if [ -n "$userExists" ]; then
+        # If the user already exists, we must update the user id to match the id in the DB,
+        # rather than the randomly generated one
+        userId=$(${sq} "SELECT Id FROM Users WHERE Username = '${mutatedUser.username}'")
+      fi
+      ${print "User id for ${mutatedUser.username} is: $userId"}
+
       # If the user is mutable, only insert the user if it doesn't already exist, otherwise just overwrite
       if [ ${
-        if (userOpts.Mutable)
+        if (userOpts.mutable)
         then "-z $userExists" # user doesn't exist
         else "-n \"true\""
       } ]; then
-        sql="INSERT INTO Users (${concatStringsSep "," options}) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormatAttrs mutatedUser)))})"
+        sql="INSERT INTO Users (${concatStringsSep "," optionsNoId}, InternalId, Id) VALUES(${concatStringsSep "," (map toString (attrValues (sqliteFormatAttrs userWithNoId)))},$(($maxIndex+${toString (index + 1)})), $(echo "'$userId'"))"
         # User already exists - don't insert a new Id, just re-use the one already present,
         # so any foreign key relations don't fail because of overwriting with newly generated ID.
         if [ -n "$userExists" ]; then
           ${print "Excluding insertion of Id/InternalId, since user already exists in DB"}
-           sql="UPDATE Users SET ${concatStringsSep ",\n" (map (
+           sql="UPDATE Users SET ${concatStringsSep "," (map (
           {
             fst,
             snd,
@@ -328,19 +318,19 @@ with lib; let
         )
         (lib.lists.zipLists
           optionsNoId
-          (attrValues userWithNoId)))} WHERE Username = '${mutatedUser.Username}'"
+          (attrValues userWithNoId)))} WHERE Username = '${mutatedUser.username}'"
         fi
         echo "''${sql};" >> "$dbcmds"
 
         # Handle admin user preferences
         ${
-        lib.optionalString (userOpts.Preferences.EnabledLibraries != [])
+        lib.optionalString (userOpts.preferences.enabledLibraries != [])
         /*
         bash
         */
         ''
-          echo "REPLACE INTO Preferences(Kind, RowVersion, UserId, Value) VALUES(${toString preferenceKindToDBInteger.EnabledFolders}, 0, $(echo "'$userId'"),
-          '${concatStringsSep "," (map (enabledLib: "$(${genfolderuuid}/bin/genfolderuuid \"${enabledLib}\")") userOpts.Preferences.EnabledLibraries)}');" >> "$dbcmds"
+          echo "REPLACE INTO Preferences(Kind, RowVersion, UserId, Value) VALUES(${toString preferenceKindToDBInteger.enabledFolders}, 0, $(echo "'$userId'"),
+          '${concatStringsSep "," (map (enabledLib: "$(${genfolderuuid}/bin/genfolderuuid \"${enabledLib}\")") userOpts.preferences.enabledLibraries)}');" >> "$dbcmds"
         ''
       }
 
@@ -359,29 +349,31 @@ with lib; let
             echo "$sql" >> "$dbcmds"
           ''
         )
-        userOpts.Permissions)}
+        userOpts.permissions)}
       fi
     '';
 
   prepassedLibraries =
     builtins.mapAttrs
-    (name: value:
-      value
-      // {
-        TypeOptions =
-          mapAttrsToList
-          (name: value: {
-            TypeOptions =
-              value
-              // (with value; {
-                Type = name;
-                MetadataFetcherOrder = MetadataFetchers;
-                ImageFetcherOrder = ImageFetchers;
-              });
-          })
-          cfg.libraries."${name}".TypeOptions;
-        PathInfos = builtins.map (x: {MediaPathInfo.Path = x;}) value.PathInfos;
-      })
+    (
+      name: value:
+        value
+        // {
+          typeOptions =
+            mapAttrsToList
+            (name: value: {
+              typeOptions =
+                value
+                // (with value; {
+                  type = name;
+                  metadataFetcherOrder = metadataFetchers;
+                  imageFetcherOrder = imageFetchers;
+                });
+            })
+            cfg.libraries."${name}".typeOptions;
+          pathInfos = builtins.map (x: {MediaPathInfo.Path = x;}) value.pathInfos;
+        }
+    )
     cfg.libraries;
 
   sq = "${pkgs.sqlite}/bin/sqlite3 \"${config.services.jellyfin.dataDir}/data/${dbname}\" --";
@@ -405,6 +397,15 @@ with lib; let
         # o=---
         umask 027
 
+        # Setup directories
+        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.configDir}"
+        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.logDir}"
+        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.cacheDir}"
+        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/metadata"
+        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/playlists"
+        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/wwwroot"
+        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/plugins/configurations"
+
         install -Dm 774 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} /dev/null "${log}"
 
         ${print "Log init"}
@@ -424,14 +425,6 @@ with lib; let
         trap "rm -rf \"$dbcmds\"" exit
         echo "BEGIN TRANSACTION;" > "$dbcmds"
 
-        # Setup directories
-        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.configDir}"
-        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.logDir}"
-        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.cacheDir}"
-        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/metadata"
-        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/playlists"
-        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/wwwroot"
-        install -d -m 750 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} "${config.services.jellyfin.dataDir}/plugins/configurations"
 
           # Install each config
           ${concatStringsSep "\n"
@@ -440,7 +433,7 @@ with lib; let
           configDerivations)}
 
           ${
-        lib.optionalString cfg.system.IsStartupWizardCompleted
+        lib.optionalString cfg.system.isStartupWizardCompleted
         /*
         bash
         */
@@ -534,14 +527,14 @@ with lib; let
             fst,
             snd,
           }:
-            genUser fst snd cfg.Users.${snd})
+            genUser fst snd cfg.users.${snd})
           (
             lib.lists.zipLists
             (
               builtins.genList (x: x)
-              (builtins.length (builtins.attrValues cfg.Users))
+              (builtins.length (builtins.attrValues cfg.users))
             )
-            (builtins.attrNames cfg.Users)
+            (builtins.attrNames cfg.users)
           )
         )
       }
@@ -566,7 +559,7 @@ with lib; let
                 install -Dm 740 /dev/null "${config.services.jellyfin.dataDir}/root/default/${name}/${baseNameOf pathInfo.MediaPathInfo.Path}.mblink"
                 echo -n "${pathInfo.MediaPathInfo.Path}" > "${config.services.jellyfin.dataDir}/root/default/${name}/${baseNameOf pathInfo.MediaPathInfo.Path}.mblink"
               '')
-            value.PathInfos)
+            value.pathInfos)
           }
         '')
       prepassedLibraries)}
@@ -608,7 +601,7 @@ in {
         inherit (cfg) user group dataDir configDir cacheDir logDir;
       };
 
-      networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [cfg.network.PublicHttpPort cfg.network.PublicHttpsPort];
+      networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [cfg.network.publicHttpPort cfg.network.publicHttpsPort];
       systemd.services.jellyfin.serviceConfig.ExecStart = lib.mkForce "+${jellyfin-init}/bin/jellyfin-init";
     };
 }

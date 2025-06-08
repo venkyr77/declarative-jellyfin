@@ -20,7 +20,7 @@ in {
         # Doesn't get more minimal than this
         services.declarative-jellyfin = {
           enable = true;
-          network.PublicHttpPort = port;
+          network.publicHttpPort = port;
         };
       };
     };
