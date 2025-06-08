@@ -36,7 +36,7 @@ Example minimal flake.nix:
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    declarative-jellyfin.url = "git+https://git.spoodythe.one/spoody/declarative-jellyfin.git";
+    declarative-jellyfin.url = "github:Sveske-Juice/declarative-jellyfin";
     # optional follow:
     declarative-jellyfin.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -55,6 +55,51 @@ Example minimal flake.nix:
   };
 }
 ```
+## Examples
+See the [example](https://github.com/Sveske-Juice/declarative-jellyfin/tree/main/examples) directory for example configs.
+
+## Users
+You can configure users with the options provided by `services.declarative-jellyfin.users`.
+
+Example:
+
+```nix
+services.declarative-jellyfin.users = {
+  admin = {
+    mutable = false; # overwrite user settings
+    permissions.isAdministrator = true;
+    HashedPasswordFile = config.sops.secrets.jellyfin-admin-passwd.path;
+  };
+  "Alice Doe" = {
+    Password = "123"; # WARNING: plain text!
+    permissions.enableMediaPlayback = false; # this user is not allowed to play media
+  };
+};
+```
+
+> [!NOTE]
+When `users.<name>.mutable = true` (default), the settings configured in your nix configuration will only be applied
+once when the user is first generated. You can therefore use the GUI to configure the user if you please. When
+`users.<name>.mutable = false` every user setting will be overwritten when jellyfin starts. This can be usefull if
+you want a user to be fully declarative (for example admin accounts).
+
+### Generate user password hash
+Jellyfin uses pbkdf2-sha512 hashes to store passwords.
+Use the `genhash` script bundled in this flake with the parameters the jellyfin DB expects:
+```nix
+nix run git+https://git.spoodythe.one/spoody/declarative-jellyfin.git#genhash -- -i 210000 -l 128 -u -k "your super secret password"
+```
+
+### Usage with sops-nix
+Extract the secret and use the `HashedPasswordFile`:
+```nix
+sops.secrets.example-user-password = {
+    owner = config.services.jellyfin.user;
+    group = config.services.jellyfin.group;
+};
+services.declarative-jellyfin.Users.example-user.HashedPasswordFile = config.sops.secrets.example-user-password.path;
+```
+
 ## Libraries
 You can configure libraries with the options provided by `services.declarative-jellyfin.libraries`.
 
@@ -213,22 +258,6 @@ Declarative Jellyfin is designed to be a drop-in replacement for the normal jell
 + services.declarative-jellyfin = {
 ```
 
-## Generate user password hash
-Jellyfin uses pbkdf2-sha512 hashes to store passwords.
-Use the `genhash` script bundled in this flake with the parameters the jellyfin DB expects:
-```nix
-nix run git+https://git.spoodythe.one/spoody/declarative-jellyfin.git#genhash -- -i 210000 -l 128 -u -k "your super secret password"
-```
-
-## Usage with sops-nix
-Extract the secret and use the `HashedPasswordFile`:
-```nix
-sops.secrets.example-user-password = {
-    owner = config.services.jellyfin.user;
-    group = config.services.jellyfin.group;
-};
-services.declarative-jellyfin.Users.example-user.HashedPasswordFile = config.sops.secrets.example-user-password.path;
-```
 
 ## API Keys
 > [!WARNING]
