@@ -123,7 +123,11 @@ services.declarative-jellyfin.libraries.Music = {
 See the [source code](https://github.com/jellyfin/jellyfin/blob/master/MediaBrowser.Model/Entities/CollectionTypeOptions.cs)
 for possible library content types.
 
-### Limit a users access to specific libraries
+> [!NOTE]
+By declaring libraries through your nixos configuration, any changes through the GUI will be overwritten by restarting jellyfin.
+If you want to change settings through the GUI, you must not specify the library in your configuration, otherwise you've to specify the options in the config.
+
+### Limit a user's access to specific libraries
 To whitelist the libraries the user have access to, you can use `services.declarative-jellyfin.Users.<name>.Preferences.EnabledLibraries`:
 
 ```nix
@@ -173,6 +177,10 @@ Use `vainfo` from `libva-utils` to see the codec capabilities for your VA-API de
 
 ## Plugins
 
+> [!WARNING]
+At the moment plugins are speculated to cause some bugs, most notably: https://git.spoodythe.one/spoody/declarative-jellyfin/issues/18.
+So at the moment it is recommended to install plugins imperatively through the GUI until declarative plugins are properly tested.
+
 Installed plugins can be configured declaratively using the `declarative-jellyfin.plugins` attribute.
 
 ```nix
@@ -220,4 +228,20 @@ sops.secrets.example-user-password = {
     group = config.services.jellyfin.group;
 };
 services.declarative-jellyfin.Users.example-user.HashedPasswordFile = config.sops.secrets.example-user-password.path;
+```
+
+## API Keys
+> [!WARNING]
+Always use `keyPath` together with a secret manager, instead of storing api keys in plaintext with `key`.
+
+Example:
+```nix
+services.declarative-jellyfin.apikeys = {
+  Jellyseerr = {
+    keyPath = config.sops.secrets.my-jellyfin-jellyseerr-key.path;
+  };
+  "Homarr Dashboard" = {
+    key = "78878bf9fc654ff78ae332c63de5aeb6"; # WARNING: plain-text!
+  };
+};
 ```
