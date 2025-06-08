@@ -58,6 +58,23 @@ Example minimal flake.nix:
 ## Examples
 See the [example](https://github.com/Sveske-Juice/declarative-jellyfin/tree/main/examples) directory for example configs.
 
+## General server settings
+You can configure system settings through the `services.declarative-jellyfin.system` options.
+
+Example:
+
+```nix
+services.declarative-jellyfin.system = {
+  serverName = "My Declarative Jellyfin Server";
+  # Use Hardware Acceleration for trickplay image generation
+  trickplayOptions = {
+    enableHwAcceleration = true;
+    enableHwEncoding = true;
+  };
+  uiCulture = "da"; # danish
+};
+```
+
 ## Users
 You can configure users with the options provided by `services.declarative-jellyfin.users`.
 
