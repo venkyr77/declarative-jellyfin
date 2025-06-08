@@ -504,7 +504,7 @@ with lib; let
 
           install -Dm 775 -o ${config.services.jellyfin.user} -g ${config.services.jellyfin.group} /dev/null "$backupName"
           ${print "Creating backup: $backupName"}
-          ${pkgs.gnutar}/bin/tar -c --exclude "${removePrefix "/" cfg.backupDir}" -C / ${removePrefix "/" config.services.jellyfin.logDir} -C / ${removePrefix "/" config.services.jellyfin.dataDir} -C / ${removePrefix "/" config.services.jellyfin.configDir} -C / ${removePrefix "/" config.services.jellyfin.cacheDir} -f - | ${pkgs.gzip}/bin/gzip > "$backupName"
+          ${pkgs.gnutar}/bin/tar -c --exclude "${removePrefix "/" cfg.backupDir}" -C / ${removePrefix "/" config.services.jellyfin.logDir} -C / ${removePrefix "/" config.services.jellyfin.dataDir} -C / ${removePrefix "/" config.services.jellyfin.configDir} -C / ${removePrefix "/" config.services.jellyfin.cacheDir} -f - | ${pkgs.pigz}/bin/pigz > "$backupName"
 
           # Rotate backups
           num_backups=$(ls -1 "${cfg.backupDir}" | wc -l)
