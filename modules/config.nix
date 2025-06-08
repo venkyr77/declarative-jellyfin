@@ -371,13 +371,13 @@ with lib; let
         TypeOptions =
           mapAttrsToList
           (name: value: {
-            TypeOptions = with value; {
-              Type = name;
-              inherit MetadataFetchers;
-              MetadataFetcherOrder = MetadataFetchers;
-              inherit ImageFetchers;
-              ImageFetcherOrder = ImageFetchers;
-            };
+            TypeOptions =
+              value
+              // (with value; {
+                Type = name;
+                MetadataFetcherOrder = MetadataFetchers;
+                ImageFetcherOrder = ImageFetchers;
+              });
           })
           cfg.libraries."${name}".TypeOptions;
         PathInfos = builtins.map (x: {MediaPathInfo.Path = x;}) value.PathInfos;

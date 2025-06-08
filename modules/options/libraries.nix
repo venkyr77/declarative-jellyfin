@@ -51,6 +51,7 @@ with lib; let
       Video = {
         MetadataFetchers = [];
         ImageFetchers = ["Embedded Image Extractor" "Screen Grabber"];
+        ImageOptions = {};
       };
     };
     musicvideos = {
