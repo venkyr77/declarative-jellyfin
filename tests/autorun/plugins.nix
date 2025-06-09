@@ -1,42 +1,47 @@
-{pkgs ? import <nixpkgs> {}, ...}: let
+{
+  pkgs ? import <nixpkgs> { },
+  ...
+}:
+let
   name = "plugins";
   port = 8096;
-in {
+in
+{
   inherit name;
   test = pkgs.nixosTest {
     inherit name;
     nodes = {
-      machine = {
-        config,
-        pkgs,
-        ...
-      }: {
-        imports = [
-          ../../modules/default.nix
-        ];
-
-        virtualisation.memorySize = 1024;
-
-        services.declarative-jellyfin = {
-          enable = true;
-          network.publicHttpPort = port;
-          plugins = [
-            {
-              name = "intro skipper";
-              url = "https://github.com/intro-skipper/intro-skipper/releases/download/10.10/v1.10.10.19/intro-skipper-v1.10.10.19.zip";
-              version = "1.10.10.19";
-              targetAbi = "10.10.7.0";
-              sha256 = "sha256:12hby8vkb6q2hn97a596d559mr9cvrda5wiqnhzqs41qg6i8p2fd";
-            }
+      machine =
+        {
+          config,
+          pkgs,
+          ...
+        }:
+        {
+          imports = [
+            ../../modules/default.nix
           ];
+
+          virtualisation.memorySize = 1024;
+
+          services.declarative-jellyfin = {
+            enable = true;
+            network.publicHttpPort = port;
+            plugins = [
+              {
+                name = "intro skipper";
+                url = "https://github.com/intro-skipper/intro-skipper/releases/download/10.10/v1.10.10.19/intro-skipper-v1.10.10.19.zip";
+                version = "1.10.10.19";
+                targetAbi = "10.10.7.0";
+                sha256 = "sha256:12hby8vkb6q2hn97a596d559mr9cvrda5wiqnhzqs41qg6i8p2fd";
+              }
+            ];
+          };
         };
-      };
     };
 
     testScript =
-      /*
-      py
-      */
+      # py
       ''
         machine.start()
         machine.wait_for_unit("jellyfin.service");

@@ -1,4 +1,7 @@
-{pkgs ? import <nixpkgs> {}, ...}:
+{
+  pkgs ? import <nixpkgs> { },
+  ...
+}:
 pkgs.stdenv.mkDerivation rec {
   name = "genhash";
   version = "69.0.0";
@@ -8,7 +11,7 @@ pkgs.stdenv.mkDerivation rec {
     nettle
   ];
 
-  phases = ["buildPhase"];
+  phases = [ "buildPhase" ];
 
   buildPhase = ''
     mkdir -p $out/bin

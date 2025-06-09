@@ -1,29 +1,34 @@
-{pkgs ? import <nixpkgs> {}, ...}: let
+{
+  pkgs ? import <nixpkgs> { },
+  ...
+}:
+let
   name = "minimal";
-in {
+in
+{
   inherit name;
   test = pkgs.nixosTest {
     inherit name;
     nodes = {
-      machine = {
-        config,
-        pkgs,
-        ...
-      }: {
-        imports = [
-          ../modules/default.nix
-        ];
+      machine =
+        {
+          config,
+          pkgs,
+          ...
+        }:
+        {
+          imports = [
+            ../modules/default.nix
+          ];
 
-        services.jellyfin.enable = true;
+          services.jellyfin.enable = true;
 
-        virtualisation.memorySize = 1024;
-      };
+          virtualisation.memorySize = 1024;
+        };
     };
 
     testScript =
-      /*
-      py
-      */
+      # py
       ''
         machine.start()
         machine.wait_for_unit("multi-user.target");

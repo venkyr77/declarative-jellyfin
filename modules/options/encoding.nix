@@ -3,7 +3,8 @@
   lib,
   ...
 }:
-with lib; {
+with lib;
+{
   options.services.declarative-jellyfin.encoding = {
     enableHardwareEncoding = mkOption {
       type = types.bool;
@@ -42,7 +43,13 @@ with lib; {
       description = "Boost audio when downmixing. A value of one will preserve the original volume.";
     };
     downMixStereoAlgorithm = mkOption {
-      type = types.enum ["None" "Dave750" "NightmodeDialogue" "RFC7845" "AC-4"];
+      type = types.enum [
+        "None"
+        "Dave750"
+        "NightmodeDialogue"
+        "RFC7845"
+        "AC-4"
+      ];
       default = "None";
       description = "Algorithm used to downmix multi-channel audio to stereo.";
     };
@@ -84,7 +91,16 @@ with lib; {
     };
 
     hardwareAccelerationType = mkOption {
-      type = types.enum ["none" "qsv" "amf" "nvenc" "vaapi" "rkmpp" "videotoolbox" "v4l2m2m"];
+      type = types.enum [
+        "none"
+        "qsv"
+        "amf"
+        "nvenc"
+        "vaapi"
+        "rkmpp"
+        "videotoolbox"
+        "v4l2m2m"
+      ];
       description = ''
         Whether or not to use hardware acceleration for transcoding.
 
@@ -122,7 +138,16 @@ with lib; {
       Currently works only with 10bit HDR10, HLG and DoVi videos. This requires the corresponding GPGPU runtime.
     '';
     tonemappingAlgorithm = mkOption {
-      type = types.enum ["none" "bt2390" "clip" "linear" "gamma" "reinhard" "hable" "mobius"];
+      type = types.enum [
+        "none"
+        "bt2390"
+        "clip"
+        "linear"
+        "gamma"
+        "reinhard"
+        "hable"
+        "mobius"
+      ];
       description = ''
         Tone mapping can be fine-tuned.
         If you are not familiar with these options, just keep the default.
@@ -130,7 +155,13 @@ with lib; {
       default = "bt2390";
     };
     tonemappingMode = mkOption {
-      type = types.enum ["auto" "max" "rgb" "lum" "itp"];
+      type = types.enum [
+        "auto"
+        "max"
+        "rgb"
+        "lum"
+        "itp"
+      ];
       description = ''
         Select the tone mapping mode.
         If you experience blown out highlights try switching to the RGB mode.
@@ -138,7 +169,11 @@ with lib; {
       default = "auto";
     };
     tonemappingRange = mkOption {
-      type = types.enum ["auto" "tv" "pc"];
+      type = types.enum [
+        "auto"
+        "tv"
+        "pc"
+      ];
       description = ''
         Select the output color range. Auto is the same as the input range.
       '';
@@ -241,7 +276,10 @@ with lib; {
       This setting uses the field rate when deinterlacing, often referred to as bob deinterlacing, which doubles the frame rate of the video to provide full motion like what you would see when viewing interlaced video on a TV.
     '';
     deinterlaceMethod = mkOption {
-      type = types.enum ["yadif" "bwdif"];
+      type = types.enum [
+        "yadif"
+        "bwdif"
+      ];
       default = "yadif";
       description = ''
         Select the deinterlacing method to use when software transcoding interlaced content.
@@ -254,15 +292,17 @@ with lib; {
     enableDecodingColorDepth10HevcRext = mkEnableOption "Enable hardware decoding for HEVC RExt 8/10bit";
     enableDecodingColorDepth12HevcRext = mkEnableOption "Enable hardware decoding for HEVC RExt 12bit";
     hardwareDecodingCodecs = mkOption {
-      type = types.listOf (types.enum [
-        "h264"
-        "hevc"
-        "mpeg2video"
-        "vc1"
-        "vp8"
-        "vp9"
-        "av1"
-      ]);
+      type = types.listOf (
+        types.enum [
+          "h264"
+          "hevc"
+          "mpeg2video"
+          "vc1"
+          "vp8"
+          "vp9"
+          "av1"
+        ]
+      );
       default = [
         "h264"
         "hevc"
@@ -299,7 +339,7 @@ with lib; {
     allowOnDemandMetadataBasedKeyframeExtractionForExtensions = mkOption {
       type = with types; listOf str;
       description = "imma be real i have no idea what this option is. Just leave it as the default";
-      default = ["mkv"];
+      default = [ "mkv" ];
     };
   };
 }

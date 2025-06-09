@@ -10,10 +10,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: $ alejandra --check *
+      - name: Format Check
         run: |
-          nix fmt -- -c *
+          nix fmt -- --ci
       
-      - name: $ nix flake check
+      - name: Tests
         run: |
           nix run github:Mic92/nix-fast-build -- --skip-cache --no-nom --no-link -j 2

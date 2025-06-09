@@ -5,35 +5,39 @@
   ...
 }:
 with lib;
-with types; let
+with types;
+let
   cfg = config.services.declarative-jellyfin;
-  apikeyOpts = {
-    name,
-    config,
-    ...
-  }: {
-    options = {
-      key = mkOption {
-        type = nullOr str;
-        default = null;
-        description = ''
-          The API key (GUID).
-          WARNING: This is stored in plain text
-        '';
-        example = "78878bf9fc654ff78ae332c63de5aeb6";
-      };
-      keyPath = mkOption {
-        type = nullOr path;
-        default = null;
-        description = ''
-          Path to a file containing API key.
-          The key is a random GUID. To generate one, run:
-          ```uuidgen -r | sed 's/-//g'```
-        '';
+  apikeyOpts =
+    {
+      name,
+      config,
+      ...
+    }:
+    {
+      options = {
+        key = mkOption {
+          type = nullOr str;
+          default = null;
+          description = ''
+            The API key (GUID).
+            WARNING: This is stored in plain text
+          '';
+          example = "78878bf9fc654ff78ae332c63de5aeb6";
+        };
+        keyPath = mkOption {
+          type = nullOr path;
+          default = null;
+          description = ''
+            Path to a file containing API key.
+            The key is a random GUID. To generate one, run:
+            ```uuidgen -r | sed 's/-//g'```
+          '';
+        };
       };
     };
-  };
-in {
+in
+{
   imports = [
     ./system.nix
     ./encoding.nix
@@ -48,7 +52,7 @@ in {
 
     apikeys = mkOption {
       description = "API keys configuration";
-      default = {};
+      default = { };
       type = attrsOf (submodule apikeyOpts);
       example = {
         Jellyseerr = {
@@ -156,7 +160,9 @@ in {
       message = "API key must be spcecified";
     }
     {
-      assertion = all (userOpts: !(userOpts.preferences.enabledLibraries != [] && userOpts.permissions.enableAllFolders)) (attrValues cfg.users);
+      assertion = all (
+        userOpts: !(userOpts.preferences.enabledLibraries != [ ] && userOpts.permissions.enableAllFolders)
+      ) (attrValues cfg.users);
       message = ''
         When specifying custom library access with `Preferences.EnabledLibraries`, you have
         to set `Permission.EnableAllFolders = false` for the user.

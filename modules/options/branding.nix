@@ -1,3 +1,4 @@
-{lib, ...}:
-with lib; {
+{ lib, ... }:
+with lib;
+{
 }

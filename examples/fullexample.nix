@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   services.declarative-jellyfin = {
     enable = true;
 
@@ -6,27 +7,30 @@
       Movies = {
         enabled = true;
         contentType = "movies";
-        pathInfos = ["/data/Movies"];
+        pathInfos = [ "/data/Movies" ];
       };
       Shows = {
         enabled = true;
         contentType = "tvshows";
-        pathInfos = ["/data/Shows"];
+        pathInfos = [ "/data/Shows" ];
       };
       "Photos and videos" = {
         enabled = true;
         contentType = "homevideos";
-        pathInfos = ["/data/Pictures" "/data/Videos"];
+        pathInfos = [
+          "/data/Pictures"
+          "/data/Videos"
+        ];
       };
       Books = {
         enabled = true;
         contentType = "books";
-        pathInfos = ["/data/Books"];
+        pathInfos = [ "/data/Books" ];
       };
       Music = {
         enabled = true;
         contentType = "music";
-        pathInfos = ["/data/Music"];
+        pathInfos = [ "/data/Music" ];
       };
     };
 
@@ -47,7 +51,10 @@
         };
         preferences = {
           # Only allow access to photos and music
-          enabledLibraries = ["Photos and Videos" "Music"];
+          enabledLibraries = [
+            "Photos and Videos"
+            "Music"
+          ];
         };
       };
       Bob = {
@@ -73,9 +80,7 @@
 
   # This is just for making sure the library paths exists, you dont need this
   system.activationScripts.setupFolders =
-    /*
-    bash
-    */
+    # bash
     ''
       mkdir -p /data/Movies
       mkdir -p /data/Shows

@@ -1,21 +1,29 @@
-{pkgs ? import <nixpkgs> {}, ...}: let
+{
+  pkgs ? import <nixpkgs> { },
+  ...
+}:
+let
   name = "verify-examples";
-  exampleFiles =
-    map (file: pkgs.lib.strings.removeSuffix ".nix" file) (builtins.attrNames (builtins.readDir ../../examples));
-in {
+  exampleFiles = map (file: pkgs.lib.strings.removeSuffix ".nix" file) (
+    builtins.attrNames (builtins.readDir ../../examples)
+  );
+in
+{
   inherit name;
   test = pkgs.nixosTest {
     inherit name;
     # Generate a VM Node foreach example file config
     nodes = pkgs.lib.attrsets.genAttrs exampleFiles (
-      example: {
+      example:
+      {
         config,
         pkgs,
         ...
-      }: {
+      }:
+      {
         imports = [
           ../../modules/default.nix
-          (import (../../examples + "/${example}.nix") {})
+          (import (../../examples + "/${example}.nix") { })
         ];
 
         virtualisation.memorySize = 1024;
@@ -24,9 +32,7 @@ in {
 
     # Run the same test on each node VM
     testScript =
-      /*
-      py
-      */
+      # py
       ''
         start_all()
 
