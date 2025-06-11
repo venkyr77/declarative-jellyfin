@@ -1,15 +1,16 @@
+<div align="center">
+
 # Declarative Jellyfin
+
 ![workflows badge](https://git.spoodythe.one/spoody/declarative-jellyfin/badges/workflows/run-tests.yml/badge.svg?branch=main)
 ![issues badge](https://git.spoodythe.one/spoody/declarative-jellyfin/badges/issues.svg)
 
-This repository provides a nix flake that allows for declarative configuration of
+This repository provides a Nix flake that allows for declarative configuration of
 Users, Libraries, Plugins, Settings, etc.
-
-> [!WARNING]
-This project is still in early stage, so beaware of bugs.
-It is highly recommended to manually take a backup of your jellyfin directory
-(usually `/var/lib/jellyfin`) if you're migrating, even though this script takes
-automatic backups before doing anything.
+</div>
+<table>
+<tr>
+<td valign="top" width="50%">
 
 # Features
 * Declarative users
@@ -24,6 +25,38 @@ automatic backups before doing anything.
 * Declarative plugins (Still a WIP)
 * Automatic backups
 * API keys
+
+</td>
+<td>
+
+<picture>
+  <source
+    media="(prefers-color-scheme: dark)"
+    srcset="
+      https://api.star-history.com/svg?repos=Sveske-Juice/declarative-jellyfin&type=Date&theme=dark
+    "
+  />
+  <source
+    media="(prefers-color-scheme: light)"
+    srcset="
+      https://api.star-history.com/svg?repos=Sveske-Juice/declarative-jellyfin&type=Date
+    "
+  />
+  <img
+    alt="Star History Chart"
+    src="https://api.star-history.com/svg?repos=Sveske-Juice/declarative-jellyfin&type=Date"
+  />
+</picture>
+</td>
+</tr>
+</table>
+
+> [!WARNING]
+This project is still in early stage, so beaware of bugs.
+It is highly recommended to manually take a backup of your jellyfin directory
+(usually `/var/lib/jellyfin`) if you're migrating, even though this script takes
+automatic backups before doing anything.
+
 
 # Usage
 ## Setup
@@ -239,7 +272,7 @@ Use `vainfo` from `libva-utils` to see the codec capabilities for your VA-API de
 
 ## Plugins
 
-> [!WARNING]
+> [!CAUTION]
 At the moment plugins are speculated to cause some bugs, most notably: https://git.spoodythe.one/spoody/declarative-jellyfin/issues/18.
 So at the moment it is recommended to install plugins imperatively through the GUI until declarative plugins are properly tested.
 
