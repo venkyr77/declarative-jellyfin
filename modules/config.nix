@@ -274,9 +274,7 @@ let
         echo "$(echo $guid | tr '[:upper:]' '[:lower:]')"
       '';
 
-  optionsNoId = builtins.trace options (
-    lib.lists.remove "Id" (lib.lists.remove "InternalId" options)
-  );
+  optionsNoId = lib.lists.remove "Id" (lib.lists.remove "InternalId" options);
   genUser =
     index: username: userOpts:
     let
@@ -528,8 +526,8 @@ let
         # Server id
         ${lib.optionalString (!isNull cfg.serverId) # bash
           ''
-            install -Dm 740 /dev/null "${config.services.jellyfin.dataDir}/device.txt"
-            echo -n "${cfg.serverId}" > "${config.services.jellyfin.dataDir}/device.txt"
+            install -Dm 740 /dev/null "${config.services.jellyfin.dataDir}/data/device.txt"
+            echo -n "${cfg.serverId}" > "${config.services.jellyfin.dataDir}/data/device.txt"
           ''
         }
 
