@@ -274,7 +274,9 @@ let
         echo "$(echo $guid | tr '[:upper:]' '[:lower:]')"
       '';
 
-  optionsNoId = lib.lists.remove "Id" (lib.lists.remove "InternalId" options);
+  optionsNoId = builtins.trace options (
+    lib.lists.remove "Id" (lib.lists.remove "InternalId" options)
+  );
   genUser =
     index: username: userOpts:
     let
@@ -520,6 +522,14 @@ let
                 ${print "Purged backup: $old_backup"}
               done
             fi
+          ''
+        }
+
+        # Server id
+        ${lib.optionalString (!isNull cfg.serverId) # bash
+          ''
+            install -Dm 740 /dev/null "${config.services.jellyfin.dataDir}/device.txt"
+            echo -n "${cfg.serverId}" > "${config.services.jellyfin.dataDir}/device.txt"
           ''
         }
 

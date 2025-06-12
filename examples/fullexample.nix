@@ -2,6 +2,7 @@
 {
   services.declarative-jellyfin = {
     enable = true;
+    serverId = "f4655afd22f348e19089c6b474b24a73";
 
     libraries = {
       Movies = {

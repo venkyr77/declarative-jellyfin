@@ -152,6 +152,17 @@ in
         store before starting to delete old ones
       '';
     };
+
+    # TODO: server id
+    serverId = mkOption {
+      type = nullOr str;
+      default = null;
+      example = "f4655afd22f348e19089c6b474b24a73";
+      description = ''
+        The ID for this server. Generate one with the following command:
+        `uuidgen -r | sed 's/-//g'`
+      '';
+    };
   };
 
   config.assertions = [
