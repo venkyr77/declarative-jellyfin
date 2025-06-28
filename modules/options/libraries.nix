@@ -162,7 +162,7 @@ let
         enableRealtimeMonitor = mkOption {
           type = types.bool;
           default = true;
-          description = "Toggles if the admin dashboard should show media being streamed from this library";
+          description = "Changes to files will be processed immediately on supported file systems";
         };
         enableLUFSScan = mkOption {
           type = types.bool;
