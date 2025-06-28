@@ -376,19 +376,21 @@ let
 
   prepassedLibraries = builtins.mapAttrs (
     name: value:
-    value
-    // {
-      typeOptions = mapAttrsToList (name: value: {
-        typeOptions =
-          value
-          // (with value; {
-            type = name;
-            metadataFetcherOrder = metadataFetchers;
-            imageFetcherOrder = imageFetchers;
-          });
-      }) cfg.libraries."${name}".typeOptions;
-      pathInfos = builtins.map (x: { MediaPathInfo.Path = x; }) value.pathInfos;
-    }
+    toPascalCase.fromAttrsRecursive (
+      value
+      // {
+        typeOptions = mapAttrsToList (name: value: {
+          typeOptions =
+            value
+            // (with value; {
+              type = name;
+              metadataFetcherOrder = metadataFetchers;
+              imageFetcherOrder = imageFetchers;
+            });
+        }) cfg.libraries."${name}".typeOptions;
+        pathInfos = builtins.map (x: { MediaPathInfo.Path = x; }) value.pathInfos;
+      }
+    )
   ) cfg.libraries;
 
   sq = "${pkgs.sqlite}/bin/sqlite3 \"${config.services.jellyfin.dataDir}/data/${dbname}\" --";
@@ -572,7 +574,7 @@ let
                     ''
                       install -Dm 740 /dev/null "${config.services.jellyfin.dataDir}/root/default/${name}/${baseNameOf pathInfo.MediaPathInfo.Path}.mblink"
                       echo -n "${pathInfo.MediaPathInfo.Path}" > "${config.services.jellyfin.dataDir}/root/default/${name}/${baseNameOf pathInfo.MediaPathInfo.Path}.mblink"
-                    '') value.pathInfos
+                    '') value.PathInfos
                 )}
               ''
             ) prepassedLibraries
