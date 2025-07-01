@@ -1,5 +1,3 @@
-<div align="center">
-
 # Declarative Jellyfin
 
 ![workflows badge](https://git.spoodythe.one/spoody/declarative-jellyfin/badges/workflows/run-tests.yml/badge.svg?branch=main)
@@ -7,10 +5,6 @@
 
 This repository provides a Nix flake that allows for declarative configuration of
 Users, Libraries, Plugins, Settings, etc.
-</div>
-<table>
-<tr>
-<td valign="top" width="50%">
 
 # Features
 * Declarative users
@@ -25,31 +19,6 @@ Users, Libraries, Plugins, Settings, etc.
 * Declarative plugins (Still a WIP)
 * Automatic backups
 * API keys
-
-</td>
-<td>
-
-<picture>
-  <source
-    media="(prefers-color-scheme: dark)"
-    srcset="
-      https://api.star-history.com/svg?repos=Sveske-Juice/declarative-jellyfin&type=Date&theme=dark
-    "
-  />
-  <source
-    media="(prefers-color-scheme: light)"
-    srcset="
-      https://api.star-history.com/svg?repos=Sveske-Juice/declarative-jellyfin&type=Date
-    "
-  />
-  <img
-    alt="Star History Chart"
-    src="https://api.star-history.com/svg?repos=Sveske-Juice/declarative-jellyfin&type=Date"
-  />
-</picture>
-</td>
-</tr>
-</table>
 
 > [!WARNING]
 This project is still in early stage, so beaware of bugs.
