@@ -212,7 +212,7 @@ with lib;
       default = 0;
     };
 
-    enableVppToneMapping = mkEnableOption ''
+    enableVppTonemapping = mkEnableOption ''
       Full Intel driver based tone-mapping. Currently works only on certain hardware with HDR10 videos. This has a higher priority compared to another OpenCL implementation.
     '';
     vppTonemappingBrightness = mkOption {
