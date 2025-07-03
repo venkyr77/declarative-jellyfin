@@ -9,6 +9,16 @@
         enabled = true;
         contentType = "movies";
         pathInfos = [ "/data/Movies" ];
+        typeOptions.Movies = {
+          metadataFetchers = [
+            "The Open Movie Database"
+            "TheMovieDb"
+          ];
+          imageFetchers = [
+            "The Open Movie Database"
+            "TheMovieDb"
+          ];
+        };
       };
       Shows = {
         enabled = true;
