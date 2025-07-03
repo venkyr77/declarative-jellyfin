@@ -79,6 +79,8 @@ with lib;
         f: x:
         if builtins.isAttrs x then
           with lib.attrsets; mapAttrs' (name: value: nameValuePair (fromString name) (f value)) x
+        else if builtins.isList x then
+          builtins.map f x
         else
           x;
       fromAttrs = fromAttrs' (x: x);

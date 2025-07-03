@@ -43,6 +43,22 @@ in
               } (toPascalCase.fromAttrs { snake_case_name = "snake_case_value"; }))
               # TODO: TODO
               (genTest "recursive attret test" "TODO" "TODO")
+              (genTest "attribute set with list"
+                {
+                  List = [
+                    { ListItem = "listValue"; }
+                    { ListItem = "listValue"; }
+                  ];
+                }
+                (
+                  toPascalCase.fromAttrsRecursive {
+                    list = [
+                      { listItem = "listValue"; }
+                      { listItem = "listValue"; }
+                    ];
+                  }
+                )
+              )
             ];
         };
     };
