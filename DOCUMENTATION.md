@@ -32,21 +32,16 @@ Specify a custom location for server cache files such as images.
 
 **Default**: 
 ```nix
-
 [
-
 {
- content = 
-{
+ content = {
   Id = `"F007D354"`;
   Name = `"Stable"`;
   };
  tag = `"CastRecieverApplication"`;
  }
-
 {
- content = 
-{
+ content = {
   Id = `"6F511C87"`;
   Name = `"Unstable"`;
   };
@@ -82,7 +77,6 @@ Changing this will have no effect on existing dummy chapters.
 
 **Default**: 
 ```nix
-
 [
 `"*"`
 ]
@@ -255,12 +249,9 @@ Country code for language. Determines stuff like dates, comma placement etc.
 
 **Default**: 
 ```nix
-
 [
-
 {
- content = 
-{
+ content = {
   disabledImageFetchers = `[]`;
   disabledMetadataFetchers = `[]`;
   disabledMetadataSavers = `[]`;
@@ -271,16 +262,12 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = `"MetadataOptions"`;
  }
-
 {
- content = 
-{
-  disabledImageFetchers = 
-[
+ content = {
+  disabledImageFetchers = [
    `"The Open Movie Database"`
 ];
-  disabledMetadataFetchers = 
-[
+  disabledMetadataFetchers = [
    `"The Open Movie Database"`
 ];
   disabledMetadataSavers = `[]`;
@@ -291,10 +278,8 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = `"MetadataOptions"`;
  }
-
 {
- content = 
-{
+ content = {
   disabledImageFetchers = `[]`;
   disabledMetadataFetchers = `[]`;
   disabledMetadataSavers = `[]`;
@@ -305,13 +290,10 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = `"MetadataOptions"`;
  }
-
 {
- content = 
-{
+ content = {
   disabledImageFetchers = `[]`;
-  disabledMetadataFetchers = 
-[
+  disabledMetadataFetchers = [
    `"TheAudioDB"`
 ];
   disabledMetadataSavers = `[]`;
@@ -322,14 +304,11 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = `"MetadataOptions"`;
  }
-
 {
- content = 
-{
+ content = {
   ImageFetcherOrder = `[]`;
   disabledImageFetchers = `[]`;
-  disabledMetadataFetchers = 
-[
+  disabledMetadataFetchers = [
    `"TheAudioDB"`
 ];
   disabledMetadataSavers = `[]`;
@@ -339,10 +318,8 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = `"MetadataOptions"`;
  }
-
 {
- content = 
-{
+ content = {
   disabledImageFetchers = `[]`;
   disabledMetadataFetchers = `[]`;
   disabledMetadataSavers = `[]`;
@@ -353,10 +330,8 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = `"MetadataOptions"`;
  }
-
 {
- content = 
-{
+ content = {
   disabledImageFetchers = `[]`;
   disabledMetadataFetchers = `[]`;
   disabledMetadataSavers = `[]`;
@@ -367,10 +342,8 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = `"MetadataOptions"`;
  }
-
 {
- content = 
-{
+ content = {
   disabledImageFetchers = `[]`;
   disabledMetadataFetchers = `[]`;
   disabledMetadataSavers = `[]`;
@@ -438,12 +411,9 @@ Configure which plugin repositories you use.
 
 **Default**: 
 ```nix
-
 [
-
 {
- content = 
-{
+ content = {
   Name = `"Jellyfin Stable"`;
   Url = `"https://repo.jellyfin.org/files/plugin/manifest.json"`;
   };
@@ -513,7 +483,6 @@ How slow (in ms) would a response have to be before a warning is shown
 
 **Default**: 
 ```nix
-
 [
 `","`
 `"&"`
@@ -530,7 +499,6 @@ How slow (in ms) would a response have to be before a warning is shown
 
 **Default**: 
 ```nix
-
 [
 `"the"`
 `"a"`
@@ -544,7 +512,6 @@ How slow (in ms) would a response have to be before a warning is shown
 
 **Default**: 
 ```nix
-
 [
 `"."`
 `"+"`
@@ -650,9 +617,7 @@ All images should generate proportionally to the source, so a width of 320 on a 
 
 **Default**: 
 ```nix
-
 [
-
 {
  content = `320`;
  tag = `"int"`;
@@ -695,7 +660,6 @@ The type of content this library contains. Used for setting the default image/me
 
 **Default**: 
 ```nix
-
 [
 `"/"`
 `"|"`
@@ -824,7 +788,6 @@ What order should local metadata readers be prioritised
 
 **Default**: 
 ```nix
-
 [
 `"Nfo"`
 ]
@@ -928,7 +891,6 @@ Keeping text versions of subtitles will result in more efficient delivery and de
 
 **Default**: 
 ```nix
-
 [
 `"eng"`
 ]
@@ -941,7 +903,6 @@ Enable and rank your preferred subtitle downloaders in order of priority.
 
 **Default**: 
 ```nix
-
 [
 `"Open Subtitles"`
 ]
@@ -971,7 +932,6 @@ imma be real i have no idea what this option is. Just leave it as the default
 
 **Default**: 
 ```nix
-
 [
 `"mkv"`
 ]
@@ -1194,7 +1154,6 @@ Consult https://jellyfin.org/docs/general/administration/hardware-acceleration/ 
 
 **Default**: 
 ```nix
-
 [
 `"h264"`
 `"hevc"`
@@ -1509,7 +1468,6 @@ List of virtual interface names
 
 **Default**: 
 ```nix
-
 [
 `"veth"`
 ]
