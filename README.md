@@ -25,6 +25,8 @@ It is highly recommended to manually take a backup of your jellyfin directory
 (usually `/var/lib/jellyfin`) if you're migrating, even though this script takes
 automatic backups before doing anything.
 
+# Documentation
+Automatically generated documentation outlining all options is available in #[DOCUMENTATION.md](https://github.com/Sveske-Juice/declarative-jellyfin/blob/main/DOCUMENTATION.md)
 
 # Usage
 ## Setup
