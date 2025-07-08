@@ -9,46 +9,40 @@ let
   repeat = repeat' "";
 
   toStringDoc' =
-    depth: value:
+    depth:
+    let
+      d0 = x: if depth == 0 then x else "";
+    in
+    value:
     if builtins.isString value then
-      "`\"${value}\"`"
+      "${d0 "`"}\"${value}\"${d0 "`"}"
     else if builtins.isBool value then
-      "`${trivial.boolToString value}`"
+      "${d0 "`"}${trivial.boolToString value}${d0 "`"}"
     else if builtins.isInt value || builtins.isFloat value then
-      "`${toString value}`"
+      "${d0 "`"}${toString value}${d0 "`"}"
     else if builtins.isList value then
       if builtins.length value == 0 then
-        "`[]`"
+        "${d0 "`"}[]${d0 "`"}"
       else
         ''
-          ${
-            if depth == 0 then
-              ''
+          ${d0 ''
 
-                ```nix
-              ''
-            else
-              ""
-          }[
+            ```nix
+          ''}[
           ${builtins.concatStringsSep "\n" (
             builtins.map (x: (repeat " " depth) + (toStringDoc' (depth + 1) x)) value
           )}
-          ]${if depth == 0 then "\n```" else ""}''
+          ]${d0 "\n```"}''
     else if builtins.isAttrs value then
       ''
-        ${
-          if depth == 0 then
-            ''
+        ${d0 ''
 
-              ```nix
-            ''
-          else
-            ""
-        }{
+          ```nix
+        ''}{
         ${builtins.concatStringsSep "\n" (
           attrsets.mapAttrsToList (k: v: "${repeat " " depth}${k} = ${toStringDoc' (depth + 1) v};") value
         )}
-        ${repeat " " depth}}${if depth == 0 then "\n```" else ""}''
+        ${repeat " " depth}}${d0 "\n```"}''
     else
       "`<${builtins.typeOf value}>`";
   toStringDoc = toStringDoc' 0;

@@ -35,17 +35,17 @@ Specify a custom location for server cache files such as images.
 [
 {
  content = {
-  Id = `"F007D354"`;
-  Name = `"Stable"`;
+  Id = "F007D354";
+  Name = "Stable";
   };
- tag = `"CastRecieverApplication"`;
+ tag = "CastRecieverApplication";
  }
 {
  content = {
-  Id = `"6F511C87"`;
-  Name = `"Unstable"`;
+  Id = "6F511C87";
+  Name = "Unstable";
   };
- tag = `"CastRecieverApplication"`;
+ tag = "CastRecieverApplication";
  }
 ]
 ```
@@ -78,7 +78,7 @@ Changing this will have no effect on existing dummy chapters.
 **Default**: 
 ```nix
 [
-`"*"`
+"*"
 ]
 ```
 
@@ -252,107 +252,107 @@ Country code for language. Determines stuff like dates, comma placement etc.
 [
 {
  content = {
-  disabledImageFetchers = `[]`;
-  disabledMetadataFetchers = `[]`;
-  disabledMetadataSavers = `[]`;
-  imageFetcherOrder = `[]`;
-  itemType = `"Movie"`;
-  localMetadataReaderOrder = `[]`;
-  metadataFetcherOrder = `[]`;
+  disabledImageFetchers = [];
+  disabledMetadataFetchers = [];
+  disabledMetadataSavers = [];
+  imageFetcherOrder = [];
+  itemType = "Movie";
+  localMetadataReaderOrder = [];
+  metadataFetcherOrder = [];
   };
- tag = `"MetadataOptions"`;
+ tag = "MetadataOptions";
  }
 {
  content = {
   disabledImageFetchers = [
-   `"The Open Movie Database"`
+   "The Open Movie Database"
 ];
   disabledMetadataFetchers = [
-   `"The Open Movie Database"`
+   "The Open Movie Database"
 ];
-  disabledMetadataSavers = `[]`;
-  imageFetcherOrder = `[]`;
-  itemType = `"MusicVideo"`;
-  localMetadataReaderOrder = `[]`;
-  metadataFetcherOrder = `[]`;
+  disabledMetadataSavers = [];
+  imageFetcherOrder = [];
+  itemType = "MusicVideo";
+  localMetadataReaderOrder = [];
+  metadataFetcherOrder = [];
   };
- tag = `"MetadataOptions"`;
+ tag = "MetadataOptions";
  }
 {
  content = {
-  disabledImageFetchers = `[]`;
-  disabledMetadataFetchers = `[]`;
-  disabledMetadataSavers = `[]`;
-  imageFetcherOrder = `[]`;
-  itemType = `"Series"`;
-  localMetadataReaderOrder = `[]`;
-  metadataFetcherOrder = `[]`;
+  disabledImageFetchers = [];
+  disabledMetadataFetchers = [];
+  disabledMetadataSavers = [];
+  imageFetcherOrder = [];
+  itemType = "Series";
+  localMetadataReaderOrder = [];
+  metadataFetcherOrder = [];
   };
- tag = `"MetadataOptions"`;
+ tag = "MetadataOptions";
  }
 {
  content = {
-  disabledImageFetchers = `[]`;
+  disabledImageFetchers = [];
   disabledMetadataFetchers = [
-   `"TheAudioDB"`
+   "TheAudioDB"
 ];
-  disabledMetadataSavers = `[]`;
-  imageFetcherOrder = `[]`;
-  itemType = `"MusicAlbum"`;
-  localMetadataReaderOrder = `[]`;
-  metadataFetcherOrder = `[]`;
+  disabledMetadataSavers = [];
+  imageFetcherOrder = [];
+  itemType = "MusicAlbum";
+  localMetadataReaderOrder = [];
+  metadataFetcherOrder = [];
   };
- tag = `"MetadataOptions"`;
+ tag = "MetadataOptions";
  }
 {
  content = {
-  ImageFetcherOrder = `[]`;
-  disabledImageFetchers = `[]`;
+  ImageFetcherOrder = [];
+  disabledImageFetchers = [];
   disabledMetadataFetchers = [
-   `"TheAudioDB"`
+   "TheAudioDB"
 ];
-  disabledMetadataSavers = `[]`;
-  itemType = `"MusicArtist"`;
-  localMetadataReaderOrder = `[]`;
-  metadataFetcherOrder = `[]`;
+  disabledMetadataSavers = [];
+  itemType = "MusicArtist";
+  localMetadataReaderOrder = [];
+  metadataFetcherOrder = [];
   };
- tag = `"MetadataOptions"`;
+ tag = "MetadataOptions";
  }
 {
  content = {
-  disabledImageFetchers = `[]`;
-  disabledMetadataFetchers = `[]`;
-  disabledMetadataSavers = `[]`;
-  imageFetcherOrder = `[]`;
-  itemType = `"BoxSet"`;
-  localMetadataReaderOrder = `[]`;
-  metadataFetcherOrder = `[]`;
+  disabledImageFetchers = [];
+  disabledMetadataFetchers = [];
+  disabledMetadataSavers = [];
+  imageFetcherOrder = [];
+  itemType = "BoxSet";
+  localMetadataReaderOrder = [];
+  metadataFetcherOrder = [];
   };
- tag = `"MetadataOptions"`;
+ tag = "MetadataOptions";
  }
 {
  content = {
-  disabledImageFetchers = `[]`;
-  disabledMetadataFetchers = `[]`;
-  disabledMetadataSavers = `[]`;
-  imageFetcherOrder = `[]`;
-  itemType = `"Season"`;
-  localMetadataReaderOrder = `[]`;
-  metadataFetcherOrder = `[]`;
+  disabledImageFetchers = [];
+  disabledMetadataFetchers = [];
+  disabledMetadataSavers = [];
+  imageFetcherOrder = [];
+  itemType = "Season";
+  localMetadataReaderOrder = [];
+  metadataFetcherOrder = [];
   };
- tag = `"MetadataOptions"`;
+ tag = "MetadataOptions";
  }
 {
  content = {
-  disabledImageFetchers = `[]`;
-  disabledMetadataFetchers = `[]`;
-  disabledMetadataSavers = `[]`;
-  imageFetcherOrder = `[]`;
-  itemType = `"Episode"`;
-  localMetadataReaderOrder = `[]`;
-  metadataFetcherOrder = `[]`;
+  disabledImageFetchers = [];
+  disabledMetadataFetchers = [];
+  disabledMetadataSavers = [];
+  imageFetcherOrder = [];
+  itemType = "Episode";
+  localMetadataReaderOrder = [];
+  metadataFetcherOrder = [];
   };
- tag = `"MetadataOptions"`;
+ tag = "MetadataOptions";
  }
 ]
 ```
@@ -414,10 +414,10 @@ Configure which plugin repositories you use.
 [
 {
  content = {
-  Name = `"Jellyfin Stable"`;
-  Url = `"https://repo.jellyfin.org/files/plugin/manifest.json"`;
+  Name = "Jellyfin Stable";
+  Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
   };
- tag = `"RepositoryInfo"`;
+ tag = "RepositoryInfo";
  }
 ]
 ```
@@ -484,12 +484,12 @@ How slow (in ms) would a response have to be before a warning is shown
 **Default**: 
 ```nix
 [
-`","`
-`"&"`
-`"-"`
-`"{"`
-`"}"`
-`"'"`
+","
+"&"
+"-"
+"{"
+"}"
+"'"
 ]
 ```
 
@@ -500,9 +500,9 @@ How slow (in ms) would a response have to be before a warning is shown
 **Default**: 
 ```nix
 [
-`"the"`
-`"a"`
-`"an"`
+"the"
+"a"
+"an"
 ]
 ```
 
@@ -513,9 +513,9 @@ How slow (in ms) would a response have to be before a warning is shown
 **Default**: 
 ```nix
 [
-`"."`
-`"+"`
-`"%"`
+"."
+"+"
+"%"
 ]
 ```
 
@@ -619,8 +619,8 @@ All images should generate proportionally to the source, so a width of 320 on a 
 ```nix
 [
 {
- content = `320`;
- tag = `"int"`;
+ content = 320;
+ tag = "int";
  }
 ]
 ```
@@ -661,10 +661,10 @@ The type of content this library contains. Used for setting the default image/me
 **Default**: 
 ```nix
 [
-`"/"`
-`"|"`
-`";"`
-`"\"`
+"/"
+"|"
+";"
+"\"
 ]
 ```
 
@@ -789,7 +789,7 @@ What order should local metadata readers be prioritised
 **Default**: 
 ```nix
 [
-`"Nfo"`
+"Nfo"
 ]
 ```
 
@@ -892,7 +892,7 @@ Keeping text versions of subtitles will result in more efficient delivery and de
 **Default**: 
 ```nix
 [
-`"eng"`
+"eng"
 ]
 ```
 
@@ -904,7 +904,7 @@ Enable and rank your preferred subtitle downloaders in order of priority.
 **Default**: 
 ```nix
 [
-`"Open Subtitles"`
+"Open Subtitles"
 ]
 ```
 
@@ -933,7 +933,7 @@ imma be real i have no idea what this option is. Just leave it as the default
 **Default**: 
 ```nix
 [
-`"mkv"`
+"mkv"
 ]
 ```
 
@@ -1155,10 +1155,10 @@ Consult https://jellyfin.org/docs/general/administration/hardware-acceleration/ 
 **Default**: 
 ```nix
 [
-`"h264"`
-`"hevc"`
-`"mpeg2video"`
-`"vc1"`
+"h264"
+"hevc"
+"mpeg2video"
+"vc1"
 ]
 ```
 
@@ -1469,7 +1469,7 @@ List of virtual interface names
 **Default**: 
 ```nix
 [
-`"veth"`
+"veth"
 ]
 ```
 # services.declarative-jellyfin.users
