@@ -45,6 +45,12 @@ let
           makeDocumentationRecursive (depth + 1) "${fqn}.*" (
             builtins.removeAttrs (option.type.nestedTypes.elemType.getSubOptions { }) [ "_module" ]
           )
+        else if option.type.name == "submodule" then
+          builtins.concatStringsSep "\n" (
+            attrsets.mapAttrsToList (k: v: makeDocumentationRecursive (depth + 1) "${fqn}.${k}" v) (
+              builtins.removeAttrs (option.type.getSubOptions { }) [ "_module" ]
+            )
+          )
         else
           ''
             ${if builtins.hasAttr "description" option then option.description + "\n" else ""}

@@ -2175,15 +2175,244 @@ true
 ```
 
 ### services.declarative-jellyfin.users.*.permissions
-Permissions for this user
+#### services.declarative-jellyfin.users.*.permissions.enableAllChannels
+Whether the user has access to all channels
 
-**Type**: submodule
+**Type**: boolean
 
 **Default**: 
 ```nix
-{
+true
+```
 
-}
+#### services.declarative-jellyfin.users.*.permissions.enableAllDevices
+Whether the user has access to all devices
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableAllFolders
+Whether the user has access to all folders
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableAudioPlaybackTranscoding
+Whether the server should transcode audio for the user if requested
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableCollectionManagement
+Whether the user can create, modify and delete collections
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableContentDeletion
+Whether the user can delete content
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableContentDownloading
+Whether the user can download content
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableLiveTvAccess
+Whether the user can access live tv
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableLiveTvManagement
+Whether the user can manage live tv
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableLyricManagement
+Whether the user can edit lyrics
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableMediaConversion
+Whether the user can do media conversion
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableMediaPlayback
+Whether the user can play media
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enablePlaybackRemuxing
+Whether the user is permitted to do playback remuxing
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enablePublicSharing
+Whether to enable public sharing for the user
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableRemoteAccess
+Whether the user can access the server remotely
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableRemoteControlOfOtherUsers
+Whether the user can remotely control other users
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableSharedDeviceControl
+Whether the user can control shared devices
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableSubtitleManagement
+Whether the user can edit subtitles
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableSyncTranscoding
+Whether to enable sync transcoding for the user
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.enableVideoPlaybackTranscoding
+Whether the server should transcode video for the user if requested
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+#### services.declarative-jellyfin.users.*.permissions.forceRemoteSourceTranscoding
+Whether the server should force transcoding on remote connections for the user
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+#### services.declarative-jellyfin.users.*.permissions.isAdministrator
+Whether the user is an administrator
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+#### services.declarative-jellyfin.users.*.permissions.isDisabled
+Whether the user is disabled
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+#### services.declarative-jellyfin.users.*.permissions.isHidden
+Whether the user is hidden
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
 ```
 
 ### services.declarative-jellyfin.users.*.playDefaultAudioTrack
@@ -2196,15 +2425,18 @@ true
 ```
 
 ### services.declarative-jellyfin.users.*.preferences
-Preferences for this user
+#### services.declarative-jellyfin.users.*.preferences.enabledLibraries
+A list of libraries this user as access to.
+If it is empty, it means that the user has access to all libraries.
+The libraries are specified by the library name specified in
+`services.declarative-jellyfin.libraries.<name>`
 
-**Type**: submodule
+
+**Type**: list of string
 
 **Default**: 
 ```nix
-{
-
-}
+[]
 ```
 
 ### services.declarative-jellyfin.users.*.rememberAudioSelections
