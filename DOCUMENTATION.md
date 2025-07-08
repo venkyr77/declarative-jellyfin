@@ -52,7 +52,8 @@ Specify a custom location for server cache files such as images.
   };
  tag = `"CastRecieverApplication"`;
  }
-]```
+]
+```
 
 ## services.declarative-jellyfin.system.chapterImageResolution
 The resolution of the extracted chapter images.
@@ -84,7 +85,8 @@ Changing this will have no effect on existing dummy chapters.
 
 [
 `"*"`
-]```
+]
+```
 
 ## services.declarative-jellyfin.system.disableLiveTvChannelUserDataName
 
@@ -379,7 +381,8 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = `"MetadataOptions"`;
  }
-]```
+]
+```
 
 ## services.declarative-jellyfin.system.metadataPath
 Specify a custom location for downloaded artwork and metadata.
@@ -446,7 +449,8 @@ Configure which plugin repositories you use.
   };
  tag = `"RepositoryInfo"`;
  }
-]```
+]
+```
 
 ## services.declarative-jellyfin.system.preferredMetadataLanguage
 Display language of jellyfin.
@@ -517,7 +521,8 @@ How slow (in ms) would a response have to be before a warning is shown
 `"{"`
 `"}"`
 `"'"`
-]```
+]
+```
 
 ## services.declarative-jellyfin.system.sortRemoveWords
 
@@ -530,7 +535,8 @@ How slow (in ms) would a response have to be before a warning is shown
 `"the"`
 `"a"`
 `"an"`
-]```
+]
+```
 
 ## services.declarative-jellyfin.system.sortReplaceCharacters
 
@@ -543,7 +549,8 @@ How slow (in ms) would a response have to be before a warning is shown
 `"."`
 `"+"`
 `"%"`
-]```
+]
+```
 
 ## services.declarative-jellyfin.system.trickplayOptions
 ### services.declarative-jellyfin.system.trickplayOptions.enableHwAcceleration
@@ -650,7 +657,8 @@ All images should generate proportionally to the source, so a width of 320 on a 
  content = `320`;
  tag = `"int"`;
  }
-]```
+]
+```
 # services.declarative-jellyfin.libraries
 ## services.declarative-jellyfin.libraries.*
 ### services.declarative-jellyfin.libraries.*.allowEmbeddedSubtitles
@@ -693,7 +701,8 @@ The type of content this library contains. Used for setting the default image/me
 `"|"`
 `";"`
 `"\"`
-]```
+]
+```
 
 ### services.declarative-jellyfin.libraries.*.delimiterWhitelist
 
@@ -818,7 +827,8 @@ What order should local metadata readers be prioritised
 
 [
 `"Nfo"`
-]```
+]
+```
 
 ### services.declarative-jellyfin.libraries.*.lyricFetcherOrder
 
@@ -921,7 +931,8 @@ Keeping text versions of subtitles will result in more efficient delivery and de
 
 [
 `"eng"`
-]```
+]
+```
 
 ### services.declarative-jellyfin.libraries.*.subtitleFetcherOrder
 Enable and rank your preferred subtitle downloaders in order of priority.
@@ -933,7 +944,8 @@ Enable and rank your preferred subtitle downloaders in order of priority.
 
 [
 `"Open Subtitles"`
-]```
+]
+```
 
 ### services.declarative-jellyfin.libraries.*.typeOptions
 #### services.declarative-jellyfin.libraries.*.typeOptions.*
@@ -962,7 +974,8 @@ imma be real i have no idea what this option is. Just leave it as the default
 
 [
 `"mkv"`
-]```
+]
+```
 
 ## services.declarative-jellyfin.encoding.deinterlaceDoubleRate
 Whether to enable This setting uses the field rate when deinterlacing, often referred to as bob deinterlacing, which doubles the frame rate of the video to provide full motion like what you would see when viewing interlaced video on a TV.
@@ -1187,7 +1200,8 @@ Consult https://jellyfin.org/docs/general/administration/hardware-acceleration/ 
 `"hevc"`
 `"mpeg2video"`
 `"vc1"`
-]```
+]
+```
 
 ## services.declarative-jellyfin.encoding.maxMuxingQueueSize
 Maximum number of packets that can be buffered while waiting for all streams to initialize.
@@ -1498,7 +1512,8 @@ List of virtual interface names
 
 [
 `"veth"`
-]```
+]
+```
 # services.declarative-jellyfin.users
 ## services.declarative-jellyfin.users.*
 ### services.declarative-jellyfin.users.*.audioLanguagePreference

@@ -34,7 +34,7 @@ let
           ${builtins.concatStringsSep "\n" (
             builtins.map (x: (repeat " " depth) + (toStringDoc' (depth + 1) x)) value
           )}
-          ]${if depth == 0 then "```" else ""}''
+          ]${if depth == 0 then "\n```" else ""}''
     else if builtins.isAttrs value then
       ''
         ${
@@ -50,7 +50,7 @@ let
         ${builtins.concatStringsSep "\n" (
           attrsets.mapAttrsToList (k: v: "${repeat " " depth}${k} = ${toStringDoc' (depth + 1) v};") value
         )}
-        ${repeat " " depth}}${if depth == 0 then "```" else ""}''
+        ${repeat " " depth}}${if depth == 0 then "\n```" else ""}''
     else
       "`<${builtins.typeOf value}>`";
   toStringDoc = toStringDoc' 0;
