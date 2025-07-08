@@ -29,8 +29,7 @@ let
               ''
             else
               ""
-          }
-          [
+          }[
           ${builtins.concatStringsSep "\n" (
             builtins.map (x: (repeat " " depth) + (toStringDoc' (depth + 1) x)) value
           )}
@@ -45,8 +44,7 @@ let
             ''
           else
             ""
-        }
-        {
+        }{
         ${builtins.concatStringsSep "\n" (
           attrsets.mapAttrsToList (k: v: "${repeat " " depth}${k} = ${toStringDoc' (depth + 1) v};") value
         )}
