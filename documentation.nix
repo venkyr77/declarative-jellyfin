@@ -11,29 +11,48 @@ let
   toStringDoc' =
     depth: value:
     if builtins.isString value then
-      "\"${value}\""
+      "`\"${value}\"`"
     else if builtins.isBool value then
-      trivial.boolToString value
+      "`${trivial.boolToString value}`"
     else if builtins.isInt value || builtins.isFloat value then
-      toString value
+      "`${toString value}`"
     else if builtins.isList value then
       if builtins.length value == 0 then
-        "[]"
+        "`[]`"
       else
-        "[\n${
-          builtins.concatStringsSep "\n" (
+        ''
+          ${
+            if depth == 0 then
+              ''
+
+                ```nix
+              ''
+            else
+              ""
+          }
+          [
+          ${builtins.concatStringsSep "\n" (
             builtins.map (x: (repeat " " depth) + (toStringDoc' (depth + 1) x)) value
-          )
-        }\n]"
+          )}
+          ]${if depth == 0 then "```" else ""}''
     else if builtins.isAttrs value then
       ''
+        ${
+          if depth == 0 then
+            ''
+
+              ```nix
+            ''
+          else
+            ""
+        }
         {
         ${builtins.concatStringsSep "\n" (
           attrsets.mapAttrsToList (k: v: "${repeat " " depth}${k} = ${toStringDoc' (depth + 1) v};") value
         )}
-        ${repeat " " depth}}''
+        ${repeat " " depth}}${if depth == 0 then "```" else ""}''
     else
-      "<${builtins.typeOf value}>";
+      "`<${builtins.typeOf value}>`";
   toStringDoc = toStringDoc' 0;
 
   makeDocumentationRecursive =
@@ -55,12 +74,7 @@ let
           ''
             ${if builtins.hasAttr "description" option then option.description + "\n" else ""}
             **Type**: ${option.type.description}
-            ${
-              if builtins.hasAttr "default" option then
-                "\n**Default**: \n```nix\n${toStringDoc option.default}\n```"
-              else
-                ""
-            }
+            ${if builtins.hasAttr "default" option then "\n**Default**: ${toStringDoc option.default}" else ""}
           ''
       else
         builtins.concatStringsSep "\n" (
