@@ -16,7 +16,6 @@ Users, Libraries, Plugins, Settings, etc.
     * Network
     * Encoding (HW acceleration)
     * Coming soon: Branding (see #9)
-* Declarative plugins (Still a WIP)
 * Automatic backups
 * API keys
 
