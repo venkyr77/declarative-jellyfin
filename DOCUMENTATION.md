@@ -790,16 +790,390 @@ All images should generate proportionally to the source, so a width of 320 on a 
 ]
 ```
 # services.declarative-jellyfin.libraries
-Library configuration
+## services.declarative-jellyfin.libraries.*
+### services.declarative-jellyfin.libraries.*.allowEmbeddedSubtitles
+Disable subtitles that are packaged within media containers. Requires a full library refresh.
 
-**Type**: attribute set of (submodule)
+**Type**: one of "AllowAll", "AllowText", "AllowImages", "AllowNone"
 
 **Default**: 
 ```nix
-{
-
-}
+"AllowAll"
 ```
+
+### services.declarative-jellyfin.libraries.*.automaticRefreshIntervalDays
+How often to automatically refresh metadata from the internet. (in days)
+
+**Type**: signed integer
+
+**Default**: 
+```nix
+30
+```
+
+### services.declarative-jellyfin.libraries.*.automaticallyAddToCollection
+Toggles whether or not similar series/shows (ie. sequals or spinoffs) will be grouped in collections.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.contentType
+The type of content this library contains. Used for setting the default image/metadata fetchers.
+
+
+**Type**: one of "movies", "music", "tvshows", "books", "homevideos", "musicvideos", "boxsets"
+
+
+### services.declarative-jellyfin.libraries.*.customTagDelimiters
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[
+"/"
+"|"
+";"
+"\"
+]
+```
+
+### services.declarative-jellyfin.libraries.*.delimiterWhitelist
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+### services.declarative-jellyfin.libraries.*.disabledLocalMetadataReaders
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+### services.declarative-jellyfin.libraries.*.disabledLyricFetchers
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+### services.declarative-jellyfin.libraries.*.disabledMediaSegmentProviders
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+### services.declarative-jellyfin.libraries.*.disabledSubtitleFetchers
+What order should local metadata readers be prioritised
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+### services.declarative-jellyfin.libraries.*.enableAutomaticSeriesGrouping
+Series that are spread across multiple folders within this library will be automatically merged into a single series.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.enableChapterImageExtraction
+Whether or not to extract frames from the media to show as previews for chapters
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.enableEmbeddedEpisodeInfos
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.enableEmbeddedExtraTitles
+Use the episode information from the embedded metadata if available.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.enableEmbeddedTitles
+Whether or not to use the title embedded in the file if no internet metadata is available (if any is embedded)
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.enableLUFSScan
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.libraries.*.enablePhotos
+Whether or not media in this library should display photos
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.libraries.*.enableRealtimeMonitor
+Changes to files will be processed immediately on supported file systems
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.libraries.*.enableTrickplayImageExtraction
+Enables trickplay image generation for previews when skipping in media
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.enabled
+Whether or not this library is enabled
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.libraries.*.extractChapterImagesDuringLibraryScan
+Whether or not to extract frames for previews for chapters during library scans
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.extractTrickplayImagesDuringLibraryScan
+Whether or not trickplay images should be extracted during the library scan
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.localMetadataReaderOrder
+What order should local metadata readers be prioritised
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[
+"Nfo"
+]
+```
+
+### services.declarative-jellyfin.libraries.*.lyricFetcherOrder
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+### services.declarative-jellyfin.libraries.*.mediaSegmentProvideOrder
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+### services.declarative-jellyfin.libraries.*.metadataCountryCode
+
+**Type**: string
+
+**Default**: 
+```nix
+""
+```
+
+### services.declarative-jellyfin.libraries.*.metadataSavers
+Pick the file formats to use when saving your metadata.
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+### services.declarative-jellyfin.libraries.*.pathInfos
+List of paths for media in this library
+
+**Type**: list of string
+
+
+### services.declarative-jellyfin.libraries.*.preferredMetadataLanguage
+What language should metadata be fetched for? Affects titles, descriptions, etc.
+
+**Type**: string
+
+**Default**: 
+```nix
+"en"
+```
+
+### services.declarative-jellyfin.libraries.*.requirePerfectSubtitleMatch
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.libraries.*.saveLocalMetadata
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.saveLyricsWithMedia
+Saving lyrics into media folders will put them next to your media for easy migration and access
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.saveSubtitlesWithMedia
+Storing subtitles next to video files will allow them to be more easily managed.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.libraries.*.saveTrickplayWithMedia
+Saving trickplay images into media folders will put them next to your media for easy migration and access
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.seasonZeroDisplayName
+What title should the 'specials' season (season 0) display?
+
+**Type**: string
+
+**Default**: 
+```nix
+"Specials"
+```
+
+### services.declarative-jellyfin.libraries.*.skipSubtitlesIfAudioTrackMatches
+Uncheck this to ensure all videos have subtitles, regardless of audio language.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.skipSubtitlesIfEmbeddedSubtitlesPresent
+Keeping text versions of subtitles will result in more efficient delivery and decrease the likelihood of video transcoding.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.libraries.*.subtitleDownloadLanguages
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[
+"eng"
+]
+```
+
+### services.declarative-jellyfin.libraries.*.subtitleFetcherOrder
+Enable and rank your preferred subtitle downloaders in order of priority.
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[
+"Open Subtitles"
+]
+```
+
+### services.declarative-jellyfin.libraries.*.typeOptions
+#### services.declarative-jellyfin.libraries.*.typeOptions.*
 # services.declarative-jellyfin.encoding
 ## services.declarative-jellyfin.encoding.allowAv1Encoding
 Whether AV1 encoding is enabled
