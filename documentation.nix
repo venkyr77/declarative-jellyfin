@@ -96,6 +96,40 @@ nixpkgs.writeTextFile (
             pkgs = nixpkgs;
           }).options.services.declarative-jellyfin.encoding;
       }
+      {
+        name = "services.declarative-jellyfin.network";
+        options =
+          (import ./modules/options/network.nix {
+            lib = nixpkgs.lib;
+            config = {
+              networking.hostName = "config.networking.hostName";
+            };
+            pkgs = nixpkgs;
+          }).options.services.declarative-jellyfin.network;
+      }
+      # Uncomment when i stop being too lazy to fix plugins
+      # {
+      #   name = "services.declarative-jellyfin.plugins";
+      #   options =
+      #     (import ./modules/options/plugins.nix {
+      #       lib = nixpkgs.lib;
+      #       config = {
+      #         networking.hostName = "config.networking.hostName";
+      #       };
+      #       pkgs = nixpkgs;
+      #     }).options.services.declarative-jellyfin.plugins;
+      # }
+      {
+        name = "services.declarative-jellyfin.users";
+        options =
+          (import ./modules/options/users.nix {
+            lib = nixpkgs.lib;
+            config = {
+              networking.hostName = "config.networking.hostName";
+            };
+            pkgs = nixpkgs;
+          }).options.services.declarative-jellyfin.users;
+      }
     ];
   in
   {

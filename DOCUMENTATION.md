@@ -1682,3 +1682,599 @@ Both recommended and default values are 1.
 ```nix
 1
 ```
+# services.declarative-jellyfin.network
+## services.declarative-jellyfin.network.autoDiscovery
+Enable auto discovery
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+## services.declarative-jellyfin.network.baseUrl
+Add a custom subdirectory to the server URL. For example: http://example.com/<baseurl>
+
+**Type**: string
+
+**Default**: 
+```nix
+""
+```
+
+## services.declarative-jellyfin.network.certificatePassword
+If your certificate requires a password, please enter it here.
+
+**Type**: string
+
+**Default**: 
+```nix
+""
+```
+
+## services.declarative-jellyfin.network.certificatePath
+Path to a PKCS #12 file containing a certificate and private key to enable TLS support on a custom domain.
+
+**Type**: string or absolute path
+
+**Default**: 
+```nix
+""
+```
+
+## services.declarative-jellyfin.network.enableHttps
+Whether to enable Enable HTTPS.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+## services.declarative-jellyfin.network.enableIPv4
+Enable IPv4 routing
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+## services.declarative-jellyfin.network.enableIPv6
+Enable IPv6 routing
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+## services.declarative-jellyfin.network.enablePublishedServerUriByRequest
+Whether to enable Enable published server uri by request.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+## services.declarative-jellyfin.network.enableRemoteAccess
+Enable remote access
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+## services.declarative-jellyfin.network.enableUPnP
+Whether to enable Enable UPnP forwarding.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+## services.declarative-jellyfin.network.ignoreVirtualInterfaces
+Ignore virtual interfaces
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+## services.declarative-jellyfin.network.internalHttpPort
+The TCP port number for the HTTP server.
+
+**Type**: 16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+**Default**: 
+```nix
+8096
+```
+
+## services.declarative-jellyfin.network.internalHttpsPort
+The TCP port number for the HTTPS server.
+
+**Type**: 16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+**Default**: 
+```nix
+8920
+```
+
+## services.declarative-jellyfin.network.isRemoteIPFilterBlacklist
+Whether to enable Is the remote ip filter list a blacklist or a whitelist.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+## services.declarative-jellyfin.network.knownProxies
+A list of known proxies
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+## services.declarative-jellyfin.network.localNetworkAddresses
+Whether to enable UNIMPLEMENTED.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+## services.declarative-jellyfin.network.localNetworkSubnets
+List of IP addresses or IP/netmask entries for networks that will be considered on local network when enforcing bandwidth restrictions.
+If set, all other IP addresses will be considered to be on the external network and will be subject to the external bandwidth restrictions.
+If left empty, only the server's subnet is considered to be on the local network.
+
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+## services.declarative-jellyfin.network.publicHttpPort
+The public port number that should be mapped to the local HTTP port.
+
+**Type**: 16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+**Default**: 
+```nix
+8096
+```
+
+## services.declarative-jellyfin.network.publicHttpsPort
+The public port number that should be mapped to the local HTTPS port.
+
+**Type**: 16 bit unsigned integer; between 0 and 65535 (both inclusive)
+
+**Default**: 
+```nix
+8920
+```
+
+## services.declarative-jellyfin.network.publishedServerUriBySubnet
+Override the URI used by Jellyfin, based on the interface, or client IP address.
+
+For example: `["internal=http://jellyfin.example.com" "external=https://jellyfin.example.com"]` or `["all=https://jellyfin.example.com"]`
+
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+## services.declarative-jellyfin.network.remoteIpFilter
+List of IP addresses or IP/netmask entries for networks that will be allowed to connect remotely.
+If left empty, all remote addresses will be allowed.
+
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[]
+```
+
+## services.declarative-jellyfin.network.requireHttps
+Whether to enable Require HTTPS.
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+## services.declarative-jellyfin.network.virtualInterfaceNames
+List of virtual interface names
+
+**Type**: list of string
+
+**Default**: 
+```nix
+[
+"veth"
+]
+```
+# services.declarative-jellyfin.users
+## services.declarative-jellyfin.users.*
+### services.declarative-jellyfin.users.*.audioLanguagePreference
+The audio language preference. Defaults to 'Any Language'
+
+**Type**: null or string
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.authenticationProviderId
+
+**Type**: string
+
+**Default**: 
+```nix
+"Jellyfin.Server.Implementations.Users.DefaultAuthenticationProvider"
+```
+
+### services.declarative-jellyfin.users.*.castReceiverId
+
+**Type**: string
+
+**Default**: 
+```nix
+"F007D354"
+```
+
+### services.declarative-jellyfin.users.*.displayCollectionsView
+Whether to show the Collections View
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.users.*.displayMissingEpisodes
+Whether to show missing episodes
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.users.*.enableAutoLogin
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.users.*.enableLocalPassword
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
+
+### services.declarative-jellyfin.users.*.enableNextEpisodeAutoPlay
+Automatically play the next episode
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.users.*.enableUserPreferenceAccess
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.users.*.hashedPassword
+A pbkdf2-sha512 hash of the users password. Can be generated with the genhash flake app.
+See docs for `HashedPasswordFile` for details on how to generate a hash
+
+
+**Type**: null or string
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.hashedPasswordFile
+A path to a pbkdf2-sha512 hash
+in this format [PHC string](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md).
+You can use the packaged 'genhash' tool in this flake.nix to generate a hash
+```
+# default values:
+nix run gitlab:SpoodyTheOne/declarative-jellyfin#genhash -- \\
+  -k <password> \\
+  -i 210000 \\
+  -l 128 \\
+  -u
+# Usage:
+nix run gitlab:SpoodyTheOne/declarative-jellyfin#genhash -h
+
+```
+
+
+**Type**: null or absolute path
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.hidePlayedInLatest
+Whether to hide already played titles in the 'Latest' section
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.users.*.id
+The ID of the user
+
+**Type**: null or string
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.internalId
+The index of the user in the database. Be careful setting this option. 1 indexed.
+
+**Type**: null or signed integer
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.invalidLoginAttemptCount
+
+**Type**: signed integer
+
+**Default**: 
+```nix
+0
+```
+
+### services.declarative-jellyfin.users.*.lastActivityDate
+
+**Type**: null or string
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.lastLoginDate
+
+**Type**: null or string
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.loginAttemptsBeforeLockout
+The number of login attempts the user can make before they are locked out.
+
+**Type**: signed integer
+
+**Default**: 
+```nix
+3
+```
+
+### services.declarative-jellyfin.users.*.maxActiveSessions
+The maximum number of active sessions the user can have at once. 0 for unlimited
+
+**Type**: signed integer
+
+**Default**: 
+```nix
+0
+```
+
+### services.declarative-jellyfin.users.*.maxParentalAgeRating
+
+**Type**: null or signed integer
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.mustUpdatePassword
+
+**Type**: signed integer
+
+**Default**: 
+```nix
+0
+```
+
+### services.declarative-jellyfin.users.*.mutable
+Functions like mutableUsers in NixOS users.users."user"
+If true, the first time the user is created, all configured options
+are overwritten. Any modifications from the GUI will take priority,
+and no nix configuration changes will have any effect.
+If false however, all options are overwritten as specified in the nix configuration,
+which means any change through the Jellyfin GUI will have no effect after a rebuild.
+
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.users.*.password
+
+**Type**: null or string
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.passwordResetProviderId
+
+**Type**: string
+
+**Default**: 
+```nix
+"Jellyfin.Server.Implementations.Users.DefaultPasswordResetProvider"
+```
+
+### services.declarative-jellyfin.users.*.permissions
+Permissions for this user
+
+**Type**: submodule
+
+**Default**: 
+```nix
+{
+
+}
+```
+
+### services.declarative-jellyfin.users.*.playDefaultAudioTrack
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.users.*.preferences
+Preferences for this user
+
+**Type**: submodule
+
+**Default**: 
+```nix
+{
+
+}
+```
+
+### services.declarative-jellyfin.users.*.rememberAudioSelections
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.users.*.rememberSubtitleSelections
+
+**Type**: boolean
+
+**Default**: 
+```nix
+true
+```
+
+### services.declarative-jellyfin.users.*.remoteClientBitrateLimit
+0 for unlimited
+
+**Type**: signed integer
+
+**Default**: 
+```nix
+0
+```
+
+### services.declarative-jellyfin.users.*.rowVersion
+
+**Type**: signed integer
+
+**Default**: 
+```nix
+0
+```
+
+### services.declarative-jellyfin.users.*.subtitleLanguagePreference
+The subtitle language preference. Defaults to 'Any Language'
+
+**Type**: null or string
+
+**Default**: 
+```nix
+<null>
+```
+
+### services.declarative-jellyfin.users.*.subtitleMode
+Default: The default subtitle playback mode.
+Always: Always show subtitles.
+OnlyForced: Only show forced subtitles.
+None: Don't show subtitles.
+Smart: Only show subtitles when the current audio stream is in a different language.
+
+
+**Type**: one of "default", "always", "onlyForced", "none", "smart"
+
+**Default**: 
+```nix
+"default"
+```
+
+### services.declarative-jellyfin.users.*.syncPlayAccess
+Whether or not this user has access to SyncPlay
+
+**Type**: boolean
+
+**Default**: 
+```nix
+false
+```
