@@ -106,7 +106,7 @@ you want a user to be fully declarative (for example admin accounts).
 Jellyfin uses pbkdf2-sha512 hashes to store passwords.
 Use the `genhash` script bundled in this flake with the parameters the jellyfin DB expects:
 ```nix
-nix run git+https://git.spoodythe.one/spoody/declarative-jellyfin.git#genhash -- -i 210000 -l 128 -u -k "your super secret password"
+nix run github:Sveske-Juice/declarative-jellyfin#genhash -- -i 210000 -l 128 -u -k "your super secret password"
 ```
 
 ### Usage with sops-nix
