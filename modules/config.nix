@@ -566,6 +566,7 @@ let
               # bash
               ''
                 install -Dm 740 '${pkgs.writeText "options.xml" (toXml "LibraryOptions" value)}' "${path}/options.xml"
+                touch "${path}/${value.ContentType}.collection"
                 # Create .mblink files foreach path in library
                 ${concatStringsSep "\n" (
                   map (
@@ -580,7 +581,7 @@ let
             ) prepassedLibraries
           )}
 
-          # Install libraries
+          # Install plugins
           ${pluginLinkCommands}
 
           # API Keys
