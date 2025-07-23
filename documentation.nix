@@ -30,7 +30,7 @@ let
             ```nix
           ''}[
           ${builtins.concatStringsSep "\n" (
-            builtins.map (x: (repeat " " depth) + (toStringDoc' (depth + 1) x)) value
+            builtins.map (x: (repeat " " (depth+1)) + (toStringDoc' (depth + 1) x)) value
           )}
           ]${d0 "\n```"}''
     else if builtins.isAttrs value then

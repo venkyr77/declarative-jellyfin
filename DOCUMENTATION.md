@@ -33,14 +33,14 @@ Specify a custom location for server cache files such as images.
 **Default**: 
 ```nix
 [
-{
+ {
  content = {
   Id = "F007D354";
   Name = "Stable";
   };
  tag = "CastRecieverApplication";
  }
-{
+ {
  content = {
   Id = "6F511C87";
   Name = "Unstable";
@@ -78,7 +78,7 @@ Changing this will have no effect on existing dummy chapters.
 **Default**: 
 ```nix
 [
-"*"
+ "*"
 ]
 ```
 
@@ -250,7 +250,7 @@ Country code for language. Determines stuff like dates, comma placement etc.
 **Default**: 
 ```nix
 [
-{
+ {
  content = {
   disabledImageFetchers = [];
   disabledMetadataFetchers = [];
@@ -262,13 +262,13 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = "MetadataOptions";
  }
-{
+ {
  content = {
   disabledImageFetchers = [
-   "The Open Movie Database"
+    "The Open Movie Database"
 ];
   disabledMetadataFetchers = [
-   "The Open Movie Database"
+    "The Open Movie Database"
 ];
   disabledMetadataSavers = [];
   imageFetcherOrder = [];
@@ -278,7 +278,7 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = "MetadataOptions";
  }
-{
+ {
  content = {
   disabledImageFetchers = [];
   disabledMetadataFetchers = [];
@@ -290,11 +290,11 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = "MetadataOptions";
  }
-{
+ {
  content = {
   disabledImageFetchers = [];
   disabledMetadataFetchers = [
-   "TheAudioDB"
+    "TheAudioDB"
 ];
   disabledMetadataSavers = [];
   imageFetcherOrder = [];
@@ -304,12 +304,12 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = "MetadataOptions";
  }
-{
+ {
  content = {
   ImageFetcherOrder = [];
   disabledImageFetchers = [];
   disabledMetadataFetchers = [
-   "TheAudioDB"
+    "TheAudioDB"
 ];
   disabledMetadataSavers = [];
   itemType = "MusicArtist";
@@ -318,7 +318,7 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = "MetadataOptions";
  }
-{
+ {
  content = {
   disabledImageFetchers = [];
   disabledMetadataFetchers = [];
@@ -330,7 +330,7 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = "MetadataOptions";
  }
-{
+ {
  content = {
   disabledImageFetchers = [];
   disabledMetadataFetchers = [];
@@ -342,7 +342,7 @@ Country code for language. Determines stuff like dates, comma placement etc.
   };
  tag = "MetadataOptions";
  }
-{
+ {
  content = {
   disabledImageFetchers = [];
   disabledMetadataFetchers = [];
@@ -412,7 +412,7 @@ Configure which plugin repositories you use.
 **Default**: 
 ```nix
 [
-{
+ {
  content = {
   Name = "Jellyfin Stable";
   Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
@@ -484,12 +484,12 @@ How slow (in ms) would a response have to be before a warning is shown
 **Default**: 
 ```nix
 [
-","
-"&"
-"-"
-"{"
-"}"
-"'"
+ ","
+ "&"
+ "-"
+ "{"
+ "}"
+ "'"
 ]
 ```
 
@@ -500,9 +500,9 @@ How slow (in ms) would a response have to be before a warning is shown
 **Default**: 
 ```nix
 [
-"the"
-"a"
-"an"
+ "the"
+ "a"
+ "an"
 ]
 ```
 
@@ -513,9 +513,9 @@ How slow (in ms) would a response have to be before a warning is shown
 **Default**: 
 ```nix
 [
-"."
-"+"
-"%"
+ "."
+ "+"
+ "%"
 ]
 ```
 
@@ -618,7 +618,7 @@ All images should generate proportionally to the source, so a width of 320 on a 
 **Default**: 
 ```nix
 [
-{
+ {
  content = 320;
  tag = "int";
  }
@@ -661,10 +661,10 @@ The type of content this library contains. Used for setting the default image/me
 **Default**: 
 ```nix
 [
-"/"
-"|"
-";"
-"\"
+ "/"
+ "|"
+ ";"
+ "\"
 ]
 ```
 
@@ -789,7 +789,7 @@ What order should local metadata readers be prioritised
 **Default**: 
 ```nix
 [
-"Nfo"
+ "Nfo"
 ]
 ```
 
@@ -892,7 +892,7 @@ Keeping text versions of subtitles will result in more efficient delivery and de
 **Default**: 
 ```nix
 [
-"eng"
+ "eng"
 ]
 ```
 
@@ -904,7 +904,7 @@ Enable and rank your preferred subtitle downloaders in order of priority.
 **Default**: 
 ```nix
 [
-"Open Subtitles"
+ "Open Subtitles"
 ]
 ```
 
@@ -933,7 +933,7 @@ imma be real i have no idea what this option is. Just leave it as the default
 **Default**: 
 ```nix
 [
-"mkv"
+ "mkv"
 ]
 ```
 
@@ -1088,7 +1088,7 @@ The path to the FFmpeg application file or folder containing FFmpeg.
 
 **Type**: string
 
-**Default**: `"/nix/store/hjhiyw52n41h58bgbx5mziaj277a6v7b-jellyfin-ffmpeg-7.1.1-6-bin"`
+**Default**: `"/nix/store/c3wmf5758398dyzp21lqmazazbmxbrdw-jellyfin-ffmpeg-7.1.1-7-bin"`
 
 ## services.declarative-jellyfin.encoding.encoderPreset
 Pick a faster value to improve performance, or a slower value to improve quality.
@@ -1155,10 +1155,10 @@ Consult https://jellyfin.org/docs/general/administration/hardware-acceleration/ 
 **Default**: 
 ```nix
 [
-"h264"
-"hevc"
-"mpeg2video"
-"vc1"
+ "h264"
+ "hevc"
+ "mpeg2video"
+ "vc1"
 ]
 ```
 
@@ -1469,7 +1469,7 @@ List of virtual interface names
 **Default**: 
 ```nix
 [
-"veth"
+ "veth"
 ]
 ```
 # services.declarative-jellyfin.users
