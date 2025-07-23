@@ -28,6 +28,9 @@ automatic backups before doing anything.
 # Documentation
 Automatically generated documentation outlining all options is available in [DOCUMENTATION.md](https://github.com/Sveske-Juice/declarative-jellyfin/blob/main/DOCUMENTATION.md)
 
+# FAQ
+Frequently asked questions and common problems are documented in [FAQ.md](https://github.com/Sveske-Juice/declarative-jellyfin/blob/main/FAQ.md)
+
 # Usage
 ## Setup
 Add the flake to your `inputs` and import the `nixosModule` in your configuration.
