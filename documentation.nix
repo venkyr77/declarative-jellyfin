@@ -15,6 +15,7 @@ let
     in
     value:
     if builtins.isString value then
+      # TODO: Prettier multiline strings
       "${d0 "`"}\"${value}\"${d0 "`"}"
     else if builtins.isBool value then
       "${d0 "`"}${trivial.boolToString value}${d0 "`"}"
@@ -32,7 +33,7 @@ let
           ${builtins.concatStringsSep "\n" (
             builtins.map (x: (repeat " " (depth+1)) + (toStringDoc' (depth + 1) x)) value
           )}
-          ]${d0 "\n```"}''
+          ${repeat " " depth}]${d0 "\n```"}''
     else if builtins.isAttrs value then
       ''
         ${d0 ''
@@ -40,7 +41,7 @@ let
           ```nix
         ''}{
         ${builtins.concatStringsSep "\n" (
-          attrsets.mapAttrsToList (k: v: "${repeat " " depth}${k} = ${toStringDoc' (depth + 1) v};") value
+          attrsets.mapAttrsToList (k: v: "${repeat " " (depth+1)}${k} = ${toStringDoc' (depth + 1) v};") value
         )}
         ${repeat " " depth}}${d0 "\n```"}''
     else

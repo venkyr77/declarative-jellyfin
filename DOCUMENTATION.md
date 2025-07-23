@@ -34,18 +34,18 @@ Specify a custom location for server cache files such as images.
 ```nix
 [
  {
- content = {
-  Id = "F007D354";
-  Name = "Stable";
+  content = {
+   Id = "F007D354";
+   Name = "Stable";
   };
- tag = "CastRecieverApplication";
+  tag = "CastRecieverApplication";
  }
  {
- content = {
-  Id = "6F511C87";
-  Name = "Unstable";
+  content = {
+   Id = "6F511C87";
+   Name = "Unstable";
   };
- tag = "CastRecieverApplication";
+  tag = "CastRecieverApplication";
  }
 ]
 ```
@@ -251,108 +251,108 @@ Country code for language. Determines stuff like dates, comma placement etc.
 ```nix
 [
  {
- content = {
-  disabledImageFetchers = [];
-  disabledMetadataFetchers = [];
-  disabledMetadataSavers = [];
-  imageFetcherOrder = [];
-  itemType = "Movie";
-  localMetadataReaderOrder = [];
-  metadataFetcherOrder = [];
+  content = {
+   disabledImageFetchers = [];
+   disabledMetadataFetchers = [];
+   disabledMetadataSavers = [];
+   imageFetcherOrder = [];
+   itemType = "Movie";
+   localMetadataReaderOrder = [];
+   metadataFetcherOrder = [];
   };
- tag = "MetadataOptions";
+  tag = "MetadataOptions";
  }
  {
- content = {
-  disabledImageFetchers = [
+  content = {
+   disabledImageFetchers = [
     "The Open Movie Database"
-];
-  disabledMetadataFetchers = [
+   ];
+   disabledMetadataFetchers = [
     "The Open Movie Database"
-];
-  disabledMetadataSavers = [];
-  imageFetcherOrder = [];
-  itemType = "MusicVideo";
-  localMetadataReaderOrder = [];
-  metadataFetcherOrder = [];
+   ];
+   disabledMetadataSavers = [];
+   imageFetcherOrder = [];
+   itemType = "MusicVideo";
+   localMetadataReaderOrder = [];
+   metadataFetcherOrder = [];
   };
- tag = "MetadataOptions";
+  tag = "MetadataOptions";
  }
  {
- content = {
-  disabledImageFetchers = [];
-  disabledMetadataFetchers = [];
-  disabledMetadataSavers = [];
-  imageFetcherOrder = [];
-  itemType = "Series";
-  localMetadataReaderOrder = [];
-  metadataFetcherOrder = [];
+  content = {
+   disabledImageFetchers = [];
+   disabledMetadataFetchers = [];
+   disabledMetadataSavers = [];
+   imageFetcherOrder = [];
+   itemType = "Series";
+   localMetadataReaderOrder = [];
+   metadataFetcherOrder = [];
   };
- tag = "MetadataOptions";
+  tag = "MetadataOptions";
  }
  {
- content = {
-  disabledImageFetchers = [];
-  disabledMetadataFetchers = [
+  content = {
+   disabledImageFetchers = [];
+   disabledMetadataFetchers = [
     "TheAudioDB"
-];
-  disabledMetadataSavers = [];
-  imageFetcherOrder = [];
-  itemType = "MusicAlbum";
-  localMetadataReaderOrder = [];
-  metadataFetcherOrder = [];
+   ];
+   disabledMetadataSavers = [];
+   imageFetcherOrder = [];
+   itemType = "MusicAlbum";
+   localMetadataReaderOrder = [];
+   metadataFetcherOrder = [];
   };
- tag = "MetadataOptions";
+  tag = "MetadataOptions";
  }
  {
- content = {
-  ImageFetcherOrder = [];
-  disabledImageFetchers = [];
-  disabledMetadataFetchers = [
+  content = {
+   ImageFetcherOrder = [];
+   disabledImageFetchers = [];
+   disabledMetadataFetchers = [
     "TheAudioDB"
-];
-  disabledMetadataSavers = [];
-  itemType = "MusicArtist";
-  localMetadataReaderOrder = [];
-  metadataFetcherOrder = [];
+   ];
+   disabledMetadataSavers = [];
+   itemType = "MusicArtist";
+   localMetadataReaderOrder = [];
+   metadataFetcherOrder = [];
   };
- tag = "MetadataOptions";
+  tag = "MetadataOptions";
  }
  {
- content = {
-  disabledImageFetchers = [];
-  disabledMetadataFetchers = [];
-  disabledMetadataSavers = [];
-  imageFetcherOrder = [];
-  itemType = "BoxSet";
-  localMetadataReaderOrder = [];
-  metadataFetcherOrder = [];
+  content = {
+   disabledImageFetchers = [];
+   disabledMetadataFetchers = [];
+   disabledMetadataSavers = [];
+   imageFetcherOrder = [];
+   itemType = "BoxSet";
+   localMetadataReaderOrder = [];
+   metadataFetcherOrder = [];
   };
- tag = "MetadataOptions";
+  tag = "MetadataOptions";
  }
  {
- content = {
-  disabledImageFetchers = [];
-  disabledMetadataFetchers = [];
-  disabledMetadataSavers = [];
-  imageFetcherOrder = [];
-  itemType = "Season";
-  localMetadataReaderOrder = [];
-  metadataFetcherOrder = [];
+  content = {
+   disabledImageFetchers = [];
+   disabledMetadataFetchers = [];
+   disabledMetadataSavers = [];
+   imageFetcherOrder = [];
+   itemType = "Season";
+   localMetadataReaderOrder = [];
+   metadataFetcherOrder = [];
   };
- tag = "MetadataOptions";
+  tag = "MetadataOptions";
  }
  {
- content = {
-  disabledImageFetchers = [];
-  disabledMetadataFetchers = [];
-  disabledMetadataSavers = [];
-  imageFetcherOrder = [];
-  itemType = "Episode";
-  localMetadataReaderOrder = [];
-  metadataFetcherOrder = [];
+  content = {
+   disabledImageFetchers = [];
+   disabledMetadataFetchers = [];
+   disabledMetadataSavers = [];
+   imageFetcherOrder = [];
+   itemType = "Episode";
+   localMetadataReaderOrder = [];
+   metadataFetcherOrder = [];
   };
- tag = "MetadataOptions";
+  tag = "MetadataOptions";
  }
 ]
 ```
@@ -413,11 +413,11 @@ Configure which plugin repositories you use.
 ```nix
 [
  {
- content = {
-  Name = "Jellyfin Stable";
-  Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
+  content = {
+   Name = "Jellyfin Stable";
+   Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
   };
- tag = "RepositoryInfo";
+  tag = "RepositoryInfo";
  }
 ]
 ```
@@ -619,8 +619,8 @@ All images should generate proportionally to the source, so a width of 320 on a 
 ```nix
 [
  {
- content = 320;
- tag = "int";
+  content = 320;
+  tag = "int";
  }
 ]
 ```
