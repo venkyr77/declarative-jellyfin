@@ -31,7 +31,7 @@ let
             ```nix
           ''}[
           ${builtins.concatStringsSep "\n" (
-            builtins.map (x: (repeat " " (depth+1)) + (toStringDoc' (depth + 1) x)) value
+            builtins.map (x: (repeat " " (depth + 1)) + (toStringDoc' (depth + 1) x)) value
           )}
           ${repeat " " depth}]${d0 "\n```"}''
     else if builtins.isAttrs value then
@@ -41,7 +41,9 @@ let
           ```nix
         ''}{
         ${builtins.concatStringsSep "\n" (
-          attrsets.mapAttrsToList (k: v: "${repeat " " (depth+1)}${k} = ${toStringDoc' (depth + 1) v};") value
+          attrsets.mapAttrsToList (
+            k: v: "${repeat " " (depth + 1)}${k} = ${toStringDoc' (depth + 1) v};"
+          ) value
         )}
         ${repeat " " depth}}${d0 "\n```"}''
     else
