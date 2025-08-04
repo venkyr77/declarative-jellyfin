@@ -5,6 +5,7 @@ on: [push]
 jobs:
   run_tests:
     runs-on: native
+    if: forge.actor != 'baritone'
 
     steps:
       - name: Checkout
@@ -21,6 +22,7 @@ jobs:
   generate_documentation:
     runs-on: native
     needs: run_tests
+    if: forge.actor != 'baritone'
 
     steps:
       - name: Checkout
