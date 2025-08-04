@@ -59,6 +59,20 @@
       hydraJobs = forAllSystems tests;
       checks = forAllSystems tests;
 
+      apps = eachSystem (pkgs: {
+        generate-documentation = {
+          type = "app";
+          program = builtins.toString (
+            pkgs.writeShellScript "copy-documentation-from-store" "cp ${
+              import ./documentation.nix {
+                inherit pkgs;
+                inherit (pkgs) lib writeTextFile;
+              }
+            } DOCUMENTATION.md"
+          );
+        };
+      });
+
       packages = forAllSystems (
         system:
         let

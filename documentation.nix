@@ -1,8 +1,11 @@
 {
-  nixpkgs ? import <nixpkgs> { },
+  pkgs,
+  lib,
+  writeTextFile,
 }:
-with nixpkgs.lib;
 let
+  attrsets = lib.attrsets;
+  trivial = lib.trivial;
   repeat' =
     t: c: i:
     if i == 0 then t else repeat' (t + c) c (i - 1);
@@ -77,14 +80,14 @@ let
         )
     );
 in
-nixpkgs.writeTextFile (
+writeTextFile (
   let
     modules = [
       {
         name = "services.declarative-jellyfin.system";
         options =
           (import ./modules/options/system.nix {
-            lib = nixpkgs.lib;
+              inherit lib;
             config = {
               networking.hostName = "config.networking.hostName";
             };
@@ -94,7 +97,7 @@ nixpkgs.writeTextFile (
         name = "services.declarative-jellyfin.libraries";
         options =
           (import ./modules/options/libraries.nix {
-            lib = nixpkgs.lib;
+              inherit lib;
             config = {
               networking.hostName = "config.networking.hostName";
             };
@@ -104,22 +107,20 @@ nixpkgs.writeTextFile (
         name = "services.declarative-jellyfin.encoding";
         options =
           (import ./modules/options/encoding.nix {
-            lib = nixpkgs.lib;
+              inherit lib pkgs;
             config = {
               networking.hostName = "config.networking.hostName";
             };
-            pkgs = nixpkgs;
           }).options.services.declarative-jellyfin.encoding;
       }
       {
         name = "services.declarative-jellyfin.network";
         options =
           (import ./modules/options/network.nix {
-            lib = nixpkgs.lib;
+              inherit lib pkgs;
             config = {
               networking.hostName = "config.networking.hostName";
             };
-            pkgs = nixpkgs;
           }).options.services.declarative-jellyfin.network;
       }
       # Uncomment when i stop being too lazy to fix plugins
@@ -138,11 +139,10 @@ nixpkgs.writeTextFile (
         name = "services.declarative-jellyfin.users";
         options =
           (import ./modules/options/users.nix {
-            lib = nixpkgs.lib;
+              inherit lib pkgs;
             config = {
               networking.hostName = "config.networking.hostName";
             };
-            pkgs = nixpkgs;
           }).options.services.declarative-jellyfin.users;
       }
     ];

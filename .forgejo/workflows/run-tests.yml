@@ -32,7 +32,7 @@ jobs:
       
       - name: Generate documentation
         run: |
-          sh make-documentation.sh
+          nix run .#generate-documentation
           git config --local user.name "baritone"
           git config --local user.email "baritone@mail.spoodythe.one"
           git add DOCUMENTATION.md
