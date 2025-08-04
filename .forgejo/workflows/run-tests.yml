@@ -31,10 +31,21 @@ jobs:
           nix fmt -- --ci
       
       - name: Generate documentation
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.BARITONE_KEY }}
         run: |
           nix run .#generate-documentation
           git config --local user.name "baritone"
           git config --local user.email "baritone@mail.spoodythe.one"
+
           git add DOCUMENTATION.md
           git commit -m "chore: Updated DOCUMENTATION.md"
+
+          echo "$SSH_PRIVATE_KEY" > /tmp/private_key
+          chmod 600 /tmp/private_key
+          git config --local core.sshCommand "ssh -i /home/me/.ssh/id_rsa_foo"
+
+          git remote remove origin
+          git remote add origin forgejo@git.spoodythe.one:spoody/declarative-jellyfin.git
+
           git push origin main
