@@ -87,7 +87,7 @@ writeTextFile (
         name = "services.declarative-jellyfin.system";
         options =
           (import ./modules/options/system.nix {
-              inherit lib;
+            inherit lib;
             config = {
               networking.hostName = "config.networking.hostName";
             };
@@ -97,7 +97,7 @@ writeTextFile (
         name = "services.declarative-jellyfin.libraries";
         options =
           (import ./modules/options/libraries.nix {
-              inherit lib;
+            inherit lib;
             config = {
               networking.hostName = "config.networking.hostName";
             };
@@ -107,7 +107,7 @@ writeTextFile (
         name = "services.declarative-jellyfin.encoding";
         options =
           (import ./modules/options/encoding.nix {
-              inherit lib pkgs;
+            inherit lib pkgs;
             config = {
               networking.hostName = "config.networking.hostName";
             };
@@ -117,7 +117,7 @@ writeTextFile (
         name = "services.declarative-jellyfin.network";
         options =
           (import ./modules/options/network.nix {
-              inherit lib pkgs;
+            inherit lib pkgs;
             config = {
               networking.hostName = "config.networking.hostName";
             };
@@ -139,7 +139,7 @@ writeTextFile (
         name = "services.declarative-jellyfin.users";
         options =
           (import ./modules/options/users.nix {
-              inherit lib pkgs;
+            inherit lib pkgs;
             config = {
               networking.hostName = "config.networking.hostName";
             };
