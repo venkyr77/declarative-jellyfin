@@ -48,16 +48,7 @@ in
           assertions =
             let
               genTest = name: expected: got: {
-                assertion =
-                  (
-                    "${pkgs.lib.getExe pkgs.xmlstarlet} val ${
-                      pkgs.writeTextFile {
-                        inherit name;
-                        text = got;
-                      }
-                    }"
-                  )
-                  && (expected == got);
+                assertion = expected == got;
                 message = "[Test: ${name}] Generated XML is incorrect!\nExpected \n\n${expected}\n but got \n\n${got}";
               };
               toXml = (import ../../lib { nixpkgs = pkgs; }).toXMLGeneric;
