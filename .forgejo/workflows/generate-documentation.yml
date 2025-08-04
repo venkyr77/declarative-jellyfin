@@ -1,0 +1,29 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'modules/**'
+
+jobs:
+  run_tests:
+    runs-on: native
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Format Check
+        run: |
+          nix fmt -- --ci
+      
+      - name: Generate documentation
+        run: |
+          ./make-documentation.sh
+          git config --local user.name "baritone"
+          git config --local user.email "baritone@mail.spoodythe.one"
+          git add DOCUMENTATION.md
+          git commit -m "chore: Updated DOCUMENTATION.md"
+          git push origin main
