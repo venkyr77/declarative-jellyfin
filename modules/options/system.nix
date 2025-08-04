@@ -37,6 +37,9 @@ in
     logFileRetentionDays = mkOption {
       type = types.int;
       default = 3;
+      description = ''
+        The amount of days that jellyfin should keep log files before deleting.
+      '';
     };
 
     isStartupWizardCompleted = mkOption {
