@@ -17,3 +17,24 @@ jobs:
       - name: Tests
         run: |
           nix run github:Mic92/nix-fast-build -- --skip-cache --no-nom --no-link -j 2
+
+  generate_documentation:
+    runs-on: native
+    needs: run_tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Format Check
+        run: |
+          nix fmt -- --ci
+      
+      - name: Generate documentation
+        run: |
+          sh make-documentation.sh
+          git config --local user.name "baritone"
+          git config --local user.email "baritone@mail.spoodythe.one"
+          git add DOCUMENTATION.md
+          git commit -m "chore: Updated DOCUMENTATION.md"
+          git push origin main
