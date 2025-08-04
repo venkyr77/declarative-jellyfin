@@ -214,6 +214,8 @@ WARNING: Setting this number too high may cause issues with network file systems
 **Default**: `30`
 
 ## services.declarative-jellyfin.system.logFileRetentionDays
+The amount of days that jellyfin should keep log files before deleting.
+
 
 **Type**: signed integer
 
@@ -1088,7 +1090,7 @@ The path to the FFmpeg application file or folder containing FFmpeg.
 
 **Type**: string
 
-**Default**: `"/nix/store/c3wmf5758398dyzp21lqmazazbmxbrdw-jellyfin-ffmpeg-7.1.1-7-bin"`
+**Default**: `"/nix/store/qam79xcqhd994vl11n88xwdykzyirjhn-jellyfin-ffmpeg-7.0.2-9-bin"`
 
 ## services.declarative-jellyfin.encoding.encoderPreset
 Pick a faster value to improve performance, or a slower value to improve quality.
@@ -1602,9 +1604,9 @@ The index of the user in the database. Be careful setting this option. 1 indexed
 **Default**: `<null>`
 
 ### services.declarative-jellyfin.users.*.loginAttemptsBeforeLockout
-The number of login attempts the user can make before they are locked out.
+The number of login attempts the user can make before they are locked out. 0 for default (3 for normal users, 5 for admins). null for unlimited
 
-**Type**: signed integer
+**Type**: null or signed integer
 
 **Default**: `3`
 
