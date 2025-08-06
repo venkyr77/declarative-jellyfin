@@ -1,24 +1,24 @@
 This documentation is auto-generated
-# services.declarative-jellyfin.system
-## services.declarative-jellyfin.system.UICulture
+# system
+## system.UICulture
 
 **Type**: string
 
 **Default**: `"en-US"`
 
-## services.declarative-jellyfin.system.activityLogRetentionDays
+## system.activityLogRetentionDays
 
 **Type**: signed integer
 
 **Default**: `30`
 
-## services.declarative-jellyfin.system.allowClientLogUpload
+## system.allowClientLogUpload
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.cachePath
+## system.cachePath
 Specify a custom location for server cache files such as images.
 
 
@@ -26,7 +26,7 @@ Specify a custom location for server cache files such as images.
 
 **Default**: `"/var/cache/jellyfin"`
 
-## services.declarative-jellyfin.system.castReceiverApplications
+## system.castReceiverApplications
 
 **Type**: list of (attribute set)
 
@@ -50,7 +50,7 @@ Specify a custom location for server cache files such as images.
 ]
 ```
 
-## services.declarative-jellyfin.system.chapterImageResolution
+## system.chapterImageResolution
 The resolution of the extracted chapter images.
 Changing this will have no effect on existing dummy chapters.
 
@@ -59,19 +59,19 @@ Changing this will have no effect on existing dummy chapters.
 
 **Default**: `"MatchSource"`
 
-## services.declarative-jellyfin.system.codecsUsed
+## system.codecsUsed
 
 **Type**: list of string
 
 **Default**: `[]`
 
-## services.declarative-jellyfin.system.contentTypes
+## system.contentTypes
 
 **Type**: list of string
 
 **Default**: `[]`
 
-## services.declarative-jellyfin.system.corsHosts
+## system.corsHosts
 
 **Type**: list of string
 
@@ -82,96 +82,96 @@ Changing this will have no effect on existing dummy chapters.
 ]
 ```
 
-## services.declarative-jellyfin.system.disableLiveTvChannelUserDataName
+## system.disableLiveTvChannelUserDataName
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.displaySpecialsWithinSeasons
+## system.displaySpecialsWithinSeasons
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.dummyChapterDuration
+## system.dummyChapterDuration
 
 **Type**: signed integer
 
 **Default**: `0`
 
-## services.declarative-jellyfin.system.enableCaseSensitiveItemIds
+## system.enableCaseSensitiveItemIds
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.enableExternalContentInSuggestions
+## system.enableExternalContentInSuggestions
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.enableFolderView
+## system.enableFolderView
 Whether to enable .
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.system.enableGroupingIntoCollections
+## system.enableGroupingIntoCollections
 Whether to enable .
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.system.enableMetrics
+## system.enableMetrics
 Whether to enable metrics.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.system.enableNormalizedItemByNameIds
+## system.enableNormalizedItemByNameIds
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.enableSlowResponseWarning
+## system.enableSlowResponseWarning
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.imageExtractionTimeoutMs
+## system.imageExtractionTimeoutMs
 Leave at 0 for no timeout
 
 **Type**: signed integer
 
 **Default**: `0`
 
-## services.declarative-jellyfin.system.imageSavingConvention
+## system.imageSavingConvention
 i got no idea what this is
 
 **Type**: value "Legacy" (singular enum)
 
 **Default**: `"Legacy"`
 
-## services.declarative-jellyfin.system.inactiveSessionThreshhold
+## system.inactiveSessionThreshhold
 
 **Type**: signed integer
 
 **Default**: `0`
 
-## services.declarative-jellyfin.system.isPortAuthorized
+## system.isPortAuthorized
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.isStartupWizardCompleted
+## system.isStartupWizardCompleted
 Controls whether or not Declarative Jellyfin will mark the startup wizard as completed.
 Set to `false` to show the startup wizard when visiting jellyfin (not recommended as this
 will happen every time jellyfin is restarted)
@@ -181,7 +181,7 @@ will happen every time jellyfin is restarted)
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.libraryMetadataRefreshConcurrency
+## system.libraryMetadataRefreshConcurrency
 Maximum number of parallel tasks during library scans.
 Setting this to 0 will choose a limit based on your systems core count.
 WARNING: Setting this number too high may cause issues with network file systems; if you encounter problems lower this number.
@@ -191,13 +191,13 @@ WARNING: Setting this number too high may cause issues with network file systems
 
 **Default**: `0`
 
-## services.declarative-jellyfin.system.libraryMonitorDelay
+## system.libraryMonitorDelay
 
 **Type**: signed integer
 
 **Default**: `60`
 
-## services.declarative-jellyfin.system.libraryScanFanoutConcurrency
+## system.libraryScanFanoutConcurrency
 Maximum number of parallel tasks during library scans.
 Setting this to 0 will choose a limit based on your systems core count.
 WARNING: Setting this number too high may cause issues with network file systems; if you encounter problems lower this number.
@@ -207,13 +207,13 @@ WARNING: Setting this number too high may cause issues with network file systems
 
 **Default**: `0`
 
-## services.declarative-jellyfin.system.libraryUpdateDuration
+## system.libraryUpdateDuration
 
 **Type**: signed integer
 
 **Default**: `30`
 
-## services.declarative-jellyfin.system.logFileRetentionDays
+## system.logFileRetentionDays
 The amount of days that jellyfin should keep log files before deleting.
 
 
@@ -221,7 +221,7 @@ The amount of days that jellyfin should keep log files before deleting.
 
 **Default**: `3`
 
-## services.declarative-jellyfin.system.maxAudiobookResume
+## system.maxAudiobookResume
 Titles are assumed fully played if stopped when the remaining duration is less than this value.
 
 
@@ -229,7 +229,7 @@ Titles are assumed fully played if stopped when the remaining duration is less t
 
 **Default**: `5`
 
-## services.declarative-jellyfin.system.maxResumePct
+## system.maxResumePct
 Titles are assumed fully played if stopped after this time.
 
 
@@ -237,7 +237,7 @@ Titles are assumed fully played if stopped after this time.
 
 **Default**: `90`
 
-## services.declarative-jellyfin.system.metadataCountryCode
+## system.metadataCountryCode
 Country code for language. Determines stuff like dates, comma placement etc.
 
 
@@ -245,7 +245,7 @@ Country code for language. Determines stuff like dates, comma placement etc.
 
 **Default**: `"US"`
 
-## services.declarative-jellyfin.system.metadataOptions
+## system.metadataOptions
 
 **Type**: list of (attribute set)
 
@@ -359,7 +359,7 @@ Country code for language. Determines stuff like dates, comma placement etc.
 ]
 ```
 
-## services.declarative-jellyfin.system.metadataPath
+## system.metadataPath
 Specify a custom location for downloaded artwork and metadata.
 
 
@@ -367,7 +367,7 @@ Specify a custom location for downloaded artwork and metadata.
 
 **Default**: `"/var/lib/jellyfin/metadata"`
 
-## services.declarative-jellyfin.system.minAudiobookResume
+## system.minAudiobookResume
 Titles are assumed unplayed if stopped before this time.
 
 
@@ -375,7 +375,7 @@ Titles are assumed unplayed if stopped before this time.
 
 **Default**: `5`
 
-## services.declarative-jellyfin.system.minResumeDurationSeconds
+## system.minResumeDurationSeconds
 The shortest video length in seconds that will save playback location and let you resume.
 
 
@@ -383,7 +383,7 @@ The shortest video length in seconds that will save playback location and let yo
 
 **Default**: `300`
 
-## services.declarative-jellyfin.system.minResumePct
+## system.minResumePct
 Titles are assumed unplayed if stopped before this time.
 
 
@@ -391,7 +391,7 @@ Titles are assumed unplayed if stopped before this time.
 
 **Default**: `5`
 
-## services.declarative-jellyfin.system.parallelImageEncodingLimit
+## system.parallelImageEncodingLimit
 Maximum number of image encodings that are allowed to run in parallel.
 Setting this to 0 will choose a limit based on your systems core count.
 
@@ -400,13 +400,13 @@ Setting this to 0 will choose a limit based on your systems core count.
 
 **Default**: `0`
 
-## services.declarative-jellyfin.system.pathSubstitutions
+## system.pathSubstitutions
 
 **Type**: list of string
 
 **Default**: `[]`
 
-## services.declarative-jellyfin.system.pluginRepositories
+## system.pluginRepositories
 Configure which plugin repositories you use.
 
 **Type**: list of (attribute set)
@@ -424,14 +424,14 @@ Configure which plugin repositories you use.
 ]
 ```
 
-## services.declarative-jellyfin.system.preferredMetadataLanguage
+## system.preferredMetadataLanguage
 Display language of jellyfin.
 
 **Type**: string
 
 **Default**: `"en"`
 
-## services.declarative-jellyfin.system.quickConnectAvailable
+## system.quickConnectAvailable
 Whether or not to enable quickconnect
 
 
@@ -439,26 +439,26 @@ Whether or not to enable quickconnect
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.remoteClientBitrateLimit
+## system.remoteClientBitrateLimit
 
 **Type**: signed integer
 
 **Default**: `0`
 
-## services.declarative-jellyfin.system.removeOldPlugins
+## system.removeOldPlugins
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.saveMetadataHidden
+## system.saveMetadataHidden
 Whether to enable .
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.system.serverName
+## system.serverName
 This name will be used to identify the server and will default to the server's hostname.
 
 
@@ -466,20 +466,20 @@ This name will be used to identify the server and will default to the server's h
 
 **Default**: `"config.networking.hostName"`
 
-## services.declarative-jellyfin.system.skipDeserializationForBasicTypes
+## system.skipDeserializationForBasicTypes
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.system.slowResponseThresholdMs
+## system.slowResponseThresholdMs
 How slow (in ms) would a response have to be before a warning is shown
 
 **Type**: signed integer
 
 **Default**: `500`
 
-## services.declarative-jellyfin.system.sortRemoveCharacters
+## system.sortRemoveCharacters
 
 **Type**: list of string
 
@@ -495,7 +495,7 @@ How slow (in ms) would a response have to be before a warning is shown
 ]
 ```
 
-## services.declarative-jellyfin.system.sortRemoveWords
+## system.sortRemoveWords
 
 **Type**: list of string
 
@@ -508,7 +508,7 @@ How slow (in ms) would a response have to be before a warning is shown
 ]
 ```
 
-## services.declarative-jellyfin.system.sortReplaceCharacters
+## system.sortReplaceCharacters
 
 **Type**: list of string
 
@@ -521,22 +521,22 @@ How slow (in ms) would a response have to be before a warning is shown
 ]
 ```
 
-## services.declarative-jellyfin.system.trickplayOptions
-### services.declarative-jellyfin.system.trickplayOptions.enableHwAcceleration
+## system.trickplayOptions
+### system.trickplayOptions.enableHwAcceleration
 Whether to enable Enable hardware acceleration.
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.system.trickplayOptions.enableHwEncoding
+### system.trickplayOptions.enableHwEncoding
 Whether to enable Currently only available on QSV, VA-API, VideoToolbox and RKMPP, this option has no effect on other hardware acceleration methods..
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.system.trickplayOptions.enableKeyFrameOnlyExtraction
+### system.trickplayOptions.enableKeyFrameOnlyExtraction
 Whether to enable Extract key frames only for significantly faster processing with less accurate timing.
 If the configured hardware decoder does not support this mode, will use the software decoder instead.
 .
@@ -545,7 +545,7 @@ If the configured hardware decoder does not support this mode, will use the soft
 
 **Default**: `false`
 
-### services.declarative-jellyfin.system.trickplayOptions.interval
+### system.trickplayOptions.interval
 Interval of time (ms) between each new trickplay image.
 
 
@@ -553,7 +553,7 @@ Interval of time (ms) between each new trickplay image.
 
 **Default**: `10000`
 
-### services.declarative-jellyfin.system.trickplayOptions.jpegQuality
+### system.trickplayOptions.jpegQuality
 The JPEG compression quality for trickplay images.
 
 
@@ -561,7 +561,7 @@ The JPEG compression quality for trickplay images.
 
 **Default**: `90`
 
-### services.declarative-jellyfin.system.trickplayOptions.processPriority
+### system.trickplayOptions.processPriority
 Setting this lower or higher will determine how the CPU prioritizes the ffmpeg trickplay generation process in relation to other processes.
 If you notice slowdown while generating trickplay images but don't want to fully stop their generation, try lowering this as well as the thread count.
 
@@ -570,7 +570,7 @@ If you notice slowdown while generating trickplay images but don't want to fully
 
 **Default**: `"BelowNormal"`
 
-### services.declarative-jellyfin.system.trickplayOptions.processThreads
+### system.trickplayOptions.processThreads
 The number of threads to pass to the '-threads' argument of ffmpeg.
 
 
@@ -578,7 +578,7 @@ The number of threads to pass to the '-threads' argument of ffmpeg.
 
 **Default**: `1`
 
-### services.declarative-jellyfin.system.trickplayOptions.qscale
+### system.trickplayOptions.qscale
 The quality scale of images output by ffmpeg, with 2 being the highest quality and 31 being the lowest.
 
 
@@ -586,7 +586,7 @@ The quality scale of images output by ffmpeg, with 2 being the highest quality a
 
 **Default**: `4`
 
-### services.declarative-jellyfin.system.trickplayOptions.scanBehavior
+### system.trickplayOptions.scanBehavior
 The default behavior is non blocking, which will add media to the library before trickplay generation is done. Blocking will ensure trickplay files are generated before media is added to the library, but will make scans significantly longer.
 
 
@@ -594,7 +594,7 @@ The default behavior is non blocking, which will add media to the library before
 
 **Default**: `"NonBlocking"`
 
-### services.declarative-jellyfin.system.trickplayOptions.tileHeight
+### system.trickplayOptions.tileHeight
 Maximum number of images per tile in the X direction.
 
 
@@ -602,7 +602,7 @@ Maximum number of images per tile in the X direction.
 
 **Default**: `10`
 
-### services.declarative-jellyfin.system.trickplayOptions.tileWidth
+### system.trickplayOptions.tileWidth
 Maximum number of images per tile in the X direction.
 
 
@@ -610,7 +610,7 @@ Maximum number of images per tile in the X direction.
 
 **Default**: `10`
 
-### services.declarative-jellyfin.system.trickplayOptions.widthResolutions
+### system.trickplayOptions.widthResolutions
 List of the widths (px) that trickplay images will be generated at.
 All images should generate proportionally to the source, so a width of 320 on a 16:9 video ends up around 320x180.
 
@@ -626,37 +626,37 @@ All images should generate proportionally to the source, so a width of 320 on a 
  }
 ]
 ```
-# services.declarative-jellyfin.libraries
-## services.declarative-jellyfin.libraries.*
-### services.declarative-jellyfin.libraries.*.allowEmbeddedSubtitles
+# libraries
+## libraries.*
+### libraries.*.allowEmbeddedSubtitles
 Disable subtitles that are packaged within media containers. Requires a full library refresh.
 
 **Type**: one of "AllowAll", "AllowText", "AllowImages", "AllowNone"
 
 **Default**: `"AllowAll"`
 
-### services.declarative-jellyfin.libraries.*.automaticRefreshIntervalDays
+### libraries.*.automaticRefreshIntervalDays
 How often to automatically refresh metadata from the internet. (in days)
 
 **Type**: signed integer
 
 **Default**: `30`
 
-### services.declarative-jellyfin.libraries.*.automaticallyAddToCollection
+### libraries.*.automaticallyAddToCollection
 Toggles whether or not similar series/shows (ie. sequals or spinoffs) will be grouped in collections.
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.contentType
+### libraries.*.contentType
 The type of content this library contains. Used for setting the default image/metadata fetchers.
 
 
 **Type**: one of "movies", "music", "tvshows", "books", "homevideos", "musicvideos", "boxsets"
 
 
-### services.declarative-jellyfin.libraries.*.customTagDelimiters
+### libraries.*.customTagDelimiters
 
 **Type**: list of string
 
@@ -670,120 +670,120 @@ The type of content this library contains. Used for setting the default image/me
 ]
 ```
 
-### services.declarative-jellyfin.libraries.*.delimiterWhitelist
+### libraries.*.delimiterWhitelist
 
 **Type**: list of string
 
 **Default**: `[]`
 
-### services.declarative-jellyfin.libraries.*.disabledLocalMetadataReaders
+### libraries.*.disabledLocalMetadataReaders
 
 **Type**: list of string
 
 **Default**: `[]`
 
-### services.declarative-jellyfin.libraries.*.disabledLyricFetchers
+### libraries.*.disabledLyricFetchers
 
 **Type**: list of string
 
 **Default**: `[]`
 
-### services.declarative-jellyfin.libraries.*.disabledMediaSegmentProviders
+### libraries.*.disabledMediaSegmentProviders
 
 **Type**: list of string
 
 **Default**: `[]`
 
-### services.declarative-jellyfin.libraries.*.disabledSubtitleFetchers
+### libraries.*.disabledSubtitleFetchers
 What order should local metadata readers be prioritised
 
 **Type**: list of string
 
 **Default**: `[]`
 
-### services.declarative-jellyfin.libraries.*.enableAutomaticSeriesGrouping
+### libraries.*.enableAutomaticSeriesGrouping
 Series that are spread across multiple folders within this library will be automatically merged into a single series.
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.enableChapterImageExtraction
+### libraries.*.enableChapterImageExtraction
 Whether or not to extract frames from the media to show as previews for chapters
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.enableEmbeddedEpisodeInfos
+### libraries.*.enableEmbeddedEpisodeInfos
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.enableEmbeddedExtraTitles
+### libraries.*.enableEmbeddedExtraTitles
 Use the episode information from the embedded metadata if available.
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.enableEmbeddedTitles
+### libraries.*.enableEmbeddedTitles
 Whether or not to use the title embedded in the file if no internet metadata is available (if any is embedded)
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.enableLUFSScan
+### libraries.*.enableLUFSScan
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.libraries.*.enablePhotos
+### libraries.*.enablePhotos
 Whether or not media in this library should display photos
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.libraries.*.enableRealtimeMonitor
+### libraries.*.enableRealtimeMonitor
 Changes to files will be processed immediately on supported file systems
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.libraries.*.enableTrickplayImageExtraction
+### libraries.*.enableTrickplayImageExtraction
 Enables trickplay image generation for previews when skipping in media
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.enabled
+### libraries.*.enabled
 Whether or not this library is enabled
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.libraries.*.extractChapterImagesDuringLibraryScan
+### libraries.*.extractChapterImagesDuringLibraryScan
 Whether or not to extract frames for previews for chapters during library scans
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.extractTrickplayImagesDuringLibraryScan
+### libraries.*.extractTrickplayImagesDuringLibraryScan
 Whether or not trickplay images should be extracted during the library scan
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.localMetadataReaderOrder
+### libraries.*.localMetadataReaderOrder
 What order should local metadata readers be prioritised
 
 **Type**: list of string
@@ -795,99 +795,99 @@ What order should local metadata readers be prioritised
 ]
 ```
 
-### services.declarative-jellyfin.libraries.*.lyricFetcherOrder
+### libraries.*.lyricFetcherOrder
 
 **Type**: list of string
 
 **Default**: `[]`
 
-### services.declarative-jellyfin.libraries.*.mediaSegmentProvideOrder
+### libraries.*.mediaSegmentProvideOrder
 
 **Type**: list of string
 
 **Default**: `[]`
 
-### services.declarative-jellyfin.libraries.*.metadataCountryCode
+### libraries.*.metadataCountryCode
 
 **Type**: string
 
 **Default**: `""`
 
-### services.declarative-jellyfin.libraries.*.metadataSavers
+### libraries.*.metadataSavers
 Pick the file formats to use when saving your metadata.
 
 **Type**: list of string
 
 **Default**: `[]`
 
-### services.declarative-jellyfin.libraries.*.pathInfos
+### libraries.*.pathInfos
 List of paths for media in this library
 
 **Type**: list of string
 
 
-### services.declarative-jellyfin.libraries.*.preferredMetadataLanguage
+### libraries.*.preferredMetadataLanguage
 What language should metadata be fetched for? Affects titles, descriptions, etc.
 
 **Type**: string
 
 **Default**: `"en"`
 
-### services.declarative-jellyfin.libraries.*.requirePerfectSubtitleMatch
+### libraries.*.requirePerfectSubtitleMatch
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.libraries.*.saveLocalMetadata
+### libraries.*.saveLocalMetadata
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.saveLyricsWithMedia
+### libraries.*.saveLyricsWithMedia
 Saving lyrics into media folders will put them next to your media for easy migration and access
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.saveSubtitlesWithMedia
+### libraries.*.saveSubtitlesWithMedia
 Storing subtitles next to video files will allow them to be more easily managed.
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.libraries.*.saveTrickplayWithMedia
+### libraries.*.saveTrickplayWithMedia
 Saving trickplay images into media folders will put them next to your media for easy migration and access
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.seasonZeroDisplayName
+### libraries.*.seasonZeroDisplayName
 What title should the 'specials' season (season 0) display?
 
 **Type**: string
 
 **Default**: `"Specials"`
 
-### services.declarative-jellyfin.libraries.*.skipSubtitlesIfAudioTrackMatches
+### libraries.*.skipSubtitlesIfAudioTrackMatches
 Uncheck this to ensure all videos have subtitles, regardless of audio language.
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.skipSubtitlesIfEmbeddedSubtitlesPresent
+### libraries.*.skipSubtitlesIfEmbeddedSubtitlesPresent
 Keeping text versions of subtitles will result in more efficient delivery and decrease the likelihood of video transcoding.
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.libraries.*.subtitleDownloadLanguages
+### libraries.*.subtitleDownloadLanguages
 
 **Type**: list of string
 
@@ -898,7 +898,7 @@ Keeping text versions of subtitles will result in more efficient delivery and de
 ]
 ```
 
-### services.declarative-jellyfin.libraries.*.subtitleFetcherOrder
+### libraries.*.subtitleFetcherOrder
 Enable and rank your preferred subtitle downloaders in order of priority.
 
 **Type**: list of string
@@ -910,24 +910,24 @@ Enable and rank your preferred subtitle downloaders in order of priority.
 ]
 ```
 
-### services.declarative-jellyfin.libraries.*.typeOptions
-#### services.declarative-jellyfin.libraries.*.typeOptions.*
-# services.declarative-jellyfin.encoding
-## services.declarative-jellyfin.encoding.allowAv1Encoding
+### libraries.*.typeOptions
+#### libraries.*.typeOptions.*
+# encoding
+## encoding.allowAv1Encoding
 Whether AV1 encoding is enabled
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.allowHevcEncoding
+## encoding.allowHevcEncoding
 Whether HEVC encoding is enabled
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.allowOnDemandMetadataBasedKeyframeExtractionForExtensions
+## encoding.allowOnDemandMetadataBasedKeyframeExtractionForExtensions
 imma be real i have no idea what this option is. Just leave it as the default
 
 **Type**: list of string
@@ -939,7 +939,7 @@ imma be real i have no idea what this option is. Just leave it as the default
 ]
 ```
 
-## services.declarative-jellyfin.encoding.deinterlaceDoubleRate
+## encoding.deinterlaceDoubleRate
 Whether to enable This setting uses the field rate when deinterlacing, often referred to as bob deinterlacing, which doubles the frame rate of the video to provide full motion like what you would see when viewing interlaced video on a TV.
 .
 
@@ -947,7 +947,7 @@ Whether to enable This setting uses the field rate when deinterlacing, often ref
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.deinterlaceMethod
+## encoding.deinterlaceMethod
 Select the deinterlacing method to use when software transcoding interlaced content.
 When hardware acceleration supporting hardware deinterlacing is enabled the hardware deinterlacer will be used instead of this setting.
 
@@ -956,70 +956,70 @@ When hardware acceleration supporting hardware deinterlacing is enabled the hard
 
 **Default**: `"yadif"`
 
-## services.declarative-jellyfin.encoding.downMixAudioBoost
+## encoding.downMixAudioBoost
 Boost audio when downmixing. A value of one will preserve the original volume.
 
 **Type**: signed integer or floating point number
 
 **Default**: `2`
 
-## services.declarative-jellyfin.encoding.downMixStereoAlgorithm
+## encoding.downMixStereoAlgorithm
 Algorithm used to downmix multi-channel audio to stereo.
 
 **Type**: one of "None", "Dave750", "NightmodeDialogue", "RFC7845", "AC-4"
 
 **Default**: `"None"`
 
-## services.declarative-jellyfin.encoding.enableAudioVbr
+## encoding.enableAudioVbr
 Whether to enable Enable VBR Audio.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableDecodingColorDepth10Hevc
+## encoding.enableDecodingColorDepth10Hevc
 Whether to enable Enable hardware decoding for HEVC 10bit.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableDecodingColorDepth10HevcRext
+## encoding.enableDecodingColorDepth10HevcRext
 Whether to enable Enable hardware decoding for HEVC RExt 8/10bit.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableDecodingColorDepth10Vp9
+## encoding.enableDecodingColorDepth10Vp9
 Whether to enable Enable hardware decoding for VP9 10bit.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableDecodingColorDepth12HevcRext
+## encoding.enableDecodingColorDepth12HevcRext
 Whether to enable Enable hardware decoding for HEVC RExt 12bit.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableFallbackFont
+## encoding.enableFallbackFont
 Whether to enable Enable fallback font.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableHardwareEncoding
+## encoding.enableHardwareEncoding
 Whether to do Hardware Acceleration
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.encoding.enableIntelLowPowerH264HwEncoder
+## encoding.enableIntelLowPowerH264HwEncoder
 Whether to enable Low-Power Encoding can keep unnecessary CPU-GPU sync. On Linux they must be disabled if the i915 HuC firmware is not configured.
 
 https://jellyfin.org/docs/general/administration/hardware-acceleration/intel/#configure-and-verify-lp-mode-on-linux
@@ -1029,7 +1029,7 @@ https://jellyfin.org/docs/general/administration/hardware-acceleration/intel/#co
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableIntelLowPowerHevcHwEncoder
+## encoding.enableIntelLowPowerHevcHwEncoder
 Whether to enable Low-Power Encoding can keep unnecessary CPU-GPU sync. On Linux they must be disabled if the i915 HuC firmware is not configured.
 
 https://jellyfin.org/docs/general/administration/hardware-acceleration/intel/#configure-and-verify-lp-mode-on-linux
@@ -1039,7 +1039,7 @@ https://jellyfin.org/docs/general/administration/hardware-acceleration/intel/#co
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableSegmentDeletion
+## encoding.enableSegmentDeletion
 Whether to enable Delete old segments after they have been downloaded by the client.
 This prevents having to store the entire transcoded file on disk.
 Turn this off if you experience playback issues.
@@ -1049,7 +1049,7 @@ Turn this off if you experience playback issues.
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableSubtitleExtraction
+## encoding.enableSubtitleExtraction
 Embedded subtitles can be extracted from videos and delivered to clients in plain text, in order to help prevent video transcoding.
 On some systems this can take a long time and cause video playback to stall during the extraction process.
 Disable this to have embedded subtitles burned in with video transcoding when they are not natively supported by the client device.
@@ -1059,7 +1059,7 @@ Disable this to have embedded subtitles burned in with video transcoding when th
 
 **Default**: `true`
 
-## services.declarative-jellyfin.encoding.enableThrottling
+## encoding.enableThrottling
 Whether to enable When a transcode or remux gets far enough ahead from the current playback position, pause the process so it will consume fewer resources.
 This is most useful when watching without seeking often. Turn this off if you experience playback issues.
 .
@@ -1068,7 +1068,7 @@ This is most useful when watching without seeking often. Turn this off if you ex
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableTonemapping
+## encoding.enableTonemapping
 Whether to enable Tone-mapping can transform the dynamic range of a video from HDR to SDR while maintaining image details and colors, which are very important information for representing the original scene.
 Currently works only with 10bit HDR10, HLG and DoVi videos. This requires the corresponding GPGPU runtime.
 .
@@ -1077,7 +1077,7 @@ Currently works only with 10bit HDR10, HLG and DoVi videos. This requires the co
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.enableVppTonemapping
+## encoding.enableVppTonemapping
 Whether to enable Full Intel driver based tone-mapping. Currently works only on certain hardware with HDR10 videos. This has a higher priority compared to another OpenCL implementation.
 .
 
@@ -1085,14 +1085,14 @@ Whether to enable Full Intel driver based tone-mapping. Currently works only on 
 
 **Default**: `false`
 
-## services.declarative-jellyfin.encoding.encoderAppPathDisplay
+## encoding.encoderAppPathDisplay
 The path to the FFmpeg application file or folder containing FFmpeg.
 
 **Type**: string
 
 **Default**: `"/nix/store/qam79xcqhd994vl11n88xwdykzyirjhn-jellyfin-ffmpeg-7.0.2-9-bin"`
 
-## services.declarative-jellyfin.encoding.encoderPreset
+## encoding.encoderPreset
 Pick a faster value to improve performance, or a slower value to improve quality.
 
 
@@ -1100,7 +1100,7 @@ Pick a faster value to improve performance, or a slower value to improve quality
 
 **Default**: `"auto"`
 
-## services.declarative-jellyfin.encoding.encodingThreadCount
+## encoding.encodingThreadCount
 Amount of threads used for encoding.
 
 Set to -1 for automatic and 0 for max.
@@ -1110,7 +1110,7 @@ Set to -1 for automatic and 0 for max.
 
 **Default**: `-1`
 
-## services.declarative-jellyfin.encoding.h254Crf
+## encoding.h254Crf
 The 'Constant Rate Factor' (CRF) is the default quality setting for the x264 and x265 software encoders.
 You can set the values between 0 and 51, where lower values would result in better quality (at the expense of higher file sizes).
 Sane values are between 18 and 28.
@@ -1122,7 +1122,7 @@ Hardware encoders do not use these settings.
 
 **Default**: `23`
 
-## services.declarative-jellyfin.encoding.h256Crf
+## encoding.h256Crf
 The 'Constant Rate Factor' (CRF) is the default quality setting for the x264 and x265 software encoders.
 You can set the values between 0 and 51, where lower values would result in better quality (at the expense of higher file sizes).
 Sane values are between 18 and 28.
@@ -1134,7 +1134,7 @@ Hardware encoders do not use these settings.
 
 **Default**: `28`
 
-## services.declarative-jellyfin.encoding.hardwareAccelerationType
+## encoding.hardwareAccelerationType
 Whether or not to use hardware acceleration for transcoding.
 
 If you misconfigure this your streams **will not work**!.
@@ -1145,7 +1145,7 @@ More info: https://jellyfin.org/docs/general/administration/hardware-acceleratio
 
 **Default**: `"none"`
 
-## services.declarative-jellyfin.encoding.hardwareDecodingCodecs
+## encoding.hardwareDecodingCodecs
 List of codec types to enable hardware decoding for.
 Should only include codecs your hardware has support for.
 
@@ -1164,7 +1164,7 @@ Consult https://jellyfin.org/docs/general/administration/hardware-acceleration/ 
 ]
 ```
 
-## services.declarative-jellyfin.encoding.maxMuxingQueueSize
+## encoding.maxMuxingQueueSize
 Maximum number of packets that can be buffered while waiting for all streams to initialize.
 Try to increase it if you still meet "Too many packets buffered for output stream" error in FFmpeg logs.
 
@@ -1175,7 +1175,7 @@ The recommended value is `2048`.
 
 **Default**: `2048`
 
-## services.declarative-jellyfin.encoding.qsvDevice
+## encoding.qsvDevice
 Specify the device for Intel QSV on a multi-GPU system.
 On Linux, this is the render node, e.g., /dev/dri/renderD128.
 Leave blank unless you know what you are doing.
@@ -1185,7 +1185,7 @@ Leave blank unless you know what you are doing.
 
 **Default**: `""`
 
-## services.declarative-jellyfin.encoding.segmentKeepSeconds
+## encoding.segmentKeepSeconds
 Time in seconds for which segments should be kept after they are downloaded by the client.
 Only works if segment deletion is enabled.
 
@@ -1194,7 +1194,7 @@ Only works if segment deletion is enabled.
 
 **Default**: `720`
 
-## services.declarative-jellyfin.encoding.throttleDelaySeconds
+## encoding.throttleDelaySeconds
 Time in seconds after which the transcoder will be throttled.
 Must be large enough for the client to maintain a healthy buffer.
 Only works if throttling is enabled.
@@ -1204,7 +1204,7 @@ Only works if throttling is enabled.
 
 **Default**: `180`
 
-## services.declarative-jellyfin.encoding.tonemapingParam
+## encoding.tonemapingParam
 Tune the tone mapping algorithm.
 The recommended and default values are 0.
 
@@ -1215,7 +1215,7 @@ Recommended to leave unchanged
 
 **Default**: `0`
 
-## services.declarative-jellyfin.encoding.tonemappingAlgorithm
+## encoding.tonemappingAlgorithm
 Tone mapping can be fine-tuned.
 If you are not familiar with these options, just keep the default.
 
@@ -1224,7 +1224,7 @@ If you are not familiar with these options, just keep the default.
 
 **Default**: `"bt2390"`
 
-## services.declarative-jellyfin.encoding.tonemappingDesat
+## encoding.tonemappingDesat
 Apply desaturation for highlights that exceed this level of brightness.
 The higher the parameter, the more color information will be preserved.
 This setting helps prevent unnaturally blown-out colors for super-highlights, by (smoothly) turning into white instead.
@@ -1237,7 +1237,7 @@ The recommended and default values are 0 and 0.5.
 
 **Default**: `0`
 
-## services.declarative-jellyfin.encoding.tonemappingMode
+## encoding.tonemappingMode
 Select the tone mapping mode.
 If you experience blown out highlights try switching to the RGB mode.
 
@@ -1246,7 +1246,7 @@ If you experience blown out highlights try switching to the RGB mode.
 
 **Default**: `"auto"`
 
-## services.declarative-jellyfin.encoding.tonemappingPeak
+## encoding.tonemappingPeak
 Override signal/nominal/reference peak with this value.
 Useful when the embedded peak information in display metadata is not reliable or when tone mapping from a lower range to a higher range.
 
@@ -1257,7 +1257,7 @@ The recommended and default values are 100 and 0.
 
 **Default**: `100`
 
-## services.declarative-jellyfin.encoding.tonemappingRange
+## encoding.tonemappingRange
 Select the output color range. Auto is the same as the input range.
 
 
@@ -1265,14 +1265,14 @@ Select the output color range. Auto is the same as the input range.
 
 **Default**: `"auto"`
 
-## services.declarative-jellyfin.encoding.transcodingTempPath
+## encoding.transcodingTempPath
 Path for temporary transcoded files when streaming
 
 **Type**: string
 
 **Default**: `"/var/cache/jellyfin/transcodes"`
 
-## services.declarative-jellyfin.encoding.vaapiDevice
+## encoding.vaapiDevice
 This is the render node that is used for hardware acceleration.
 Only used if `HardwareAccelerationType` is set to `vaapi`.
 
@@ -1281,7 +1281,7 @@ Only used if `HardwareAccelerationType` is set to `vaapi`.
 
 **Default**: `"/dev/dri/renderD128"`
 
-## services.declarative-jellyfin.encoding.vppTonemappingBrightness
+## encoding.vppTonemappingBrightness
 Apply brightness gain in VPP tone mapping.
 
 The recommended and default values are 16 and 0.
@@ -1291,7 +1291,7 @@ The recommended and default values are 16 and 0.
 
 **Default**: `16`
 
-## services.declarative-jellyfin.encoding.vppTonemappingContrast
+## encoding.vppTonemappingContrast
 Apply contrast gain in VPP tone mapping.
 
 Both recommended and default values are 1.
@@ -1300,120 +1300,120 @@ Both recommended and default values are 1.
 **Type**: signed integer or floating point number
 
 **Default**: `1`
-# services.declarative-jellyfin.network
-## services.declarative-jellyfin.network.autoDiscovery
+# network
+## network.autoDiscovery
 Enable auto discovery
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.network.baseUrl
+## network.baseUrl
 Add a custom subdirectory to the server URL. For example: http://example.com/<baseurl>
 
 **Type**: string
 
 **Default**: `""`
 
-## services.declarative-jellyfin.network.certificatePassword
+## network.certificatePassword
 If your certificate requires a password, please enter it here.
 
 **Type**: string
 
 **Default**: `""`
 
-## services.declarative-jellyfin.network.certificatePath
+## network.certificatePath
 Path to a PKCS #12 file containing a certificate and private key to enable TLS support on a custom domain.
 
 **Type**: string or absolute path
 
 **Default**: `""`
 
-## services.declarative-jellyfin.network.enableHttps
+## network.enableHttps
 Whether to enable Enable HTTPS.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.network.enableIPv4
+## network.enableIPv4
 Enable IPv4 routing
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.network.enableIPv6
+## network.enableIPv6
 Enable IPv6 routing
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.network.enablePublishedServerUriByRequest
+## network.enablePublishedServerUriByRequest
 Whether to enable Enable published server uri by request.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.network.enableRemoteAccess
+## network.enableRemoteAccess
 Enable remote access
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.network.enableUPnP
+## network.enableUPnP
 Whether to enable Enable UPnP forwarding.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.network.ignoreVirtualInterfaces
+## network.ignoreVirtualInterfaces
 Ignore virtual interfaces
 
 **Type**: boolean
 
 **Default**: `true`
 
-## services.declarative-jellyfin.network.internalHttpPort
+## network.internalHttpPort
 The TCP port number for the HTTP server.
 
 **Type**: 16 bit unsigned integer; between 0 and 65535 (both inclusive)
 
 **Default**: `8096`
 
-## services.declarative-jellyfin.network.internalHttpsPort
+## network.internalHttpsPort
 The TCP port number for the HTTPS server.
 
 **Type**: 16 bit unsigned integer; between 0 and 65535 (both inclusive)
 
 **Default**: `8920`
 
-## services.declarative-jellyfin.network.isRemoteIPFilterBlacklist
+## network.isRemoteIPFilterBlacklist
 Whether to enable Is the remote ip filter list a blacklist or a whitelist.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.network.knownProxies
+## network.knownProxies
 A list of known proxies
 
 **Type**: list of string
 
 **Default**: `[]`
 
-## services.declarative-jellyfin.network.localNetworkAddresses
+## network.localNetworkAddresses
 Whether to enable UNIMPLEMENTED.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.network.localNetworkSubnets
+## network.localNetworkSubnets
 List of IP addresses or IP/netmask entries for networks that will be considered on local network when enforcing bandwidth restrictions.
 If set, all other IP addresses will be considered to be on the external network and will be subject to the external bandwidth restrictions.
 If left empty, only the server's subnet is considered to be on the local network.
@@ -1423,21 +1423,21 @@ If left empty, only the server's subnet is considered to be on the local network
 
 **Default**: `[]`
 
-## services.declarative-jellyfin.network.publicHttpPort
+## network.publicHttpPort
 The public port number that should be mapped to the local HTTP port.
 
 **Type**: 16 bit unsigned integer; between 0 and 65535 (both inclusive)
 
 **Default**: `8096`
 
-## services.declarative-jellyfin.network.publicHttpsPort
+## network.publicHttpsPort
 The public port number that should be mapped to the local HTTPS port.
 
 **Type**: 16 bit unsigned integer; between 0 and 65535 (both inclusive)
 
 **Default**: `8920`
 
-## services.declarative-jellyfin.network.publishedServerUriBySubnet
+## network.publishedServerUriBySubnet
 Override the URI used by Jellyfin, based on the interface, or client IP address.
 
 For example: `["internal=http://jellyfin.example.com" "external=https://jellyfin.example.com"]` or `["all=https://jellyfin.example.com"]`
@@ -1447,7 +1447,7 @@ For example: `["internal=http://jellyfin.example.com" "external=https://jellyfin
 
 **Default**: `[]`
 
-## services.declarative-jellyfin.network.remoteIpFilter
+## network.remoteIpFilter
 List of IP addresses or IP/netmask entries for networks that will be allowed to connect remotely.
 If left empty, all remote addresses will be allowed.
 
@@ -1456,14 +1456,14 @@ If left empty, all remote addresses will be allowed.
 
 **Default**: `[]`
 
-## services.declarative-jellyfin.network.requireHttps
+## network.requireHttps
 Whether to enable Require HTTPS.
 
 **Type**: boolean
 
 **Default**: `false`
 
-## services.declarative-jellyfin.network.virtualInterfaceNames
+## network.virtualInterfaceNames
 List of virtual interface names
 
 **Type**: list of string
@@ -1474,67 +1474,67 @@ List of virtual interface names
  "veth"
 ]
 ```
-# services.declarative-jellyfin.users
-## services.declarative-jellyfin.users.*
-### services.declarative-jellyfin.users.*.audioLanguagePreference
+# users
+## users.*
+### users.*.audioLanguagePreference
 The audio language preference. Defaults to 'Any Language'
 
 **Type**: null or string
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.authenticationProviderId
+### users.*.authenticationProviderId
 
 **Type**: string
 
 **Default**: `"Jellyfin.Server.Implementations.Users.DefaultAuthenticationProvider"`
 
-### services.declarative-jellyfin.users.*.castReceiverId
+### users.*.castReceiverId
 
 **Type**: string
 
 **Default**: `"F007D354"`
 
-### services.declarative-jellyfin.users.*.displayCollectionsView
+### users.*.displayCollectionsView
 Whether to show the Collections View
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.users.*.displayMissingEpisodes
+### users.*.displayMissingEpisodes
 Whether to show missing episodes
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.users.*.enableAutoLogin
+### users.*.enableAutoLogin
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.users.*.enableLocalPassword
+### users.*.enableLocalPassword
 
 **Type**: boolean
 
 **Default**: `false`
 
-### services.declarative-jellyfin.users.*.enableNextEpisodeAutoPlay
+### users.*.enableNextEpisodeAutoPlay
 Automatically play the next episode
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.users.*.enableUserPreferenceAccess
+### users.*.enableUserPreferenceAccess
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.users.*.hashedPassword
+### users.*.hashedPassword
 A pbkdf2-sha512 hash of the users password. Can be generated with the genhash flake app.
 See docs for `HashedPasswordFile` for details on how to generate a hash
 
@@ -1543,7 +1543,7 @@ See docs for `HashedPasswordFile` for details on how to generate a hash
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.hashedPasswordFile
+### users.*.hashedPasswordFile
 A path to a pbkdf2-sha512 hash
 in this format [PHC string](https://github.com/P-H-C/phc-string-format/blob/master/phc-sf-spec.md).
 You can use the packaged 'genhash' tool in this flake.nix to generate a hash
@@ -1564,72 +1564,72 @@ nix run gitlab:SpoodyTheOne/declarative-jellyfin#genhash -h
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.hidePlayedInLatest
+### users.*.hidePlayedInLatest
 Whether to hide already played titles in the 'Latest' section
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.users.*.id
+### users.*.id
 The ID of the user
 
 **Type**: null or string
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.internalId
+### users.*.internalId
 The index of the user in the database. Be careful setting this option. 1 indexed.
 
 **Type**: null or signed integer
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.invalidLoginAttemptCount
+### users.*.invalidLoginAttemptCount
 
 **Type**: signed integer
 
 **Default**: `0`
 
-### services.declarative-jellyfin.users.*.lastActivityDate
+### users.*.lastActivityDate
 
 **Type**: null or string
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.lastLoginDate
+### users.*.lastLoginDate
 
 **Type**: null or string
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.loginAttemptsBeforeLockout
+### users.*.loginAttemptsBeforeLockout
 The number of login attempts the user can make before they are locked out. 0 for default (3 for normal users, 5 for admins). null for unlimited
 
 **Type**: null or signed integer
 
 **Default**: `3`
 
-### services.declarative-jellyfin.users.*.maxActiveSessions
+### users.*.maxActiveSessions
 The maximum number of active sessions the user can have at once. 0 for unlimited
 
 **Type**: signed integer
 
 **Default**: `0`
 
-### services.declarative-jellyfin.users.*.maxParentalAgeRating
+### users.*.maxParentalAgeRating
 
 **Type**: null or signed integer
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.mustUpdatePassword
+### users.*.mustUpdatePassword
 
 **Type**: signed integer
 
 **Default**: `0`
 
-### services.declarative-jellyfin.users.*.mutable
+### users.*.mutable
 Functions like mutableUsers in NixOS users.users."user"
 If true, the first time the user is created, all configured options
 are overwritten. Any modifications from the GUI will take priority,
@@ -1642,195 +1642,195 @@ which means any change through the Jellyfin GUI will have no effect after a rebu
 
 **Default**: `true`
 
-### services.declarative-jellyfin.users.*.password
+### users.*.password
 
 **Type**: null or string
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.passwordResetProviderId
+### users.*.passwordResetProviderId
 
 **Type**: string
 
 **Default**: `"Jellyfin.Server.Implementations.Users.DefaultPasswordResetProvider"`
 
-### services.declarative-jellyfin.users.*.permissions
-#### services.declarative-jellyfin.users.*.permissions.enableAllChannels
+### users.*.permissions
+#### users.*.permissions.enableAllChannels
 Whether the user has access to all channels
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableAllDevices
+#### users.*.permissions.enableAllDevices
 Whether the user has access to all devices
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableAllFolders
+#### users.*.permissions.enableAllFolders
 Whether the user has access to all folders
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableAudioPlaybackTranscoding
+#### users.*.permissions.enableAudioPlaybackTranscoding
 Whether the server should transcode audio for the user if requested
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableCollectionManagement
+#### users.*.permissions.enableCollectionManagement
 Whether the user can create, modify and delete collections
 
 **Type**: boolean
 
 **Default**: `false`
 
-#### services.declarative-jellyfin.users.*.permissions.enableContentDeletion
+#### users.*.permissions.enableContentDeletion
 Whether the user can delete content
 
 **Type**: boolean
 
 **Default**: `false`
 
-#### services.declarative-jellyfin.users.*.permissions.enableContentDownloading
+#### users.*.permissions.enableContentDownloading
 Whether the user can download content
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableLiveTvAccess
+#### users.*.permissions.enableLiveTvAccess
 Whether the user can access live tv
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableLiveTvManagement
+#### users.*.permissions.enableLiveTvManagement
 Whether the user can manage live tv
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableLyricManagement
+#### users.*.permissions.enableLyricManagement
 Whether the user can edit lyrics
 
 **Type**: boolean
 
 **Default**: `false`
 
-#### services.declarative-jellyfin.users.*.permissions.enableMediaConversion
+#### users.*.permissions.enableMediaConversion
 Whether the user can do media conversion
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableMediaPlayback
+#### users.*.permissions.enableMediaPlayback
 Whether the user can play media
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enablePlaybackRemuxing
+#### users.*.permissions.enablePlaybackRemuxing
 Whether the user is permitted to do playback remuxing
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enablePublicSharing
+#### users.*.permissions.enablePublicSharing
 Whether to enable public sharing for the user
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableRemoteAccess
+#### users.*.permissions.enableRemoteAccess
 Whether the user can access the server remotely
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableRemoteControlOfOtherUsers
+#### users.*.permissions.enableRemoteControlOfOtherUsers
 Whether the user can remotely control other users
 
 **Type**: boolean
 
 **Default**: `false`
 
-#### services.declarative-jellyfin.users.*.permissions.enableSharedDeviceControl
+#### users.*.permissions.enableSharedDeviceControl
 Whether the user can control shared devices
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableSubtitleManagement
+#### users.*.permissions.enableSubtitleManagement
 Whether the user can edit subtitles
 
 **Type**: boolean
 
 **Default**: `false`
 
-#### services.declarative-jellyfin.users.*.permissions.enableSyncTranscoding
+#### users.*.permissions.enableSyncTranscoding
 Whether to enable sync transcoding for the user
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.enableVideoPlaybackTranscoding
+#### users.*.permissions.enableVideoPlaybackTranscoding
 Whether the server should transcode video for the user if requested
 
 **Type**: boolean
 
 **Default**: `true`
 
-#### services.declarative-jellyfin.users.*.permissions.forceRemoteSourceTranscoding
+#### users.*.permissions.forceRemoteSourceTranscoding
 Whether the server should force transcoding on remote connections for the user
 
 **Type**: boolean
 
 **Default**: `false`
 
-#### services.declarative-jellyfin.users.*.permissions.isAdministrator
+#### users.*.permissions.isAdministrator
 Whether the user is an administrator
 
 **Type**: boolean
 
 **Default**: `false`
 
-#### services.declarative-jellyfin.users.*.permissions.isDisabled
+#### users.*.permissions.isDisabled
 Whether the user is disabled
 
 **Type**: boolean
 
 **Default**: `false`
 
-#### services.declarative-jellyfin.users.*.permissions.isHidden
+#### users.*.permissions.isHidden
 Whether the user is hidden
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.users.*.playDefaultAudioTrack
+### users.*.playDefaultAudioTrack
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.users.*.preferences
-#### services.declarative-jellyfin.users.*.preferences.enabledLibraries
+### users.*.preferences
+#### users.*.preferences.enabledLibraries
 A list of libraries this user as access to.
 If it is empty, it means that the user has access to all libraries.
 The libraries are specified by the library name specified in
@@ -1841,39 +1841,39 @@ The libraries are specified by the library name specified in
 
 **Default**: `[]`
 
-### services.declarative-jellyfin.users.*.rememberAudioSelections
+### users.*.rememberAudioSelections
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.users.*.rememberSubtitleSelections
+### users.*.rememberSubtitleSelections
 
 **Type**: boolean
 
 **Default**: `true`
 
-### services.declarative-jellyfin.users.*.remoteClientBitrateLimit
+### users.*.remoteClientBitrateLimit
 0 for unlimited
 
 **Type**: signed integer
 
 **Default**: `0`
 
-### services.declarative-jellyfin.users.*.rowVersion
+### users.*.rowVersion
 
 **Type**: signed integer
 
 **Default**: `0`
 
-### services.declarative-jellyfin.users.*.subtitleLanguagePreference
+### users.*.subtitleLanguagePreference
 The subtitle language preference. Defaults to 'Any Language'
 
 **Type**: null or string
 
 **Default**: `<null>`
 
-### services.declarative-jellyfin.users.*.subtitleMode
+### users.*.subtitleMode
 Default: The default subtitle playback mode.
 Always: Always show subtitles.
 OnlyForced: Only show forced subtitles.
@@ -1885,7 +1885,7 @@ Smart: Only show subtitles when the current audio stream is in a different langu
 
 **Default**: `"default"`
 
-### services.declarative-jellyfin.users.*.syncPlayAccess
+### users.*.syncPlayAccess
 Whether or not this user has access to SyncPlay
 
 **Type**: boolean
