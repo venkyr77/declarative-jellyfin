@@ -59,7 +59,7 @@ let
     + (
       if builtins.hasAttr "_type" option then
         if option.type.name == "attrsOf" then
-          makeDocumentationRecursive (depth + 1) "${fqn}.*" (
+          makeDocumentationRecursive (depth + 1) "${fqn}.\*" (
             builtins.removeAttrs (option.type.nestedTypes.elemType.getSubOptions { }) [ "_module" ]
           )
         else if option.type.name == "submodule" then
