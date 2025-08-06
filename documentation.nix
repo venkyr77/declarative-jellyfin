@@ -84,7 +84,7 @@ writeTextFile (
   let
     modules = [
       {
-        name = "services.declarative-jellyfin.system";
+        name = "system";
         options =
           (import ./modules/options/system.nix {
             inherit lib;
@@ -94,7 +94,7 @@ writeTextFile (
           }).options.services.declarative-jellyfin.system;
       }
       {
-        name = "services.declarative-jellyfin.libraries";
+        name = "libraries";
         options =
           (import ./modules/options/libraries.nix {
             inherit lib;
@@ -104,7 +104,7 @@ writeTextFile (
           }).options.services.declarative-jellyfin.libraries;
       }
       {
-        name = "services.declarative-jellyfin.encoding";
+        name = "encoding";
         options =
           (import ./modules/options/encoding.nix {
             inherit lib pkgs;
@@ -114,7 +114,7 @@ writeTextFile (
           }).options.services.declarative-jellyfin.encoding;
       }
       {
-        name = "services.declarative-jellyfin.network";
+        name = "network";
         options =
           (import ./modules/options/network.nix {
             inherit lib pkgs;
@@ -136,7 +136,7 @@ writeTextFile (
       #     }).options.services.declarative-jellyfin.plugins;
       # }
       {
-        name = "services.declarative-jellyfin.users";
+        name = "users";
         options =
           (import ./modules/options/users.nix {
             inherit lib pkgs;
