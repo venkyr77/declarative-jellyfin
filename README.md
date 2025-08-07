@@ -26,7 +26,7 @@ It is highly recommended to manually take a backup of your jellyfin directory
 automatic backups before doing anything.
 
 # Documentation
-Automatically generated documentation outlining all options is available in [DOCUMENTATION.md](https://github.com/Sveske-Juice/declarative-jellyfin/blob/main/DOCUMENTATION.md)
+Automatically generated documentation outlining all options is available in [documentation.md](https://github.com/Sveske-Juice/declarative-jellyfin/blob/main/documentation)
 
 # FAQ
 Frequently asked questions and common problems are documented in [FAQ.md](https://github.com/Sveske-Juice/declarative-jellyfin/blob/main/FAQ.md)
