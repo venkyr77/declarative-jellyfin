@@ -62,10 +62,12 @@
       apps = eachSystem (pkgs: {
         generate-documentation = {
           type = "app";
-          program = builtins.toString (import ./documentation.nix {
-            inherit pkgs;
-            inherit (pkgs) lib writeTextFile writeShellScript;
-          });
+          program = builtins.toString (
+            import ./documentation.nix {
+              inherit pkgs;
+              inherit (pkgs) lib writeTextFile writeShellScript;
+            }
+          );
         };
       });
 

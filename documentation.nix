@@ -172,11 +172,10 @@ let
     '';
   };
 in
-writeShellScript "generate-documentation" (builtins.foldl'
-  (a: b: a + "cp ${mkModuleFile b} ./documentation/${b.name}.md\n")
-  ''
+writeShellScript "generate-documentation" (
+  builtins.foldl' (a: b: a + "cp ${mkModuleFile b} ./documentation/${b.name}.md\n") ''
     rm -rf ./documentation/*
     mkdir -p ./documentation/
     cp ${documentationIndex} ./documentation/documentation.md
-  ''
-  modules)
+  '' modules
+)
