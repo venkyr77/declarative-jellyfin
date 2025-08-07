@@ -40,7 +40,7 @@ jobs:
           git config --local user.name "baritone"
           git config --local user.email "baritone@mail.spoodythe.one"
 
-          git add DOCUMENTATION.md
+          git add documentation/*
           git commit -m "chore: Updated DOCUMENTATION.md" || exit 0
 
           echo "$SSH_PRIVATE_KEY" > /tmp/private_key

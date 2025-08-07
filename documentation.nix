@@ -2,6 +2,8 @@
   pkgs,
   lib,
   writeTextFile,
+  writeShellScript,
+  ...
 }:
 let
   attrsets = lib.attrsets;
@@ -79,78 +81,102 @@ let
           attrsets.mapAttrsToList (k: v: makeDocumentationRecursive (depth + 1) "${fqn}.${k}" v) option
         )
     );
-in
-writeTextFile (
-  let
-    modules = [
-      {
-        name = "system";
-        options =
-          (import ./modules/options/system.nix {
-            inherit lib;
-            config = {
-              networking.hostName = "config.networking.hostName";
-            };
-          }).options.services.declarative-jellyfin.system;
-      }
-      {
-        name = "libraries";
-        options =
-          (import ./modules/options/libraries.nix {
-            inherit lib;
-            config = {
-              networking.hostName = "config.networking.hostName";
-            };
-          }).options.services.declarative-jellyfin.libraries;
-      }
-      {
-        name = "encoding";
-        options =
-          (import ./modules/options/encoding.nix {
-            inherit lib pkgs;
-            config = {
-              networking.hostName = "config.networking.hostName";
-            };
-          }).options.services.declarative-jellyfin.encoding;
-      }
-      {
-        name = "network";
-        options =
-          (import ./modules/options/network.nix {
-            inherit lib pkgs;
-            config = {
-              networking.hostName = "config.networking.hostName";
-            };
-          }).options.services.declarative-jellyfin.network;
-      }
-      # Uncomment when i stop being too lazy to fix plugins
-      # {
-      #   name = "services.declarative-jellyfin.plugins";
-      #   options =
-      #     (import ./modules/options/plugins.nix {
-      #       lib = nixpkgs.lib;
-      #       config = {
-      #         networking.hostName = "config.networking.hostName";
-      #       };
-      #       pkgs = nixpkgs;
-      #     }).options.services.declarative-jellyfin.plugins;
-      # }
-      {
-        name = "users";
-        options =
-          (import ./modules/options/users.nix {
-            inherit lib pkgs;
-            config = {
-              networking.hostName = "config.networking.hostName";
-            };
-          }).options.services.declarative-jellyfin.users;
-      }
-    ];
-  in
-  {
+
+  modules = [
+    {
+      name = "system";
+      options =
+        (import ./modules/options/system.nix {
+          inherit lib;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.system;
+    }
+    {
+      name = "libraries";
+      options =
+        (import ./modules/options/libraries.nix {
+          inherit lib;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.libraries;
+    }
+    {
+      name = "encoding";
+      options =
+        (import ./modules/options/encoding.nix {
+          inherit lib pkgs;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.encoding;
+    }
+    {
+      name = "network";
+      options =
+        (import ./modules/options/network.nix {
+          inherit lib pkgs;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.network;
+    }
+    # Uncomment when i stop being too lazy to fix plugins
+    # {
+    #   name = "services.declarative-jellyfin.plugins";
+    #   options =
+    #     (import ./modules/options/plugins.nix {
+    #       lib = nixpkgs.lib;
+    #       config = {
+    #         networking.hostName = "config.networking.hostName";
+    #       };
+    #       pkgs = nixpkgs;
+    #     }).options.services.declarative-jellyfin.plugins;
+    # }
+    {
+      name = "users";
+      options =
+        (import ./modules/options/users.nix {
+          inherit lib pkgs;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.users;
+    }
+  ];
+
+  mkModuleFile =
+    module:
+    writeTextFile {
+      name = "documentation-${module.name}.md";
+      text = makeDocumentationRecursive 0 module.name module.options;
+    };
+
+  documentationIndex = writeTextFile {
     name = "documentation.md";
-    text = builtins.foldl' (
-      a: b: a + (makeDocumentationRecursive 0 b.name b.options)
-    ) "This documentation is auto-generated\n" modules;
-  }
-)
+    text = ''
+      # Automatically generated documentation
+      Automatically generated documentation for declarative-jellyfin options
+
+      ${builtins.foldl' (
+        a: b:
+        a
+        + ''
+          # ${b.name}
+          Options for [services.declarative-jellyfin.${b.name}](https://github.com/Sveske-Juice/declarative-jellyfin/blob/main/documentation/${b.name}.md)
+
+        ''
+      ) "" modules}
+    '';
+  };
+in
+writeShellScript "generate-documentation" (builtins.foldl'
+  (a: b: a + "cp ${mkModuleFile b} ./documentation/${b.name}.md\n")
+  ''
+    rm -rf ./documentation/*
+    mkdir -p ./documentation/
+    cp ${documentationIndex} ./documentation/documentation.md
+  ''
+  modules)
