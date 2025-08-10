@@ -65,7 +65,7 @@ passed with `--configdir` see [configuration-directory](https://jellyfin.org/doc
 
 **Type**: absolute path
 
-**Default**: `${cfg.dataDir}/configb
+**Default**: `${cfg.dataDir}/config`
 
 ## services.declarative-jellyfin.dataDir
 Base data directory,
@@ -97,7 +97,7 @@ passed with `--logdir` see [#log-directory](https://jellyfin.org/docs/general/ad
 
 **Type**: absolute path
 
-**Default**: `${cfg.dataDir}/logb
+**Default**: `${cfg.dataDir}/log`
 
 ## services.declarative-jellyfin.openFirewall
 Open the configured ports in the firewall for the media server.
@@ -112,7 +112,7 @@ Which package to use. Overrides `services.jellyfin.package`
 
 **Type**: package
 
-**Default**: `pkgs.jellyfinb
+**Default**: `pkgs.jellyfin`
 
 ## services.declarative-jellyfin.serverId
 The ID for this server. Generate one with the following command:
