@@ -10,7 +10,8 @@ WARNING: This is stored in plain text
 
 
 **Type**: null or string
-**Default: `<null>`
+
+**Default**: `<null>`
 
 #### services.declarative-jellyfin.apikeys.*.keyPath
 Path to a file containing API key.
@@ -19,7 +20,8 @@ The key is a random GUID. To generate one, run:
 
 
 **Type**: null or absolute path
-**Default: `<null>`
+
+**Default**: `<null>`
 
 ## services.declarative-jellyfin.backupCount
 The amount of backups that gets rotated, ie. how many backups to
@@ -27,14 +29,16 @@ store before starting to delete old ones
 
 
 **Type**: signed integer
-**Default: `5`
+
+**Default**: `5`
 
 ## services.declarative-jellyfin.backupDir
 The directory to store backups
 
 
 **Type**: string
-**Default: `"/var/lib/jellyfin/backups"`
+
+**Default**: `"/var/lib/jellyfin/backups"`
 
 ## services.declarative-jellyfin.backups
 Whether or not to make a backup before we update jellyfin configs and DB.
@@ -42,7 +46,8 @@ Disable at your own risk!
 
 
 **Type**: boolean
-**Default: `true`
+
+**Default**: `true`
 
 ## services.declarative-jellyfin.cacheDir
 Directory containing the jellyfin server cache,
@@ -50,7 +55,8 @@ passed with `--cachedir` see [#cache-directory](https://jellyfin.org/docs/genera
 
 
 **Type**: absolute path
-**Default: `"/var/cache/jellyfin"`
+
+**Default**: `"/var/cache/jellyfin"`
 
 ## services.declarative-jellyfin.configDir
 Directory containing the server configuration files,
@@ -58,7 +64,8 @@ passed with `--configdir` see [configuration-directory](https://jellyfin.org/doc
 
 
 **Type**: absolute path
-**Default**: `${cfg.dataDir}/config`
+
+**Default**: `${cfg.dataDir}/configb
 
 ## services.declarative-jellyfin.dataDir
 Base data directory,
@@ -66,19 +73,22 @@ passed with `--datadir` see [#data-directory](https://jellyfin.org/docs/general/
 
 
 **Type**: absolute path
-**Default: `"/var/lib/jellyfin"`
+
+**Default**: `"/var/lib/jellyfin"`
 
 ## services.declarative-jellyfin.enable
 Whether to enable Jellyfin Service.
 
 **Type**: boolean
-**Default: `false`
+
+**Default**: `false`
 
 ## services.declarative-jellyfin.group
 Group under which jellyfin runs
 
 **Type**: string
-**Default: `"jellyfin"`
+
+**Default**: `"jellyfin"`
 
 ## services.declarative-jellyfin.logDir
 Directory where the Jellyfin logs will be stored,
@@ -86,20 +96,23 @@ passed with `--logdir` see [#log-directory](https://jellyfin.org/docs/general/ad
 
 
 **Type**: absolute path
-**Default**: `${cfg.dataDir}/log`
+
+**Default**: `${cfg.dataDir}/logb
 
 ## services.declarative-jellyfin.openFirewall
 Open the configured ports in the firewall for the media server.
 
 
 **Type**: boolean
-**Default: `false`
+
+**Default**: `false`
 
 ## services.declarative-jellyfin.package
 Which package to use. Overrides `services.jellyfin.package`
 
 **Type**: package
-**Default**: `pkgs.jellyfin`
+
+**Default**: `pkgs.jellyfinb
 
 ## services.declarative-jellyfin.serverId
 The ID for this server. Generate one with the following command:
@@ -107,13 +120,15 @@ The ID for this server. Generate one with the following command:
 
 
 **Type**: null or string
-**Default: `<null>`
+
+**Default**: `<null>`
 
 ## services.declarative-jellyfin.user
 User account under which jellyfin runs
 
 **Type**: string
-**Default: `"jellyfin"`
+
+**Default**: `"jellyfin"`
 
 
 # system
