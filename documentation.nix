@@ -10,7 +10,7 @@ let
   trivial = lib.trivial;
   repeat' =
     t: c: i:
-    if i == 0 then t else repeat' (t + c) c (i - 1);
+    if i <= 0 then t else repeat' (t + c) c (i - 1);
   repeat = repeat' "";
 
   toStringDoc' =
@@ -55,6 +55,10 @@ let
       "`<${builtins.typeOf value}>`";
   toStringDoc = toStringDoc' 0;
 
+  isOr =
+    set: attr: y: n:
+    (if builtins.hasAttr attr set then y set.${attr} else n);
+
   makeDocumentationRecursive =
     depth: fqn: option:
     "${repeat "#" (depth + 1)} ${fqn}\n"
@@ -72,9 +76,16 @@ let
           )
         else
           ''
-            ${if builtins.hasAttr "description" option then option.description + "\n" else ""}
+            ${isOr option "description" (d: d + "\n") ""}
             **Type**: ${option.type.description}
-            ${if builtins.hasAttr "default" option then "\n**Default**: ${toStringDoc option.default}" else ""}
+            ${
+              let
+                default = isOr option "defaultText" (d: "**Default**: `${d}`") (
+                  isOr option "default" (d: "**Default: ${toStringDoc d}") ""
+                );
+              in
+              default
+            }
           ''
       else
         builtins.concatStringsSep "\n" (
@@ -123,18 +134,6 @@ let
           };
         }).options.services.declarative-jellyfin.network;
     }
-    # Uncomment when i stop being too lazy to fix plugins
-    # {
-    #   name = "services.declarative-jellyfin.plugins";
-    #   options =
-    #     (import ./modules/options/plugins.nix {
-    #       lib = nixpkgs.lib;
-    #       config = {
-    #         networking.hostName = "config.networking.hostName";
-    #       };
-    #       pkgs = nixpkgs;
-    #     }).options.services.declarative-jellyfin.plugins;
-    # }
     {
       name = "users";
       options =
@@ -159,6 +158,15 @@ let
     text = ''
       # Automatically generated documentation
       Automatically generated documentation for declarative-jellyfin options
+
+      ${makeDocumentationRecursive 0 "services.declarative-jellyfin" (
+        (import ./modules/options/default.nix {
+          inherit lib pkgs;
+          config = {
+            services.declarative-jellyfin.dataDir = "$${cfg.dataDir}";
+          };
+        }).options.services.declarative-jellyfin
+      )}
 
       ${builtins.foldl' (
         a: b:

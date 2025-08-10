@@ -123,6 +123,7 @@ in
     package = mkOption {
       type = package;
       default = pkgs.jellyfin;
+      defaultText = "pkgs.jellyfin";
       description = "Which package to use. Overrides `services.jellyfin.package`";
     };
 
