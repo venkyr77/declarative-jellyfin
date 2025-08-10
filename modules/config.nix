@@ -581,9 +581,6 @@ let
             ) prepassedLibraries
           )}
 
-          # Install plugins
-          ${pluginLinkCommands}
-
           # API Keys
           ${concatStringsSep "\n" (
             mapAttrsToList (
@@ -609,9 +606,6 @@ in
   config = mkIf cfg.enable {
     services.jellyfin = {
       enable = true;
-      package = cfg.package.overrideAttrs (old: {
-        buildInputs = old.buildInputs ++ (builtins.map (x: x.package) plugins);
-      });
       inherit (cfg)
         user
         group
