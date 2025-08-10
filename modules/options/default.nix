@@ -45,7 +45,7 @@ in
     ./branding.nix
     ./users.nix
     ./libraries.nix
-    ./plugins.nix
+    # ./plugins.nix
   ];
   options.services.declarative-jellyfin = {
     enable = mkEnableOption "Jellyfin Service";
