@@ -80,8 +80,8 @@ let
             **Type**: ${option.type.description}
             ${
               let
-                default = isOr option "defaultText" (d: "**Default**: `${d}`") (
-                  isOr option "default" (d: "**Default: ${toStringDoc d}") ""
+                default = isOr option "defaultText" (d: "\n**Default**: `${d}b") (
+                  isOr option "default" (d: "\n**Default**: ${toStringDoc d}") ""
                 );
               in
               default
