@@ -184,10 +184,10 @@ let
           default = { };
           type = with types; submodule permissionOpts;
           example = {
-            IsAdministrator = true;
-            EnableContentDeletion = false;
-            EnableSubtitleManagement = true;
-            IsDisabled = false;
+            isAdministrator = true;
+            enableContentDeletion = false;
+            enableSubtitleManagement = true;
+            isDisabled = false;
           };
         };
         mutable = mkOption {
