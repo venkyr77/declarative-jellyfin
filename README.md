@@ -281,7 +281,6 @@ Declarative Jellyfin is designed to be a drop-in replacement for the normal jell
 + services.declarative-jellyfin = {
 ```
 
-
 ## API Keys
 > [!WARNING]
 Always use `keyPath` together with a secret manager, instead of storing api keys in plaintext with `key`.
@@ -297,3 +296,9 @@ services.declarative-jellyfin.apikeys = {
   };
 };
 ```
+
+# Known Issues
+
+## Intro Skipper stops working after a while
+
+Don't know why this happens. A workaround is to restart jellyfin (through the dashboard, restarting the service doesn't count) which will make it work again for a while.
