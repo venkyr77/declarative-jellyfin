@@ -182,7 +182,12 @@ in
     }
     {
       assertion = all (
-        userOpts: (lib.count isNull [userOpts.password userOpts.hashedPassword userOpts.hashedPasswordFile]) == 2
+        userOpts:
+        (lib.count isNull [
+          userOpts.password
+          userOpts.hashedPassword
+          userOpts.hashedPasswordFile
+        ]) == 2
       ) (attrValues cfg.users);
       message = ''
         For a user, exactly one of `password`, `hashedPassword` and `hashedPasswordFile` should be defined.
