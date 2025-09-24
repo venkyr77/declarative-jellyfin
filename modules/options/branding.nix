@@ -9,7 +9,7 @@ with lib;
         Sets the text shown during login underneath the form.
       '';
     };
-    customCSS = mkOption {
+    customCss = mkOption {
       type = with types; lines;
       default = "";
       description = ''
