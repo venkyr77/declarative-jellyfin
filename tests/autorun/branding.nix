@@ -35,7 +35,7 @@ in
             network.publicHttpPort = port;
             branding = {
               inherit loginDisclaimer;
-              customCSS =
+              customCss =
                 # css
                 ''
                   * {
