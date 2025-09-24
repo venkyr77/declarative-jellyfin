@@ -146,4 +146,7 @@ Options for [services.declarative-jellyfin.network](https://github.com/Sveske-Ju
 # users
 Options for [services.declarative-jellyfin.users](https://github.com/Sveske-Juice/declarative-jellyfin/blob/main/documentation/users.md)
 
+# branding
+Options for [services.declarative-jellyfin.branding](https://github.com/Sveske-Juice/declarative-jellyfin/blob/main/documentation/branding.md)
+
 
