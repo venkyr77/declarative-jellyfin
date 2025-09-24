@@ -159,6 +159,10 @@ let
       name = "ServerConfiguration";
       content = toPascalCase.fromAttrsRecursive cfg.system;
     };
+    "branding.xml" = {
+      name = "BrandingOptions";
+      content = toPascalCase.fromAttrsRecursive cfg.branding;
+    };
   };
 
   # See: https://github.com/jellyfin/jellyfin/blob/master/src/Jellyfin.Database/Jellyfin.Database.Implementations/Enums/PermissionKind.cs
