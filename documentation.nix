@@ -6,6 +6,69 @@
   ...
 }:
 let
+  modules = [
+    {
+      name = "system";
+      options =
+        (import ./modules/options/system.nix {
+          inherit lib;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.system;
+    }
+    {
+      name = "libraries";
+      options =
+        (import ./modules/options/libraries.nix {
+          inherit lib;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.libraries;
+    }
+    {
+      name = "encoding";
+      options =
+        (import ./modules/options/encoding.nix {
+          inherit lib pkgs;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.encoding;
+    }
+    {
+      name = "network";
+      options =
+        (import ./modules/options/network.nix {
+          inherit lib pkgs;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.network;
+    }
+    {
+      name = "users";
+      options =
+        (import ./modules/options/users.nix {
+          inherit lib pkgs;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.users;
+    }
+    {
+      name = "branding";
+      options =
+        (import ./modules/options/branding.nix {
+          inherit lib pkgs;
+          config = {
+            networking.hostName = "config.networking.hostName";
+          };
+        }).options.services.declarative-jellyfin.branding;
+    }
+  ];
+
   attrsets = lib.attrsets;
   trivial = lib.trivial;
   repeat' =
@@ -93,58 +156,6 @@ let
         )
     );
 
-  modules = [
-    {
-      name = "system";
-      options =
-        (import ./modules/options/system.nix {
-          inherit lib;
-          config = {
-            networking.hostName = "config.networking.hostName";
-          };
-        }).options.services.declarative-jellyfin.system;
-    }
-    {
-      name = "libraries";
-      options =
-        (import ./modules/options/libraries.nix {
-          inherit lib;
-          config = {
-            networking.hostName = "config.networking.hostName";
-          };
-        }).options.services.declarative-jellyfin.libraries;
-    }
-    {
-      name = "encoding";
-      options =
-        (import ./modules/options/encoding.nix {
-          inherit lib pkgs;
-          config = {
-            networking.hostName = "config.networking.hostName";
-          };
-        }).options.services.declarative-jellyfin.encoding;
-    }
-    {
-      name = "network";
-      options =
-        (import ./modules/options/network.nix {
-          inherit lib pkgs;
-          config = {
-            networking.hostName = "config.networking.hostName";
-          };
-        }).options.services.declarative-jellyfin.network;
-    }
-    {
-      name = "users";
-      options =
-        (import ./modules/options/users.nix {
-          inherit lib pkgs;
-          config = {
-            networking.hostName = "config.networking.hostName";
-          };
-        }).options.services.declarative-jellyfin.users;
-    }
-  ];
 
   mkModuleFile =
     module:
