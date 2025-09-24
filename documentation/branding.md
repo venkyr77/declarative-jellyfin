@@ -1,5 +1,5 @@
 # branding
-## branding.customCSS
+## branding.customCss
 Custom css to be injected into the web client.
 
 
