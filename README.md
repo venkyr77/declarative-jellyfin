@@ -15,7 +15,7 @@ Users, Libraries, Plugins, Settings, etc.
     * System
     * Network
     * Encoding (HW acceleration)
-    * Coming soon: Branding (see #9)
+    * Branding settings
 * Automatic backups
 * API keys
 
