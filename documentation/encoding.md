@@ -356,7 +356,7 @@ Path for temporary transcoded files when streaming
 
 **Type**: string
 
-**Default**: `"/var/cache/jellyfin/transcodes"`
+**Default**: `${cfg.cacheDir}/transcodes`
 
 ## encoding.vaapiDevice
 This is the render node that is used for hardware acceleration.

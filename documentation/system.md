@@ -23,7 +23,7 @@ Specify a custom location for server cache files such as images.
 
 **Type**: string
 
-**Default**: `"/var/cache/jellyfin"`
+**Default**: `${cfg.cacheDir}`
 
 ## system.castReceiverApplications
 
