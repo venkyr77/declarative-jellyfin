@@ -176,7 +176,7 @@ The path to the FFmpeg application file or folder containing FFmpeg.
 
 **Type**: string
 
-**Default**: `/nix/store/qam79xcqhd994vl11n88xwdykzyirjhn-jellyfin-ffmpeg-7.0.2-9-bin`
+**Default**: `${pkgs.jellyfin-ffmpeg}`
 
 ## encoding.encoderPreset
 Pick a faster value to improve performance, or a slower value to improve quality.
