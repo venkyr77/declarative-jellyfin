@@ -77,7 +77,7 @@ services.declarative-jellyfin.system = {
     enableHwAcceleration = true;
     enableHwEncoding = true;
   };
-  UICulture = "da"; # danish
+  UICulture = "da"; # Make the UI language danish
 };
 ```
 
@@ -109,8 +109,8 @@ you want a user to be fully declarative (for example admin accounts).
 ### Generate user password hash
 Jellyfin uses pbkdf2-sha512 hashes to store passwords.
 Use the `genhash` script bundled in this flake with the parameters the jellyfin DB expects:
-```nix
-nix run github:Sveske-Juice/declarative-jellyfin#genhash -- -i 210000 -l 128 -u -k "your super secret password"
+```sh
+$ nix run github:Sveske-Juice/declarative-jellyfin#genhash -- -i 210000 -l 128 -u -k "your super secret password"
 ```
 
 ### Usage with sops-nix
@@ -249,18 +249,25 @@ Use `vainfo` from `libva-utils` to see the codec capabilities for your VA-API de
 At the moment plugins are speculated to cause some bugs, most notably: https://git.spoodythe.one/spoody/declarative-jellyfin/issues/18.
 So at the moment it is recommended to install plugins imperatively through the GUI until declarative plugins are properly tested.
 
-Installed plugins can be configured declaratively using the `declarative-jellyfin.plugins` option.
+Plugins are very difficult to manage declaratively, so for now you can only manage the plugin repositories declaratively
 
 ```nix
 services.declarative-jellyfin = {
-    enable = true;
-    plugins = [
+    system.pluginRepositories = [
         {
-            name = "intro skipper";
-            url = "https://github.com/intro-skipper/intro-skipper/releases/download/10.10/v1.10.10.19/intro-skipper-v1.10.10.19.zip";
-            version = "1.10.10.19";
-            targetAbi = "10.10.7.0"; # Required as intro-skipper doesn't provide a meta.json file
-            sha256 = "sha256:12hby8vkb6q2hn97a596d559mr9cvrda5wiqnhzqs41qg6i8p2fd";
+          content = {
+            Name = "Jellyfin Stable";
+            Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
+          };
+          tag = "RepositoryInfo"; # Needed to generate the correct XML
+        }
+
+        {
+          content = {
+            Name = "Intro Skipper";
+            Url = "https://intro-skipper.org/manifest.json";
+          };
+          tag = "RepositoryInfo"; # Needed to generate the correct XML
         }
     ];
 };
