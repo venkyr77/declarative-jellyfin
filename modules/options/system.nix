@@ -325,6 +325,7 @@ in
           content = {
             Name = "Jellyfin Stable";
             Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
+            Enabled = true;
           };
         }
       ];

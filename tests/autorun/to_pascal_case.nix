@@ -44,8 +44,87 @@ in
               (genTest "snake case attribute set" {
                 SnakeCaseName = "snake_case_value";
               } (toPascalCase.fromAttrs { snake_case_name = "snake_case_value"; }))
-              # TODO: TODO
-              (genTest "recursive attret test" "TODO" "TODO")
+
+              # Ensures structural keys are preserved (tag/content/attrib),
+              # while inner data keys are PascalCased.
+              (genTest "preserve structural keys + pascalcase data"
+                {
+                  tag = "RepositoryInfo";
+                  content = {
+                    Name = "Jellyfin test";
+                    Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
+                    Enabled = true;
+                  };
+                  attrib = {
+                    SomeAttr = "value";
+                  };
+                }
+                (
+                  toPascalCase.fromAttrsRecursive {
+                    tag = "RepositoryInfo";
+                    content = {
+                      name = "Jellyfin test";
+                      url = "https://repo.jellyfin.org/files/plugin/manifest.json";
+                      enabled = true;
+                    };
+                    attrib = {
+                      some_attr = "value";
+                    };
+                  }
+                )
+              )
+
+              # Sanity: a fully structured XML-like tree remains unchanged by renamer
+              # (no accidental Tag/Content/Attrib renames).
+              (genTest "no rename of structured xml nodes"
+                {
+                  tag = "PluginRepositories";
+                  content = [
+                    {
+                      tag = "RepositoryInfo";
+                      content = [
+                        {
+                          tag = "Name";
+                          content = "Jellyfin test";
+                        }
+                        {
+                          tag = "Url";
+                          content = "https://repo.jellyfin.org/files/plugin/manifest.json";
+                        }
+                        {
+                          tag = "Enabled";
+                          content = true;
+                        }
+                      ];
+                    }
+                  ];
+                }
+                (
+                  toPascalCase.fromAttrsRecursive {
+                    tag = "PluginRepositories";
+                    content = [
+                      {
+                        tag = "RepositoryInfo";
+                        content = [
+                          {
+                            tag = "Name";
+                            content = "Jellyfin test";
+                          }
+                          {
+                            tag = "Url";
+                            content = "https://repo.jellyfin.org/files/plugin/manifest.json";
+                          }
+                          {
+                            tag = "Enabled";
+                            content = true;
+                          }
+                        ];
+                      }
+                    ];
+                  }
+                )
+              )
+
               (genTest "attribute set with list"
                 {
                   List = [
