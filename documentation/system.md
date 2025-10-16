@@ -415,6 +415,7 @@ Configure which plugin repositories you use.
 [
  {
   content = {
+   Enabled = true;
    Name = "Jellyfin Stable";
    Url = "https://repo.jellyfin.org/files/plugin/manifest.json";
   };
