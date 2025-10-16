@@ -78,7 +78,18 @@ with lib;
       fromAttrs' =
         f: x:
         if builtins.isAttrs x then
-          with lib.attrsets; mapAttrs' (name: value: nameValuePair (fromString name) (f value)) x
+          lib.attrsets.mapAttrs' (
+            name: value:
+            let
+              isReserved = lib.elem name [
+                "tag"
+                "content"
+                "attrib"
+              ];
+              newName = if isReserved then name else fromString name;
+            in
+            lib.attrsets.nameValuePair newName (f value)
+          ) x
         else if builtins.isList x then
           builtins.map f x
         else
